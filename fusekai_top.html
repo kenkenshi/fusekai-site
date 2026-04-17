@@ -877,15 +877,23 @@ function toggleAuthorForm(formId, btn) {
 
 // おすすめボタン（ワンクリック送信）
 function sendRecommend(title, author, btn) {
-  btn.textContent = 'おすすめ済み ♡';
-  btn.disabled = true;
-  btn.style.borderColor = '#d4a0b8';
-  btn.style.color = '#c87098';
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfS8nV_egG3PEdttzKOPq88-yOB6_fbjAounh4hJEVlWpHlMVGkQkaSi59VOkkBo8/exec';
-  fetch(SCRIPT_URL, {
-    method: 'POST',
-    body: JSON.stringify({ type: 'recommend', title, author })
-  }).catch(() => {});
+  const isActive = btn.dataset.recommended === 'true';
+  if (isActive) {
+    btn.dataset.recommended = 'false';
+    btn.textContent = 'おすすめ';
+    btn.style.borderColor = '';
+    btn.style.color = '';
+  } else {
+    btn.dataset.recommended = 'true';
+    btn.textContent = 'おすすめ済み ♡';
+    btn.style.borderColor = '#d4a0b8';
+    btn.style.color = '#c87098';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfS8nV_egG3PEdttzKOPq88-yOB6_fbjAounh4hJEVlWpHlMVGkQkaSi59VOkkBo8/exec';
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({ type: 'recommend', title, author })
+    }).catch(() => {});
+  }
 }
 
 // 語りたいフォーム送信
