@@ -910,8 +910,8 @@ function submitTalk(title, author, uid) {
   submitBtn.textContent = '送信中…';
 
   const targets = [];
-  if (document.getElementById(`check-title-${uid}`)?.checked) targets.push('この作品');
-  if (document.getElementById(`check-author-${uid}`)?.checked) targets.push('この作者');
+  if (document.getElementById(`chk-title-${uid}`)?.checked) targets.push('この作品');
+  if (document.getElementById(`chk-author-${uid}`)?.checked) targets.push('この作者');
   const target = targets.join('・') || '';
 
   fetch(SCRIPT_URL, {
