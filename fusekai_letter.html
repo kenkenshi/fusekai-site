@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>腐便りを書く | けんしの腐世界生活</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #faf8f6;
+  color: #1a1018;
+  font-family: 'Noto Sans JP', sans-serif;
+  min-height: 100vh;
+}
+
+/* header */
+.header {
+  padding: 1.5rem 1.5rem 0;
+  max-width: 460px;
+  margin: 0 auto;
+}
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  color: #9a7888;
+  text-decoration: none;
+  letter-spacing: 0.03em;
+}
+.back-link:hover { color: #c87098; }
+
+/* hero */
+.hero {
+  padding: 1.8rem 1.5rem 2rem;
+  text-align: center;
+  max-width: 460px;
+  margin: 0 auto;
+}
+.hero-title {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #2a1828;
+  letter-spacing: 0.08em;
+  margin-bottom: 1rem;
+}
+.hero-copy {
+  font-size: 0.82rem;
+  color: #7a6070;
+  line-height: 2;
+  letter-spacing: 0.02em;
+  margin-bottom: 1rem;
+}
+.hero-usage {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  font-size: 0.7rem;
+  color: #b8a0b0;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.05em;
+}
+.hero-usage span {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* form */
+.form-section {
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+}
+.form-label {
+  font-size: 0.72rem;
+  color: #9a7888;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.4rem;
+  display: block;
+}
+.form-input {
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  border: 1.5px solid rgba(220,180,200,0.5);
+  border-radius: 10px;
+  background: #fff;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.85rem;
+  color: #1a1018;
+  outline: none;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s;
+}
+.form-input:focus { border-color: #d4a0b8; }
+.form-input::placeholder { color: #c8b0c0; }
+.form-textarea {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 1.5px solid rgba(220,180,200,0.5);
+  border-radius: 10px;
+  background: #fff;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.82rem;
+  color: #1a1018;
+  outline: none;
+  resize: vertical;
+  min-height: 140px;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s;
+}
+.form-textarea:focus { border-color: #d4a0b8; }
+.form-textarea::placeholder { color: #c8b0c0; }
+.form-divider {
+  height: 1px;
+  background: rgba(220,180,200,0.25);
+  margin: 1rem 0;
+}
+.radio-label {
+  font-size: 0.72rem;
+  color: #9a7888;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+.radio-group {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.2rem;
+}
+.radio-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  color: #4a3048;
+  cursor: pointer;
+}
+.radio-item input { accent-color: #d4a0b8; }
+
+/* 規約 */
+.terms-box {
+  background: #fff;
+  border: 1px solid rgba(220,180,200,0.35);
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.7rem;
+  color: #7a6070;
+  line-height: 1.9;
+}
+.terms-box ul {
+  padding-left: 1rem;
+  margin: 0.3rem 0 0.6rem;
+}
+.terms-check {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: #4a3048;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+.terms-check input { accent-color: #d4a0b8; }
+
+/* 送信ボタン */
+.submit-btn {
+  width: 100%;
+  padding: 0.9rem;
+  border: none;
+  border-radius: 999px;
+  background: #d4a0b8;
+  color: #fff;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+  transition: background 0.2s;
+}
+.submit-btn:hover { background: #c888a8; }
+.submit-btn:disabled { background: #e0c8d4; cursor: default; }
+
+/* 完了メッセージ */
+.done-msg {
+  text-align: center;
+  padding: 2rem 0;
+  font-size: 0.88rem;
+  color: #9a7888;
+  line-height: 2;
+  display: none;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a href="fusekai_top.html" class="back-link">← けんしの腐世界生活</a>
+</div>
+
+<div class="hero">
+  <p class="hero-title">腐便りを書く</p>
+  <p class="hero-copy">
+    性癖、職場にバレた、妄想が止まらない…<br>
+    そんな腐女子の日常、腐世界でお焚き上げ！
+  </p>
+  <div class="hero-usage">
+    <span>📱 短め → ショート動画</span>
+    <span>🎙 長め → 横動画・ポッドキャスト</span>
+  </div>
+</div>
+
+<div class="form-section">
+  <label class="form-label">ラジオネーム（任意）</label>
+  <input type="text" class="form-input" id="radioname" placeholder="例：腐女子歴15年のさくら">
+
+  <label class="form-label">本文</label>
+  <textarea class="form-textarea" id="body" placeholder="直接的すぎる性表現は採用できない場合があります（けんしは笑いながら読みますが…）&#10;💡 ポップな造語で表現してみてね！&#10;例：激しいシーン → ベッド壊れる界隈"></textarea>
+
+  <div class="form-divider"></div>
+
+  <span class="radio-label">ラジオ・動画で使っていいですか？</span>
+  <div class="radio-group">
+    <label class="radio-item">
+      <input type="radio" name="radio-ok" value="yes"> はい
+    </label>
+    <label class="radio-item">
+      <input type="radio" name="radio-ok" value="no"> いいえ
+    </label>
+  </div>
+
+  <div class="terms-box">
+    <p>📋 送信前にご確認ください</p>
+    <ul>
+      <li>送信内容はラジオ・動画で参考にさせていただく場合があります</li>
+      <li>個人が特定される情報は含めないでください</li>
+      <li>直接的すぎる性表現は採用できない場合があります（けんしは笑いながら読みますが…）</li>
+    </ul>
+    <label class="terms-check">
+      <input type="checkbox" id="terms"> 上記を確認して送信する
+    </label>
+  </div>
+
+  <button class="submit-btn" id="submit-btn" onclick="submitLetter()">腐世界にお焚き上げする</button>
+
+  <div class="done-msg" id="done-msg">
+    送ってくれてありがとう！🌸<br>
+    けんしがちゃんと読むよ。
+  </div>
+</div>
+
+<script>
+function submitLetter() {
+  const terms = document.getElementById('terms').checked;
+  if (!terms) {
+    alert('送信前に規約のチェックをお願いします');
+    return;
+  }
+  const body = document.getElementById('body').value.trim();
+  if (!body) {
+    alert('本文を入力してください');
+    return;
+  }
+  const radioName = document.getElementById('radioname').value.trim();
+  const radioOk = document.querySelector('input[name="radio-ok"]:checked')?.value || '未選択';
+
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfS8nV_egG3PEdttzKOPq88-yOB6_fbjAounh4hJEVlWpHlMVGkQkaSi59VOkkBo8/exec';
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = '送信中…';
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify({ type: 'letter', radioName, body, radioOk })
+  })
+  .then(() => {
+    btn.style.display = 'none';
+    document.getElementById('done-msg').style.display = 'block';
+  })
+  .catch(() => {
+    btn.disabled = false;
+    btn.textContent = '腐世界にお焚き上げする';
+    alert('送信に失敗しました。もう一度試してみてください。');
+  });
+}
+</script>
+
+</body>
+</html>

@@ -355,6 +355,256 @@ body {
   color: #b8a0b0;
   line-height: 1.8;
 }
+
+/* ===== 腐レゼントセクション ===== */
+.present-section {
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 0 1.5rem 0.5rem;
+}
+.present-inner {
+  background: #fff;
+  border: 1px solid rgba(220,180,200,0.4);
+  border-radius: 12px;
+  padding: 1.2rem 1.4rem;
+  text-align: center;
+}
+.present-title {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #4a3048;
+  margin-bottom: 0.7rem;
+  letter-spacing: 0.05em;
+}
+.present-address {
+  font-size: 0.88rem;
+  color: #2a1828;
+  font-weight: 500;
+  margin-bottom: 0.8rem;
+  letter-spacing: 0.03em;
+}
+.present-note {
+  font-size: 0.7rem;
+  color: #9a7888;
+  line-height: 1.8;
+}
+
+/* ===== SNSセクション ===== */
+.sns-section {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  padding: 1.8rem 0 2.5rem;
+}
+.sns-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(220,180,200,0.4);
+  background: #fff;
+  color: #9a7888;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.sns-btn:hover {
+  border-color: #d4a0b8;
+  color: #c87098;
+  background: #fdf0f5;
+}
+
+/* ===== カードアクションボタン ===== */
+.bl-card-wrapper {
+  margin-bottom: 0.7rem;
+}
+.bl-card-wrapper .bl-card {
+  margin-bottom: 0;
+  border-radius: 12px 12px 0 0;
+  flex-direction: column;
+}
+.bl-card-wrapper .bl-card.no-form-open {
+  border-radius: 12px;
+}
+.bl-card-inner {
+  display: flex;
+  gap: 0.9rem;
+  width: 100%;
+}
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+.action-btn {
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-family: 'Noto Sans JP', sans-serif;
+  cursor: pointer;
+  border: 1.5px solid rgba(220,180,200,0.6);
+  background: #fff;
+  color: #4a3048;
+  transition: border-color 0.2s, background 0.2s;
+  letter-spacing: 0.03em;
+}
+.action-btn:hover { border-color: #d4a0b8; background: #fdf0f5; }
+.recommend-btn { }
+.talk-btn { }
+
+/* ===== 語りたいフォーム ===== */
+.talk-form {
+  background: #fdf8fb;
+  border: 1px solid rgba(220,180,200,0.4);
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  padding: 1rem;
+  margin-bottom: 0.7rem;
+}
+.talk-form-label {
+  font-size: 0.72rem;
+  color: #9a7888;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.05em;
+}
+.talk-check-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+.talk-check {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  color: #4a3048;
+  cursor: pointer;
+}
+.talk-check input { accent-color: #d4a0b8; }
+.talk-input {
+  width: 100%;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid rgba(220,180,200,0.5);
+  border-radius: 8px;
+  background: #fff;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.78rem;
+  color: #1a1018;
+  outline: none;
+  margin-bottom: 0.6rem;
+}
+.talk-input::placeholder { color: #c8b0c0; }
+.talk-textarea {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid rgba(220,180,200,0.5);
+  border-radius: 8px;
+  background: #fff;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.75rem;
+  color: #1a1018;
+  outline: none;
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.7;
+  margin-bottom: 0.7rem;
+}
+.talk-textarea::placeholder { color: #c8b0c0; }
+.talk-radio-group {
+  margin-bottom: 0.8rem;
+}
+.talk-radios {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.3rem;
+}
+.talk-radio {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  color: #4a3048;
+  cursor: pointer;
+}
+.talk-radio input { accent-color: #d4a0b8; }
+.talk-terms {
+  background: #fff;
+  border: 1px solid rgba(220,180,200,0.35);
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+  margin-bottom: 0.8rem;
+  font-size: 0.7rem;
+  color: #7a6070;
+  line-height: 1.8;
+}
+.talk-terms ul {
+  padding-left: 1rem;
+  margin: 0.3rem 0 0.5rem;
+}
+.talk-terms-check {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  color: #4a3048;
+  cursor: pointer;
+  margin-top: 0.4rem;
+}
+.talk-terms-check input { accent-color: #d4a0b8; }
+.talk-submit-btn {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 999px;
+  background: #d4a0b8;
+  color: #fff;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.82rem;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  transition: background 0.2s;
+}
+.talk-submit-btn:hover { background: #c888a8; }
+.talk-submit-btn:disabled { background: #e0c8d4; cursor: default; }
+
+/* ===== 作者別の作品語りたいボタン ===== */
+.author-other-section {
+  margin-bottom: 0.7rem;
+}
+.author-other-btn {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1.5px dashed rgba(220,180,200,0.6);
+  border-radius: 12px 12px 0 0;
+  background: #faf8f6;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.78rem;
+  color: #9a7888;
+  cursor: pointer;
+  text-align: left;
+  letter-spacing: 0.03em;
+  transition: border-color 0.2s, background 0.2s;
+}
+.author-other-btn.closed {
+  border-radius: 12px;
+}
+.author-other-btn:hover { border-color: #d4a0b8; background: #fdf0f5; color: #4a3048; }
+.author-other-section .talk-form {
+  border-top: none;
+  border: 1px solid rgba(220,180,200,0.4);
+  border-top: none;
+}
+
+/* ===== 未ヒット時テンプレ ===== */
+.unread-template-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+.bl-card-unread .card-actions {
+  justify-content: center;
+}
 </style>
 </head>
 <body>
@@ -370,7 +620,7 @@ body {
 
   <div class="search-wrap">
     <span class="search-icon">🔍</span>
-    <input type="text" placeholder="作者名または作品名" id="search-input" oninput="searchBL()">
+    <input type="text" placeholder="おすすめ・語りたい作品/作者を検索してみて" id="search-input" oninput="searchBL()">
   </div>
   <p class="search-label">けんし既読作品検索（的な）</p>
 </div>
@@ -382,40 +632,33 @@ body {
 </div>
 
 <div class="cta-section">
-  <p class="cta-label">けんしに・・・</p>
   <div class="cta-grid">
-    <a href="#" class="cta-btn" onclick="goto('recommend')">おすすめする</a>
-    <a href="#" class="cta-btn" onclick="goto('letter')">お便りを送る</a>
+    <a href="fusekai_letter.html" class="cta-btn">けんしに腐便りを書く</a>
+    <button class="cta-btn" onclick="togglePresent()">けんしに腐レゼントを送る</button>
   </div>
-  <a href="#" class="cta-btn-full" onclick="goto('present')">プレゼントする</a>
 </div>
 
-<div class="profile-section">
-  <a href="#" class="profile-link" onclick="goto('profile')">
-    <span class="profile-dot"></span>
-    山田けんし
+<div id="present-section" class="present-section" style="display:none">
+  <div class="present-inner">
+    <p class="present-title">📮 腐レゼントを送る</p>
+    <p class="present-address">住所は近日公開予定</p>
+    <p class="present-note">※ お届けまで10日以上かかる場合があります<br>※ プレゼントの内容はSNSでご紹介することがあります</p>
+  </div>
+</div>
+
+<div class="sns-section">
+  <a href="https://x.com/secret_kenshi" target="_blank" class="sns-btn" aria-label="X">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
   </a>
-</div>
-
-<div class="topics-section">
-  <p class="topics-heading">topics</p>
-  <div class="topics-grid">
-    <div class="topic-card" onclick="goto('bl-list')">
-      <span class="topic-icon">📚</span>
-      <div class="topic-text">最近読んだ<br>作品</div>
-      <span class="topic-badge">BL LIST</span>
-    </div>
-    <div class="topic-card" onclick="goto('letter')">
-      <span class="topic-icon">💌</span>
-      <div class="topic-text">腐女子の<br>お悩み〜</div>
-      <span class="topic-badge">PODCAST</span>
-    </div>
-    <div class="topic-card" onclick="goto('goods')">
-      <span class="topic-icon">✨</span>
-      <div class="topic-text">グッズが<br>できた！</div>
-      <span class="topic-badge">COMING SOON</span>
-    </div>
-  </div>
+  <a href="https://youtube.com/@kenshi-blbook" target="_blank" class="sns-btn" aria-label="YouTube">
+    <svg width="20" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+  </a>
+  <a href="https://www.tiktok.com/@kenshi_bl" target="_blank" class="sns-btn" aria-label="TikTok">
+    <svg width="17" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.78a4.85 4.85 0 0 1-1.01-.09z"/></svg>
+  </a>
+  <a href="https://www.instagram.com/kenshi.bl/" target="_blank" class="sns-btn" aria-label="Instagram">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+  </a>
 </div>
 
 <script>
@@ -469,61 +712,227 @@ async function searchBL() {
   resultsDiv.classList.add('visible');
   container.innerHTML = '<div class="search-loading">検索中...</div>';
 
-  // データ未取得なら取得
   if (!dataLoaded) {
     await loadSheetData();
   }
 
   const keyword = q.toLowerCase();
-  const matched = blData.filter(row =>
-    row.title.toLowerCase().includes(keyword) ||
-    row.author.toLowerCase().includes(keyword)
+  const titleMatched = blData.filter(row => row.title.toLowerCase().includes(keyword));
+  const authorOnlyMatched = blData.filter(row =>
+    row.author.toLowerCase().includes(keyword) &&
+    !row.title.toLowerCase().includes(keyword)
   );
+  const hasAuthorMatch = blData.some(row => row.author.toLowerCase().includes(keyword));
+  const allMatched = [...titleMatched, ...authorOnlyMatched];
 
   label.textContent = `"${q}" の検索結果`;
   container.innerHTML = '';
 
-  if (matched.length === 0) {
-    // 未読カード
-    container.innerHTML = `
-      <div class="bl-card-unread">
-        <div class="bl-card-unread-title">${escapeHtml(q)}</div>
-        <div class="bl-card-unread-msg">まだ読んでない！<br>まって読んでないんだがオススメしておくれ！</div>
-        <a href="#" class="bl-card-unread-btn" onclick="goto('recommend')">おすすめする</a>
+  if (allMatched.length === 0) {
+    // どちらもヒットなし
+    const noResultDiv = document.createElement('div');
+    noResultDiv.className = 'bl-card-unread';
+    noResultDiv.innerHTML = `
+      <div class="unread-template-icon">🙈</div>
+      <div class="bl-card-unread-title">${escapeHtml(q)}</div>
+      <div class="bl-card-unread-msg">ごめん！まだおすすめされていない<br>作品/作者さんだ。。</div>
+      <div class="card-actions">
+        <button class="action-btn recommend-btn" onclick="sendRecommend('${escapeHtml(q)}', '', this)">おすすめ</button>
+        <button class="action-btn talk-btn" onclick="toggleTalkForm('no-result-form', this)">語りたい</button>
+      </div>
+      <div id="no-result-form" class="talk-form" style="display:none">
+        ${buildTalkForm(q, '', 'title', 'no-result')}
       </div>
     `;
+    container.appendChild(noResultDiv);
     return;
   }
 
-  // 既読カード表示
-  matched.forEach(row => {
+  // カード表示
+  allMatched.forEach((row, i) => {
+    const formId = `talk-form-${i}`;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'bl-card-wrapper';
+
     const card = document.createElement('div');
-    card.className = 'bl-card';
+    card.className = 'bl-card no-form-open';
+    card.dataset.formId = formId;
 
     const imgHtml = row.imgUrl
       ? `<img class="bl-card-img" src="${escapeHtml(row.imgUrl)}" alt="${escapeHtml(row.title)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
       : '';
     const placeholderStyle = row.imgUrl ? 'display:none' : '';
-
     const videoBadge = (row.video && row.video.trim() !== '')
       ? `<span class="bl-card-video-badge">動画腐教済み</span>`
       : '';
+    const defaultCheck = authorOnlyMatched.includes(row) ? 'author' : 'title';
 
     card.innerHTML = `
-      ${imgHtml}
-      <div class="bl-card-img-placeholder" style="${placeholderStyle}">📖</div>
-      <div class="bl-card-info">
-        <div class="bl-card-title">${escapeHtml(row.title)}</div>
-        <div class="bl-card-author">${escapeHtml(row.author)}</div>
-        <div class="bl-card-meta">
-          ${row.volume ? `<span class="bl-card-volume">既読 ${escapeHtml(row.volume)}</span>` : ''}
-          ${videoBadge}
+      <div class="bl-card-inner">
+        ${imgHtml}
+        <div class="bl-card-img-placeholder" style="${placeholderStyle}">📖</div>
+        <div class="bl-card-info">
+          <div class="bl-card-title">${escapeHtml(row.title)}</div>
+          <div class="bl-card-author">${escapeHtml(row.author)}</div>
+          <div class="bl-card-meta">
+            ${row.volume ? `<span class="bl-card-volume">既読 ${escapeHtml(row.volume)}</span>` : ''}
+            ${videoBadge}
+          </div>
+          ${row.memo ? `<div class="bl-card-memo">${escapeHtml(row.memo)}</div>` : ''}
+          <div class="card-actions">
+            <button class="action-btn recommend-btn" onclick="sendRecommend('${escapeHtml(row.title)}', '${escapeHtml(row.author)}', this)">おすすめ</button>
+            <button class="action-btn talk-btn" onclick="toggleTalkForm('${formId}', this)">語りたい</button>
+          </div>
         </div>
-        ${row.memo ? `<div class="bl-card-memo">${escapeHtml(row.memo)}</div>` : ''}
       </div>
     `;
-    container.appendChild(card);
+
+    const formDiv = document.createElement('div');
+    formDiv.id = formId;
+    formDiv.className = 'talk-form';
+    formDiv.style.display = 'none';
+    formDiv.innerHTML = buildTalkForm(row.title, row.author, defaultCheck, i);
+
+    wrapper.appendChild(card);
+    wrapper.appendChild(formDiv);
+    container.appendChild(wrapper);
   });
+
+  // 作者名でヒットがある場合、「先生の別の作品について語りたい」を追加
+  if (hasAuthorMatch) {
+    const authorFormId = 'author-other-form';
+    const authorSection = document.createElement('div');
+    authorSection.className = 'author-other-section';
+    authorSection.innerHTML = `
+      <button class="author-other-btn closed" onclick="toggleAuthorForm('${authorFormId}', this)">
+        ${escapeHtml(q)}先生の別の作品について語りたい →
+      </button>
+      <div id="${authorFormId}" class="talk-form" style="display:none">
+        ${buildTalkForm('', q, 'author', 'author-other')}
+      </div>
+    `;
+    container.appendChild(authorSection);
+  }
+}
+
+// 語りたいフォームのHTML生成
+function buildTalkForm(title, author, defaultCheck, uid) {
+  const titleChecked = defaultCheck === 'title' ? 'checked' : '';
+  const authorChecked = defaultCheck === 'author' ? 'checked' : '';
+  const safeUid = String(uid).replace(/[^a-zA-Z0-9_-]/g, '_');
+  return `
+    <div class="talk-form-inner">
+      <p class="talk-form-label">語りたいのは？</p>
+      <div class="talk-check-group">
+        <label class="talk-check"><input type="checkbox" id="chk-title-${safeUid}" ${titleChecked}> この作品について</label>
+        <label class="talk-check"><input type="checkbox" id="chk-author-${safeUid}" ${authorChecked}> この作者について</label>
+        <label class="talk-check"><input type="checkbox" id="chk-both-${safeUid}"> 両方！</label>
+      </div>
+      <input type="text" class="talk-input" id="radioname-${safeUid}" placeholder="ラジオネーム（任意）">
+      <textarea class="talk-textarea" id="body-${safeUid}" placeholder="直接的すぎる性表現は採用できない場合があります（けんしは笑いながら読みますが…）&#10;💡 ポップな造語で表現してみてね！&#10;例：激しいシーン → ベッド壊れる界隈"></textarea>
+      <div class="talk-radio-group">
+        <p class="talk-form-label">ラジオで使っていいですか？</p>
+        <div class="talk-radios">
+          <label class="talk-radio"><input type="radio" name="radio-ok-${safeUid}" value="yes"> はい</label>
+          <label class="talk-radio"><input type="radio" name="radio-ok-${safeUid}" value="no"> いいえ</label>
+        </div>
+      </div>
+      <div class="talk-terms">
+        <p>📋 送信前にご確認ください</p>
+        <ul>
+          <li>送信内容はラジオ・動画で参考にさせていただく場合があります</li>
+          <li>個人が特定される情報は含めないでください</li>
+          <li>直接的すぎる性表現は採用できない場合があります（けんしは笑いながら読みますが…）</li>
+        </ul>
+        <label class="talk-terms-check"><input type="checkbox" id="terms-${safeUid}"> 上記を確認して送信する</label>
+      </div>
+      <button class="talk-submit-btn" onclick="submitTalk('${escapeHtml(title)}', '${escapeHtml(author)}', '${safeUid}')">送信する</button>
+    </div>
+  `;
+}
+
+// 語りたいフォームのトグル
+function toggleTalkForm(formId, btn) {
+  const form = document.getElementById(formId);
+  if (!form) return;
+  const isOpen = form.style.display !== 'none';
+  form.style.display = isOpen ? 'none' : 'block';
+  btn.textContent = isOpen ? '語りたい' : '語りたい ✕';
+
+  // bl-cardの角丸切り替え
+  const card = btn.closest('.bl-card');
+  if (card) {
+    card.classList.toggle('no-form-open', isOpen);
+  }
+}
+
+// 作者別フォームのトグル
+function toggleAuthorForm(formId, btn) {
+  const form = document.getElementById(formId);
+  if (!form) return;
+  const isOpen = form.style.display !== 'none';
+  form.style.display = isOpen ? 'none' : 'block';
+  btn.classList.toggle('closed', isOpen);
+}
+
+// おすすめボタン（ワンクリック送信）
+function sendRecommend(title, author, btn) {
+  btn.textContent = 'おすすめ済み ♡';
+  btn.disabled = true;
+  btn.style.borderColor = '#d4a0b8';
+  btn.style.color = '#c87098';
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfS8nV_egG3PEdttzKOPq88-yOB6_fbjAounh4hJEVlWpHlMVGkQkaSi59VOkkBo8/exec';
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify({ type: 'recommend', title, author })
+  }).catch(() => {});
+}
+
+// 語りたいフォーム送信
+function submitTalk(title, author, uid) {
+  const termsChecked = document.getElementById(`terms-${uid}`)?.checked;
+  if (!termsChecked) {
+    alert('送信前に規約のチェックをお願いします');
+    return;
+  }
+  const radioName = document.getElementById(`radioname-${uid}`)?.value || '';
+  const body = document.getElementById(`body-${uid}`)?.value || '';
+  const radioOk = document.querySelector(`input[name="radio-ok-${uid}"]:checked`)?.value || '';
+
+  if (!body.trim()) {
+    alert('本文を入力してください');
+    return;
+  }
+
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfS8nV_egG3PEdttzKOPq88-yOB6_fbjAounh4hJEVlWpHlMVGkQkaSi59VOkkBo8/exec';
+  const submitBtn = event.target;
+  submitBtn.disabled = true;
+  submitBtn.textContent = '送信中…';
+
+  const targets = [];
+  if (document.getElementById(`check-title-${uid}`)?.checked) targets.push('この作品');
+  if (document.getElementById(`check-author-${uid}`)?.checked) targets.push('この作者');
+  const target = targets.join('・') || '';
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify({ type: 'talk', title, author, radioName, body, radioOk, target })
+  })
+  .then(() => {
+    submitBtn.textContent = '送信しました！ありがとう 🌸';
+  })
+  .catch(() => {
+    submitBtn.disabled = false;
+    submitBtn.textContent = '語りたいを送る';
+    alert('送信に失敗しました。もう一度試してみてください。');
+  });
+}
+
+// 腐レゼントセクションのトグル
+function togglePresent() {
+  const section = document.getElementById('present-section');
+  const isOpen = section.style.display !== 'none';
+  section.style.display = isOpen ? 'none' : 'block';
 }
 
 function escapeHtml(str) {
@@ -532,10 +941,6 @@ function escapeHtml(str) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
-}
-
-function goto(page) {
-  alert('→ ' + page + ' ページへ（実装予定）');
 }
 </script>
 
