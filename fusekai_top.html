@@ -722,7 +722,7 @@ async function searchBL() {
     row.author.toLowerCase().includes(keyword) &&
     !row.title.toLowerCase().includes(keyword)
   );
-  const hasAuthorMatch = blData.some(row => row.author.toLowerCase().includes(keyword));
+  const hasAuthorMatch = blData.some(row => row.author.toLowerCase() === keyword);
   const allMatched = [...titleMatched, ...authorOnlyMatched];
 
   label.textContent = `"${q}" の検索結果`;
