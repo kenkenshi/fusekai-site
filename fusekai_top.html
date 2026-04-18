@@ -1069,6 +1069,7 @@ searchInput.addEventListener('input', () => {
     resultArea.style.display = 'none';
     noResultsQuery.textContent = q;
     noResults.style.display = 'block';
+    setTimeout(() => noResults.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
   }
 });
 
@@ -1102,6 +1103,7 @@ function showReadCard(c) {
       </div>
     </div>`;
   resultArea.style.display = 'block';
+  setTimeout(() => resultArea.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
 }
 
 function selectCard(c) {
