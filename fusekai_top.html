@@ -860,7 +860,7 @@ body::after {
     <span class="back-arrow">←</span> 戻る
   </button>
 
-  <p class="page-title">腐便りを書く</p>
+  <p class="page-title">お便りを書く</p>
   <p class="page-desc">
     性癖、職場にバレた、妄想が止まらない…<br>
     そんな腐女子の日常、腐世界でお焚き上げ！
@@ -980,7 +980,7 @@ async function loadCards() {
       desc:   (r[3] || '').trim(),
       imgUrl: (r[5] || '').trim(),
     })).filter(c => c.title);
-    renderCards();
+    document.getElementById('bl-loading').style.display = 'none';
   } catch(e) {
     document.getElementById('bl-loading').textContent = '読み込みに失敗しました';
   }
