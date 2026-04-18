@@ -588,6 +588,38 @@ body::after {
   padding: 0 2rem 1.5rem;
 }
 
+.letter-guide {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  font-size: 0.72rem;
+  color: rgba(60,20,80,0.6);
+  padding: 0 1.5rem 1.2rem;
+  flex-wrap: wrap;
+}
+.letter-confirm-box {
+  border: 1.5px solid rgba(80,40,100,0.2);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.5);
+  padding: 0.9rem 1rem;
+  margin: 0.4rem 0 0.6rem;
+}
+.letter-confirm-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(60,20,80,0.7);
+  margin-bottom: 0.5rem;
+}
+.letter-confirm-list {
+  padding-left: 1.1rem;
+  margin: 0;
+}
+.letter-confirm-list li {
+  font-size: 0.68rem;
+  color: rgba(60,20,80,0.6);
+  line-height: 1.7;
+  margin-bottom: 0.2rem;
+}
 .form-wrap { padding: 0 1.5rem; }
 .form-group { margin-bottom: 1rem; }
 .form-label {
@@ -828,12 +860,15 @@ body::after {
     <span class="back-arrow">←</span> 戻る
   </button>
 
-  <p class="page-title">お便りを書く</p>
+  <p class="page-title">腐便りを書く</p>
   <p class="page-desc">
-    好きな作品の感想、けんしへのメッセージ、<br>
-    おすすめBL、なんでも送ってください！<br>
-    動画やSNSで紹介させていただくことがあります
+    性癖、職場にバレた、妄想が止まらない…<br>
+    そんな腐女子の日常、腐世界でお焚き上げ！
   </p>
+  <div class="letter-guide">
+    <span>📱 短め → ショート動画</span>
+    <span>🎙 長め → 横動画・ポッドキャスト</span>
+  </div>
 
   <div id="letter-form-wrap">
     <div class="form-wrap">
@@ -849,7 +884,19 @@ body::after {
         <input type="checkbox" id="letter-use-ok" checked>
         ラジオ・動画での使用OK
       </label>
-      <button class="submit-btn" id="letter-submit-btn" onclick="sendLetter()">送信する ✦</button>
+      <div class="letter-confirm-box">
+        <p class="letter-confirm-title">📋 送信前にご確認ください</p>
+        <ul class="letter-confirm-list">
+          <li>送信内容はラジオ・動画で参考にさせていただく場合があります</li>
+          <li>個人が特定される情報は含めないでください</li>
+          <li>直接的すぎる性表現は採用できない場合があります（けんしは笑いながら読みますが…）</li>
+        </ul>
+        <label class="form-check" style="margin:0.6rem 0 0;">
+          <input type="checkbox" id="letter-confirm-check">
+          上記を確認して送信する
+        </label>
+      </div>
+      <button class="submit-btn" id="letter-submit-btn" onclick="sendLetter()">腐世界にお焚き上げする ✦</button>
     </div>
     <p class="form-note">
       送信内容は動画・SNS等で紹介させていただく場合があります。<br>
@@ -1112,6 +1159,7 @@ function sendLetter() {
   const body  = document.getElementById('letter-body').value.trim();
   const useOk = document.getElementById('letter-use-ok').checked;
   if (!body) { alert('お便りの内容を入力してください'); return; }
+  if (!document.getElementById('letter-confirm-check').checked) { alert('送信前の確認チェックを入れてください'); return; }
   const btn = document.getElementById('letter-submit-btn');
   btn.disabled    = true;
   btn.textContent = '送信中…';
