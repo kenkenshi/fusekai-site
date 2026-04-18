@@ -174,7 +174,7 @@ body::after {
   border-radius: 999px;
   background: rgba(255,255,255,0.85);
   font-family: 'Noto Sans JP', sans-serif;
-  font-size: 0.85rem;
+  font-size: 16px;
   color: #1a0a30;
   outline: none;
   backdrop-filter: blur(8px);
@@ -981,12 +981,7 @@ async function loadCards() {
       author: (r[1] || '').trim(),
       volume: (r[2] || '').trim(),
       desc:   (r[3] || '').trim(),
-      gift:   (r[6] || '').trim(),
-      imgUrl: (() => {
-        const raw = (r[5] || '').trim();
-        const m = raw.match(/[?&]id=([\w-]+)/);
-        return m ? `https://drive.google.com/uc?export=view&id=${m[1]}` : raw;
-      })(),
+      imgUrl: (r[5] || '').trim().replace(/sz=w\d+/, 'sz=w600'),
     })).filter(c => c.title);
     document.getElementById('bl-loading').style.display = 'none';
   } catch(e) {
@@ -1080,10 +1075,7 @@ searchInput.addEventListener('input', () => {
 });
 
 function showReadCard(c) {
-  const badgeHtml = [
-    c.volume ? `<span class="badge badge-read">既読 ${c.volume}</span>` : '',
-    c.gift   ? `<span class="badge badge-gift">🎁 ${c.gift}</span>` : '',
-  ].join('');
+  const badgeHtml = c.volume ? `<span class="badge badge-read">既読 ${c.volume}</span>` : '';
   const imgHtml   = c.imgUrl
     ? `<img src="${c.imgUrl}" alt="${c.title}" loading="lazy">`
     : '📚';
