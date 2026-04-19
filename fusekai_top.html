@@ -202,6 +202,21 @@ body::after {
   margin-top: 0.4rem;
   padding: 0 1.5rem;
 }
+.read-count-wrap {
+  text-align: center;
+  padding: 0.6rem 1.5rem 0;
+}
+.read-count-num {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #c040e0;
+  letter-spacing: 0.03em;
+}
+.read-count-comment {
+  font-size: 0.7rem;
+  color: rgba(80,40,100,0.55);
+  margin-top: 0.15rem;
+}
 
 /* セクションラベル */
 .section-label {
@@ -877,6 +892,10 @@ body::after {
     <input class="search-input" id="search-input" type="text" placeholder="おすすめ・語りたい作品/作者を検索してみて">
   </div>
   <p class="search-label">けんし既読作品検索（的な）</p>
+  <div class="read-count-wrap">
+    <p class="read-count-num" id="read-count-num">-- 作品</p>
+    <p class="read-count-comment" id="read-count-comment"></p>
+  </div>
 
   <div class="search-dropdown" id="search-dropdown"></div>
 
@@ -1051,6 +1070,7 @@ async function loadCards() {
       imgUrl: (r[5] || '').trim().replace(/sz=w\d+/, 'sz=w600'),
     })).filter(c => c.title);
     document.getElementById('bl-loading').style.display = 'none';
+    updateReadCount();
     restoreSearchState();
   } catch(e) {
     document.getElementById('bl-loading').textContent = '読み込みに失敗しました';
@@ -1215,6 +1235,18 @@ function selectCard(c) {
 
 function saveSearchState(title) {
   sessionStorage.setItem('lastSearch', title);
+}
+
+function updateReadCount() {
+  const count = cardData.length;
+  const thresholds = [
+    { min: 150, comment: 'これは腐の仲間入り？か？' },
+    { min: 100, comment: '１００作品超えたぜ！' },
+    { min:   0, comment: 'まだ少ないよね' },
+  ];
+  const comment = thresholds.find(t => count >= t.min).comment;
+  document.getElementById('read-count-num').textContent = `全 ${count} 作品`;
+  document.getElementById('read-count-comment').textContent = comment;
 }
 
 function restoreSearchState() {
