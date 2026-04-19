@@ -1051,6 +1051,7 @@ async function loadCards() {
       imgUrl: (r[5] || '').trim().replace(/sz=w\d+/, 'sz=w600'),
     })).filter(c => c.title);
     document.getElementById('bl-loading').style.display = 'none';
+    restoreSearchState();
   } catch(e) {
     document.getElementById('bl-loading').textContent = '読み込みに失敗しました';
   }
@@ -1204,9 +1205,23 @@ function showReadCard(c) {
     </div>`;
   resultArea.style.display = 'block';
   setTimeout(() => resultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 300);
+  saveSearchState(c.title);
 }
 
 function selectCard(c) {
+  searchInput.value = c.title;
+  showReadCard(c);
+}
+
+function saveSearchState(title) {
+  sessionStorage.setItem('lastSearch', title);
+}
+
+function restoreSearchState() {
+  const saved = sessionStorage.getItem('lastSearch');
+  if (!saved || !cardData.length) return;
+  const c = cardData.find(d => d.title === saved);
+  if (!c) return;
   searchInput.value = c.title;
   showReadCard(c);
 }
