@@ -1175,7 +1175,7 @@ const toKana = s => s.replace(/[\u3041-\u3096]/g, c => String.fromCharCode(c.cha
 
 function getFiltered(q) {
   const qk = toKana(q);
-  return cardData.filter(c => toKana(c.title).includes(qk) || toKana(c.author).includes(qk));
+  return cardData.filter(c => toKana(c.title).startsWith(qk) || toKana(c.author).startsWith(qk));
 }
 
 searchInput.addEventListener('input', () => {
