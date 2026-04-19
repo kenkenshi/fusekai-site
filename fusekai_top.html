@@ -1261,6 +1261,19 @@ shapeDefs.forEach(s => {
 });
 
 loadCards();
+
+/* ── iOS自動ズーム防止 ── */
+const viewportMeta = document.querySelector('meta[name=viewport]');
+document.addEventListener('focusin', e => {
+  if (e.target.matches('input:not([type="checkbox"]), textarea')) {
+    viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0');
+  }
+});
+document.addEventListener('focusout', e => {
+  if (e.target.matches('input:not([type="checkbox"]), textarea')) {
+    viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0');
+  }
+});
 </script>
 </body>
 </html>
