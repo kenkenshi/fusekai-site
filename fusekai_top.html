@@ -1254,6 +1254,7 @@ function showReadCard(c) {
           <button class="btn btn-talk" onclick="toggleTalkInline('${titleEsc}','${authorEsc}')">語りたい / 布教したい</button>
         </div>
         <div class="talk-inline" id="talk-inline">
+          <input id="talk-inline-name" type="text" placeholder="ラジオネーム（任意）" style="width:100%;border:2px solid #1a0a30;border-radius:10px;padding:0.5rem 0.75rem;font-size:16px;font-family:'Noto Sans JP',sans-serif;margin-bottom:0.5rem;box-shadow:2px 2px 0px #1a0a30;outline:none;">
           <textarea id="talk-inline-textarea" placeholder="どんなところが好き？けんしに布教してみよう…"></textarea>
           <label class="talk-inline-check">
             <input type="checkbox" id="talk-inline-use-ok" checked>
@@ -1306,11 +1307,13 @@ function toggleTalkInline(title, author) {
 }
 
 function sendTalkInline(title, author) {
+  const name  = document.getElementById('talk-inline-name').value.trim();
   const body  = document.getElementById('talk-inline-textarea').value.trim();
   const useOk = document.getElementById('talk-inline-use-ok').checked;
   if (!body) { alert('内容を入力してください'); return; }
-  postToScript({ type: 'talk', title, author, body, target: 'この作品', radioOk: useOk ? 'yes' : 'no' });
+  postToScript({ type: 'talk', title, author, radioName: name, body, target: 'この作品', radioOk: useOk ? 'yes' : 'no' });
   document.getElementById('talk-inline').style.display = 'none';
+  document.getElementById('talk-inline-name').value = '';
   document.getElementById('talk-inline-textarea').value = '';
   suggestToast.textContent = 'けんしに届けました！';
   suggestToast.style.display = 'block';
