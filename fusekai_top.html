@@ -1108,6 +1108,7 @@ function showPage(id, pushHistory = true) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0, 0);
+  sessionStorage.setItem('currentPage', id);
   if (pushHistory) {
     if (id === 'page-top') {
       history.replaceState({ page: 'page-top' }, '');
@@ -1122,7 +1123,44 @@ window.addEventListener('popstate', e => {
   showPage(page, false);
 });
 
-history.replaceState({ page: 'page-top' }, '');
+/* ── ページ・フォーム復元 ── */
+(function() {
+  const savedPage = sessionStorage.getItem('currentPage');
+  if (savedPage && savedPage !== 'page-top') {
+    showPage(savedPage, false);
+  } else {
+    history.replaceState({ page: 'page-top' }, '');
+  }
+
+  // お便りフォーム復元
+  const nameEl = document.getElementById('letter-name');
+  const bodyEl = document.getElementById('letter-body');
+  const useOkEl = document.getElementById('letter-use-ok');
+
+  const savedName  = sessionStorage.getItem('letterName');
+  const savedBody  = sessionStorage.getItem('letterBody');
+  const savedUseOk = sessionStorage.getItem('letterUseOk');
+  const savedCats  = JSON.parse(sessionStorage.getItem('letterCats') || '[]');
+
+  if (savedName)  nameEl.value   = savedName;
+  if (savedBody)  bodyEl.value   = savedBody;
+  if (savedUseOk !== null) useOkEl.checked = savedUseOk === 'true';
+  savedCats.forEach(v => {
+    const el = document.querySelector(`input[name="category"][value="${v}"]`);
+    if (el) el.checked = true;
+  });
+
+  // リアルタイム保存
+  nameEl.addEventListener('input',  () => sessionStorage.setItem('letterName', nameEl.value));
+  bodyEl.addEventListener('input',  () => sessionStorage.setItem('letterBody', bodyEl.value));
+  useOkEl.addEventListener('change', () => sessionStorage.setItem('letterUseOk', useOkEl.checked));
+  document.querySelectorAll('input[name="category"]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const checked = [...document.querySelectorAll('input[name="category"]:checked')].map(c => c.value);
+      sessionStorage.setItem('letterCats', JSON.stringify(checked));
+    });
+  });
+})();
 
 /* ── 検索 ── */
 const searchInput    = document.getElementById('search-input');
@@ -1320,6 +1358,7 @@ function sendLetter() {
   postToScript({ type: 'letter', radioName: name, body, radioOk: useOk ? 'yes' : 'no', categories }, () => {
     document.getElementById('letter-form-wrap').style.display = 'none';
     document.getElementById('sent-view').style.display        = 'block';
+    ['letterName','letterBody','letterUseOk','letterCats'].forEach(k => sessionStorage.removeItem(k));
   });
 }
 
