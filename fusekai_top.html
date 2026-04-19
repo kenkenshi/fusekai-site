@@ -1046,6 +1046,11 @@ const noResultsQuery = document.getElementById('no-results-query');
 
 const toKana = s => s.replace(/[\u3041-\u3096]/g, c => String.fromCharCode(c.charCodeAt(0) + 0x60));
 
+function getFiltered(q) {
+  const qk = toKana(q);
+  return cardData.filter(c => toKana(c.title).includes(qk) || toKana(c.author).includes(qk));
+}
+
 searchInput.addEventListener('input', () => {
   const q = searchInput.value.trim();
   suggestToast.style.display = 'none';
@@ -1058,26 +1063,39 @@ searchInput.addEventListener('input', () => {
     return;
   }
 
-  const qk       = toKana(q);
-  const filtered = cardData.filter(c => toKana(c.title).includes(qk) || toKana(c.author).includes(qk));
+  const filtered = getFiltered(q);
 
   if (filtered.length > 0) {
-    if (filtered.length > 1) {
-      filtered.forEach(c => {
-        const item = document.createElement('div');
-        item.className = 'suggestion-item';
-        item.innerHTML = `<span class="suggestion-icon">📚</span>
-          <div class="suggestion-texts">
-            <div class="suggestion-title">${c.title}</div>
-            <div class="suggestion-author">${c.author}</div>
-          </div>`;
-        item.addEventListener('click', () => { selectCard(c); dropdown.style.display = 'none'; });
-        dropdown.appendChild(item);
-      });
-      dropdown.style.display = 'block';
-    } else {
-      dropdown.style.display = 'none';
-    }
+    filtered.forEach(c => {
+      const item = document.createElement('div');
+      item.className = 'suggestion-item';
+      item.innerHTML = `<span class="suggestion-icon">📚</span>
+        <div class="suggestion-texts">
+          <div class="suggestion-title">${c.title}</div>
+          <div class="suggestion-author">${c.author}</div>
+        </div>`;
+      item.addEventListener('click', () => { selectCard(c); dropdown.style.display = 'none'; });
+      dropdown.appendChild(item);
+    });
+    dropdown.style.display = 'block';
+    noResults.style.display = 'none';
+    resultArea.style.display = 'none';
+  } else {
+    dropdown.style.display = 'none';
+    resultArea.style.display = 'none';
+    noResultsQuery.textContent = q;
+    noResults.style.display = 'block';
+    setTimeout(() => noResults.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 300);
+  }
+});
+
+searchInput.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  const q = searchInput.value.trim();
+  if (!q) return;
+  dropdown.style.display = 'none';
+  const filtered = getFiltered(q);
+  if (filtered.length > 0) {
     noResults.style.display = 'none';
     showReadCard(filtered[0]);
   } else {
