@@ -876,6 +876,7 @@ body::after {
 </div>
 <div class="deco-layer" id="deco-stars"></div>
 <div class="deco-layer" id="deco-shapes"></div>
+<div class="deco-layer" id="deco-icons"></div>
 
 <!-- ── トップページ ── -->
 <div id="page-top" class="page active content">
@@ -1374,6 +1375,73 @@ shapeDefs.forEach(s => {
   el.style.cssText = `top:${s.top};left:${s.left};--sz:${s.sz};--c:${s.c};--d:${s.d};--delay:${s.delay};--op:${s.op};--r0:${s.r0};--r1:${s.r1};`;
   shapesWrap.appendChild(el);
 });
+
+/* ── スマホ・漫画・ヘッドホン・波線 ── */
+(function() {
+  const wrap = document.getElementById('deco-icons');
+  const ns   = 'http://www.w3.org/2000/svg';
+
+  function makeSvg(w, h, viewBox, op, d, delay, top, left, r) {
+    const svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('width', w); svg.setAttribute('height', h);
+    svg.setAttribute('viewBox', viewBox);
+    svg.style.cssText = `position:absolute;top:${top};left:${left};opacity:${op};animation:deco-pop ${d} ease-in-out infinite;animation-delay:${delay};transform:rotate(${r});pointer-events:none;`;
+    return svg;
+  }
+
+  function makePhone(top, left, sz, op, d, delay, r) {
+    const svg = makeSvg(sz, sz*1.7, '0 0 40 68', op, d, delay, top, left, r);
+    svg.innerHTML = `
+      <rect x="2" y="2" width="36" height="64" rx="7" stroke="#e040a0" stroke-width="3" fill="rgba(255,112,184,0.12)"/>
+      <rect x="6" y="10" width="28" height="40" rx="3" fill="rgba(255,112,184,0.2)"/>
+      <circle cx="20" cy="58" r="4" stroke="#e040a0" stroke-width="2" fill="none"/>`;
+    wrap.appendChild(svg);
+  }
+
+  function makeBook(top, left, sz, op, d, delay, r) {
+    const svg = makeSvg(sz*0.85, sz, '0 0 52 64', op, d, delay, top, left, r);
+    svg.innerHTML = `
+      <rect x="4" y="2" width="44" height="60" rx="4" stroke="#a060e0" stroke-width="3" fill="rgba(160,96,224,0.12)"/>
+      <line x1="13" y1="2" x2="13" y2="62" stroke="#a060e0" stroke-width="2.5"/>
+      <line x1="20" y1="18" x2="42" y2="18" stroke="rgba(160,96,224,0.5)" stroke-width="2" stroke-linecap="round"/>
+      <line x1="20" y1="26" x2="38" y2="26" stroke="rgba(160,96,224,0.5)" stroke-width="2" stroke-linecap="round"/>`;
+    wrap.appendChild(svg);
+  }
+
+  function makeHeadphone(top, left, sz, op, d, delay, r) {
+    const svg = makeSvg(sz, sz*0.85, '0 0 64 54', op, d, delay, top, left, r);
+    svg.innerHTML = `
+      <path d="M8,36 C8,14 56,14 56,36" stroke="#60b8ff" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <rect x="2" y="32" width="14" height="18" rx="6" stroke="#60b8ff" stroke-width="3" fill="rgba(96,184,255,0.18)"/>
+      <rect x="48" y="32" width="14" height="18" rx="6" stroke="#60b8ff" stroke-width="3" fill="rgba(96,184,255,0.18)"/>`;
+    wrap.appendChild(svg);
+  }
+
+  function makeWave(top, left, w, color, op, d, delay, r) {
+    const svg = makeSvg(w, 24, `0 0 ${w} 24`, op, d, delay, top, left, r);
+    const step = w / 4;
+    svg.innerHTML = `<path d="M0,12 C${step*.5},2 ${step*1.5},22 ${step*2},12 C${step*2.5},2 ${step*3.5},22 ${w},12" stroke="${color}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
+    wrap.appendChild(svg);
+  }
+
+  makePhone('8%',  '78%', 36, 0.18, '8s',   '0s',   '-12deg');
+  makePhone('60%', '4%',  28, 0.14, '9.5s', '2s',   '8deg' );
+  makePhone('82%', '82%', 32, 0.16, '7s',   '1s',   '15deg');
+
+  makeBook('22%', '5%',  44, 0.16, '7.5s', '0.5s', '10deg' );
+  makeBook('45%', '80%', 36, 0.14, '9s',   '1.5s', '-15deg');
+  makeBook('78%', '30%', 40, 0.18, '8.5s', '3s',   '5deg'  );
+
+  makeHeadphone('15%', '50%', 48, 0.15, '10s',  '1s',   '-8deg');
+  makeHeadphone('50%', '2%',  40, 0.14, '8s',   '2.5s', '5deg' );
+  makeHeadphone('75%', '60%', 44, 0.16, '9s',   '0.3s', '12deg');
+
+  makeWave('18%', '2%',  90,  '#ff70b8', 0.2,  '7s',   '1s',   '-15deg');
+  makeWave('35%', '70%', 70,  '#a060e0', 0.18, '8.5s', '2.5s', '10deg' );
+  makeWave('55%', '5%',  110, '#60b8ff', 0.15, '6s',   '0.5s', '5deg'  );
+  makeWave('72%', '65%', 80,  '#ff50a0', 0.18, '9s',   '1.8s', '-8deg' );
+  makeWave('88%', '20%', 95,  '#c040e0', 0.14, '7.5s', '0s',   '12deg' );
+})();
 
 loadCards();
 
