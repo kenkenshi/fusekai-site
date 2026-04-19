@@ -671,6 +671,35 @@ body::after {
   color: rgba(60,20,80,0.65);
   cursor: pointer;
 }
+.category-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.3rem;
+}
+.category-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border: 1.5px solid rgba(180,80,240,0.35);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.7);
+  font-size: 0.7rem;
+  color: rgba(60,20,80,0.7);
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+}
+.category-label:has(input:checked) {
+  background: linear-gradient(135deg, #ffe0f4 0%, #f0e0ff 100%);
+  border-color: #c040e0;
+  color: #8020c0;
+  font-weight: 700;
+}
+.category-label input[type="checkbox"] {
+  display: none;
+}
 .form-check input[type="checkbox"] {
   width: 16px; height: 16px;
   accent-color: #ff50a0;
@@ -876,6 +905,16 @@ body::after {
 
   <div id="letter-form-wrap">
     <div class="form-wrap">
+      <div class="form-group">
+        <label class="form-label">カテゴリ <span>（複数選択可）</span></label>
+        <div class="category-group">
+          <label class="category-label"><input type="checkbox" name="category" value="けんしへのメッセージ">💌 けんしへのメッセージ</label>
+          <label class="category-label"><input type="checkbox" name="category" value="腐女子あるある・告白">🫣 腐女子あるある・告白</label>
+          <label class="category-label"><input type="checkbox" name="category" value="恋愛・仕事のお悩み">💼 恋愛・仕事のお悩み</label>
+          <label class="category-label"><input type="checkbox" name="category" value="聞いて欲しいこと">🗣 聞いて欲しいこと</label>
+          <label class="category-label"><input type="checkbox" name="category" value="オススメ漫画・布教">📚 オススメ漫画・布教</label>
+        </div>
+      </div>
       <div class="form-group">
         <label class="form-label">ニックネーム <span>（任意）</span></label>
         <input class="form-input" id="letter-name" type="text" placeholder="腐女子Aさん、匿名希望　など">
@@ -1196,12 +1235,13 @@ function sendLetter() {
   const name  = document.getElementById('letter-name').value.trim();
   const body  = document.getElementById('letter-body').value.trim();
   const useOk = document.getElementById('letter-use-ok').checked;
+  const categories = [...document.querySelectorAll('input[name="category"]:checked')].map(c => c.value).join('・');
   if (!body) { alert('お便りの内容を入力してください'); return; }
   if (!document.getElementById('letter-confirm-check').checked) { alert('送信前の確認チェックを入れてください'); return; }
   const btn = document.getElementById('letter-submit-btn');
   btn.disabled    = true;
   btn.textContent = '送信中…';
-  postToScript({ type: 'letter', radioName: name, body, radioOk: useOk ? 'yes' : 'no' }, () => {
+  postToScript({ type: 'letter', radioName: name, body, radioOk: useOk ? 'yes' : 'no', categories }, () => {
     document.getElementById('letter-form-wrap').style.display = 'none';
     document.getElementById('sent-view').style.display        = 'block';
   });
