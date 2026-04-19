@@ -1015,11 +1015,25 @@ function renderCards() {
 }
 
 /* ── ページ切り替え ── */
-function showPage(id) {
+function showPage(id, pushHistory = true) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0, 0);
+  if (pushHistory) {
+    if (id === 'page-top') {
+      history.replaceState({ page: 'page-top' }, '');
+    } else {
+      history.pushState({ page: id }, '');
+    }
+  }
 }
+
+window.addEventListener('popstate', e => {
+  const page = (e.state && e.state.page) ? e.state.page : 'page-top';
+  showPage(page, false);
+});
+
+history.replaceState({ page: 'page-top' }, '');
 
 /* ── 検索 ── */
 const searchInput    = document.getElementById('search-input');
