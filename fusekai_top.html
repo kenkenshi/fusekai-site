@@ -1273,8 +1273,18 @@ function showPage(id, pushHistory = true) {
 }
 
 window.addEventListener('popstate', e => {
-  const page = (e.state && e.state.page) ? e.state.page : 'page-top';
+  const state = e.state || {};
+  const page = state.page || 'page-top';
   showPage(page, false);
+  if (page === 'page-top') {
+    if (state.cardTitle) {
+      const c = cardData.find(d => d.title === state.cardTitle);
+      if (c) { showReadCard(c, false); noResults.style.display = 'none'; }
+    } else {
+      resultArea.style.display = 'none';
+      noResults.style.display = 'none';
+    }
+  }
 });
 
 /* ── ページ・フォーム復元 ── */
@@ -1466,6 +1476,7 @@ searchInput.addEventListener('keydown', e => {
   overlayBtnSuggest.addEventListener('click', () => {
     const q = overlayInput.value.trim();
     closeOverlay();
+    resultArea.style.display = 'none';
     noResultsQuery.textContent = q;
     noResults.style.display = 'block';
     suggestBook();
@@ -1473,13 +1484,14 @@ searchInput.addEventListener('keydown', e => {
   overlayBtnTalk.addEventListener('click', () => {
     const q = overlayInput.value.trim();
     closeOverlay();
+    resultArea.style.display = 'none';
     noResultsQuery.textContent = q;
     noResults.style.display = 'block';
     toggleTalk();
   });
 })();
 
-function showReadCard(c) {
+function showReadCard(c, push = true) {
   const badgeHtml = c.volume ? `<span class="badge badge-read">既読 ${c.volume}</span>` : '';
   const imgHtml   = c.imgUrl
     ? `<img src="${c.imgUrl}" alt="${c.title}" loading="lazy">`
@@ -1510,6 +1522,7 @@ function showReadCard(c) {
       </div>
     </div>`;
   resultArea.style.display = 'block';
+  if (push) history.pushState({ page: 'page-top', cardTitle: c.title }, '');
   setTimeout(() => resultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 300);
   saveSearchState(c.title);
 }
