@@ -164,34 +164,36 @@ body::after {
 }
 
 /* 検索 */
+.search-outer {
+  position: relative;
+  margin: 1.2rem 1.5rem 0;
+  background: rgba(255,255,255,0.92);
+  border: 2px solid #ff70b8;
+  border-radius: 24px;
+  box-shadow: 3px 3px 0px #ff70b8;
+  overflow: hidden;
+}
 .search-wrap {
   position: relative;
-  padding: 1.2rem 1.5rem 0.3rem;
 }
 .search-input {
   width: 100%;
-  padding: 0.75rem 1rem 0.75rem 2.8rem;
-  border: 2px solid #ff70b8;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.85);
+  padding: 0.85rem 1.2rem 0.85rem 3rem;
+  background: transparent;
+  border: none;
+  outline: none;
   font-family: 'Noto Sans JP', sans-serif;
   font-size: 16px;
   color: #1a0a30;
-  outline: none;
-  backdrop-filter: blur(8px);
-  box-shadow: 3px 3px 0px #ff70b8;
-  transition: box-shadow 0.15s;
 }
-.search-input:focus { box-shadow: 4px 4px 0px #e040a0; }
 .search-input::placeholder { color: rgba(80,40,100,0.4); }
 .search-icon {
   position: absolute;
-  left: 2.5rem;
+  left: 1rem;
   top: 50%;
   transform: translateY(-50%);
   font-size: 0.9rem;
   pointer-events: none;
-  margin-top: 0.6rem;
 }
 .search-label {
   text-align: center;
@@ -457,21 +459,10 @@ body::after {
   line-height: 1.7;
 }
 
-/* 検索ラッパー */
-.search-outer {
-  position: relative;
-}
-
 /* 予測サジェスト */
 .search-dropdown {
   display: none;
-  position: fixed;
-  background: rgba(255,255,255,0.97);
-  border: 2px solid #1a0a30;
-  border-radius: 16px;
-  box-shadow: 4px 4px 0px #1a0a30;
-  overflow: hidden;
-  z-index: 50;
+  border-top: 1.5px solid rgba(255,112,184,0.25);
   max-height: 55vh;
   overflow-y: auto;
 }
@@ -479,13 +470,13 @@ body::after {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.8rem 1rem;
+  padding: 0.75rem 1rem;
   cursor: pointer;
-  border-bottom: 1px solid rgba(26,10,48,0.08);
+  border-bottom: 1px solid rgba(255,112,184,0.15);
   transition: background 0.12s;
 }
 .suggestion-item:last-child { border-bottom: none; }
-.suggestion-item:hover { background: rgba(255,80,160,0.07); }
+.suggestion-item:active, .suggestion-item:hover { background: rgba(255,112,184,0.08); }
 .suggestion-icon { font-size: 1.1rem; flex-shrink: 0; }
 .suggestion-texts { flex: 1; }
 .suggestion-title { font-size: 0.82rem; font-weight: 700; color: #1a0a30; }
@@ -896,7 +887,7 @@ body::after {
     </p>
   </div>
 
-  <div class="search-outer">
+  <div class="search-outer" id="search-outer">
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
       <input class="search-input" id="search-input" type="text" placeholder="おすすめ・語りたい作品/作者を検索してみて">
@@ -1188,12 +1179,6 @@ function getFiltered(q) {
   return cardData.filter(c => toKana(c.title).startsWith(qk) || toKana(c.author).startsWith(qk) || (c.yomi && (c.yomi.startsWith(q) || toKana(c.yomi).startsWith(qk))));
 }
 
-function positionDropdown() {
-  const rect = searchInput.getBoundingClientRect();
-  dropdown.style.top  = (rect.bottom + 4) + 'px';
-  dropdown.style.left = rect.left + 'px';
-  dropdown.style.right = (window.innerWidth - rect.right) + 'px';
-}
 
 searchInput.addEventListener('input', () => {
   const q = searchInput.value.trim();
@@ -1222,7 +1207,6 @@ searchInput.addEventListener('input', () => {
       item.addEventListener('click', () => { selectCard(c); dropdown.style.display = 'none'; });
       dropdown.appendChild(item);
     });
-    positionDropdown();
     dropdown.style.display = 'block';
     noResults.style.display = 'none';
     resultArea.style.display = 'none';
