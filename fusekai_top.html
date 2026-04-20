@@ -482,6 +482,128 @@ body::after {
 .suggestion-title { font-size: 0.82rem; font-weight: 700; color: #1a0a30; }
 .suggestion-author { font-size: 0.65rem; color: #c040e0; margin-top: 0.1rem; }
 
+/* ── スマホ用検索トリガー（PC非表示） ── */
+.search-trigger {
+  display: none;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 1.2rem 1.5rem 0;
+  padding: 0.85rem 1.2rem;
+  background: rgba(255,255,255,0.92);
+  border: 2px solid #ff70b8;
+  border-radius: 24px;
+  box-shadow: 3px 3px 0px #ff70b8;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.search-trigger-icon { font-size: 1rem; flex-shrink: 0; }
+.search-trigger-text { font-size: 0.88rem; color: rgba(80,40,100,0.4); }
+
+/* ── フルスクリーン検索オーバーレイ ── */
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  background: #fff;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+  pointer-events: none;
+}
+.search-overlay.open {
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.overlay-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem 0.75rem;
+  border-bottom: 1.5px solid rgba(255,112,184,0.25);
+  background: #fff;
+  flex-shrink: 0;
+}
+.overlay-cancel {
+  font-size: 0.85rem;
+  color: #c040e0;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding: 0.3rem 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.overlay-input-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255,112,184,0.08);
+  border: 1.5px solid rgba(255,112,184,0.4);
+  border-radius: 999px;
+  padding: 0.55rem 1rem;
+  min-width: 0;
+}
+.overlay-icon { font-size: 0.9rem; flex-shrink: 0; }
+.overlay-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 16px;
+  color: #1a0a30;
+  min-width: 0;
+}
+.overlay-input::placeholder { color: rgba(80,40,100,0.38); }
+.overlay-clear {
+  font-size: 0.85rem;
+  color: rgba(80,40,100,0.35);
+  cursor: pointer;
+  display: none;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.overlay-results {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.overlay-hint {
+  padding: 1rem 1.2rem 0.5rem;
+  font-size: 0.65rem;
+  font-family: 'DM Mono', monospace;
+  color: rgba(80,40,100,0.4);
+  letter-spacing: 0.06em;
+}
+.overlay-no-results {
+  padding: 1.5rem 1.2rem;
+  text-align: center;
+}
+.overlay-no-results-text {
+  font-size: 0.82rem;
+  color: #1a0a30;
+  line-height: 1.8;
+  margin-bottom: 0.4rem;
+}
+.overlay-no-results-hint {
+  font-size: 0.7rem;
+  color: #e040a0;
+  margin-bottom: 1rem;
+}
+.overlay-no-results-btns {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+}
+
+/* メディアクエリ：スマホのみ切り替え */
+@media (max-width: 768px) {
+  .search-outer { display: none; }
+  .search-trigger { display: flex; }
+}
+
 /* 検索結果カード（1枚・全幅） */
 .result-area {
   display: none;
@@ -887,6 +1009,13 @@ body::after {
     </p>
   </div>
 
+  <!-- スマホ用：タップで全画面オーバーレイを開くボタン -->
+  <div class="search-trigger" id="search-trigger">
+    <span class="search-trigger-icon">🔍</span>
+    <span class="search-trigger-text">おすすめ・語りたい作品/作者を検索してみて</span>
+  </div>
+
+  <!-- PC用：Google風のびる検索窓 -->
   <div class="search-outer" id="search-outer">
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
@@ -1235,9 +1364,97 @@ searchInput.addEventListener('keydown', e => {
     resultArea.style.display = 'none';
     noResultsQuery.textContent = q;
     noResults.style.display = 'block';
-    setTimeout(() => noResults.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 300);
   }
 });
+
+/* ── スマホ用フルスクリーン検索オーバーレイ ── */
+(function() {
+  const trigger       = document.getElementById('search-trigger');
+  const overlay       = document.getElementById('search-overlay');
+  const overlayInput  = document.getElementById('overlay-input');
+  const overlayClear  = document.getElementById('overlay-clear');
+  const overlayCancel = document.getElementById('overlay-cancel');
+  const suggestList   = document.getElementById('overlay-suggestion-list');
+  const overlayNoRes  = document.getElementById('overlay-no-results');
+  const overlayNoQ    = document.getElementById('overlay-no-query');
+  const overlayBtnSuggest = document.getElementById('overlay-btn-suggest');
+  const overlayBtnTalk    = document.getElementById('overlay-btn-talk');
+
+  function openOverlay() {
+    overlay.classList.add('open');
+    setTimeout(() => overlayInput.focus(), 300);
+  }
+
+  function closeOverlay() {
+    overlayInput.blur();
+    overlay.classList.remove('open');
+    overlayInput.value = '';
+    overlayClear.style.display = 'none';
+    suggestList.innerHTML = '';
+    overlayNoRes.style.display = 'none';
+  }
+
+  trigger && trigger.addEventListener('click', openOverlay);
+  overlayCancel.addEventListener('click', closeOverlay);
+
+  overlayClear.addEventListener('click', () => {
+    overlayInput.value = '';
+    overlayClear.style.display = 'none';
+    suggestList.innerHTML = '';
+    overlayNoRes.style.display = 'none';
+    overlayInput.focus();
+  });
+
+  function handleOverlayInput() {
+    const q = overlayInput.value.trim();
+    overlayClear.style.display = q ? 'block' : 'none';
+    suggestList.innerHTML = '';
+    overlayNoRes.style.display = 'none';
+    if (!q) return;
+
+    const filtered = getFiltered(q);
+    if (filtered.length > 0) {
+      filtered.forEach(c => {
+        const item = document.createElement('div');
+        item.className = 'suggestion-item';
+        item.innerHTML = `<span class="suggestion-icon">📚</span>
+          <div class="suggestion-texts">
+            <div class="suggestion-title">${c.title}</div>
+            <div class="suggestion-author">${c.author}</div>
+          </div>`;
+        item.addEventListener('click', () => {
+          closeOverlay();
+          showReadCard(c);
+          resultArea.style.display = 'block';
+          noResults.style.display = 'none';
+          setTimeout(() => resultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+        });
+        suggestList.appendChild(item);
+      });
+    } else {
+      overlayNoQ.textContent = q;
+      overlayNoRes.style.display = 'block';
+    }
+  }
+
+  overlayInput.addEventListener('input', handleOverlayInput);
+  overlayInput.addEventListener('compositionend', handleOverlayInput);
+
+  overlayBtnSuggest.addEventListener('click', () => {
+    const q = overlayInput.value.trim();
+    closeOverlay();
+    noResultsQuery.textContent = q;
+    noResults.style.display = 'block';
+    suggestBook();
+  });
+  overlayBtnTalk.addEventListener('click', () => {
+    const q = overlayInput.value.trim();
+    closeOverlay();
+    noResultsQuery.textContent = q;
+    noResults.style.display = 'block';
+    toggleTalk();
+  });
+})();
 
 function showReadCard(c) {
   const badgeHtml = c.volume ? `<span class="badge badge-read">既読 ${c.volume}</span>` : '';
@@ -1505,5 +1722,29 @@ document.addEventListener('focusout', e => {
   }
 });
 </script>
+
+<!-- ── スマホ用フルスクリーン検索オーバーレイ ── -->
+<div class="search-overlay" id="search-overlay">
+  <div class="overlay-bar">
+    <div class="overlay-input-wrap">
+      <span class="overlay-icon">🔍</span>
+      <input class="overlay-input" id="overlay-input" type="text" placeholder="作品名・作者名で検索" autocomplete="off" autocorrect="off" autocapitalize="off">
+      <span class="overlay-clear" id="overlay-clear">✕</span>
+    </div>
+    <span class="overlay-cancel" id="overlay-cancel">キャンセル</span>
+  </div>
+  <div class="overlay-results" id="overlay-results">
+    <p class="overlay-hint">SEARCH — けんし既読作品</p>
+    <div id="overlay-suggestion-list"></div>
+    <div class="overlay-no-results" id="overlay-no-results" style="display:none;">
+      <p class="overlay-no-results-text">けんしはまだ「<strong><span id="overlay-no-query"></span></strong>」を知らないかも！</p>
+      <p class="overlay-no-results-hint">けんしのラジオ・動画で使われるかも ✦</p>
+      <div class="overlay-no-results-btns">
+        <button class="btn btn-suggest" id="overlay-btn-suggest">おすすめする</button>
+        <button class="btn btn-talk" id="overlay-btn-talk">語りたい / 布教したい</button>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
