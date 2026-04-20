@@ -1176,8 +1176,7 @@ const toKana = s => s.replace(/[\u3041-\u3096]/g, c => String.fromCharCode(c.cha
 
 function getFiltered(q) {
   const qk = toKana(q);
-  if (cardData.length > 0) { const d = cardData[2]; console.log('DEBUG yomi:', JSON.stringify(d?.yomi), 'q:', q, 'qk:', qk, 'match:', d?.yomi?.startsWith(q)); }
-  return cardData.filter(c => toKana(c.title).startsWith(qk) || toKana(c.author).startsWith(qk) || (c.yomi && (c.yomi.startsWith(q) || toKana(c.yomi).startsWith(qk))));
+return cardData.filter(c => toKana(c.title).startsWith(qk) || toKana(c.author).startsWith(qk) || (c.yomi && (c.yomi.startsWith(q) || toKana(c.yomi).startsWith(qk))));
 }
 
 searchInput.addEventListener('input', () => {
