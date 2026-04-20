@@ -1169,6 +1169,22 @@ body::after {
     いただいたプレゼントは動画・SNSでご報告します。<br>
     心を込めてお送りください！
   </div>
+
+  <div style="margin:1rem 1.5rem 0;background:rgba(255,255,255,0.92);border:2px solid #1a0a30;border-radius:16px;box-shadow:4px 4px 0px #1a0a30;padding:1.2rem 1.2rem 1rem;">
+    <p style="font-size:0.65rem;font-weight:700;color:#c040e0;letter-spacing:0.08em;margin-bottom:0.6rem;font-family:'DM Mono',monospace;">AMAZON GIFT CARD</p>
+    <p style="font-size:0.85rem;font-weight:700;color:#1a0a30;margin-bottom:0.5rem;">Amazonギフトカードで布教する</p>
+    <p style="font-size:0.75rem;color:#3a2060;line-height:1.9;margin-bottom:0.9rem;">
+      「〇〇作品買ってくれ」とメッセージを添えて<br>
+      Amazonギフトカード（Eメールタイプ）を送ってください。<br>
+      けんしが読んで、買って、動画にするかも！
+    </p>
+    <p style="font-size:0.72rem;color:rgba(60,20,80,0.6);margin-bottom:0.5rem;font-weight:700;">送り先メールアドレス</p>
+    <div style="display:flex;align-items:center;gap:0.6rem;background:rgba(180,80,240,0.06);border:1.5px solid rgba(180,80,240,0.3);border-radius:10px;padding:0.6rem 0.9rem;">
+      <span style="font-size:0.85rem;font-weight:700;color:#1a0a30;flex:1;letter-spacing:0.02em;" id="gift-email">fusekai.gift@gmail.com</span>
+      <button onclick="copyGiftEmail()" id="copy-btn" style="font-size:0.68rem;font-weight:700;padding:0.3rem 0.75rem;border-radius:999px;border:1.5px solid #c040e0;background:linear-gradient(135deg,#f0e0ff,#ffe0f4);color:#8020c0;cursor:pointer;white-space:nowrap;transition:all 0.15s;">コピー</button>
+    </div>
+    <p style="font-size:0.65rem;color:rgba(80,40,100,0.45);margin-top:0.6rem;line-height:1.7;">※ Amazonでギフトカード購入時の「受取人のメールアドレス」欄に入力してください</p>
+  </div>
   <div style="height: 3rem;"></div>
 </div>
 
@@ -1776,6 +1792,21 @@ shapeDefs.forEach(s => {
   makeWave('72%', '65%', 80,  '#ff50a0', 0.18, '9s',   '1.8s', '-8deg' );
   makeWave('88%', '20%', 95,  '#c040e0', 0.14, '7.5s', '0s',   '12deg' );
 })();
+
+function copyGiftEmail() {
+  navigator.clipboard.writeText('fusekai.gift@gmail.com').then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = 'コピーした！';
+    btn.style.background = 'linear-gradient(135deg,#c040e0,#ff50a0)';
+    btn.style.color = '#fff';
+    btn.style.borderColor = '#c040e0';
+    setTimeout(() => {
+      btn.textContent = 'コピー';
+      btn.style.background = 'linear-gradient(135deg,#f0e0ff,#ffe0f4)';
+      btn.style.color = '#8020c0';
+    }, 2000);
+  });
+}
 
 document.getElementById('talk-textarea').addEventListener('input', function() {
   sessionStorage.setItem('talkDraft', this.value);
