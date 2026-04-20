@@ -507,12 +507,14 @@ body::after {
   z-index: 200;
   display: flex;
   flex-direction: column;
-  transform: translateY(100%);
-  transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.18s, visibility 0.18s;
   pointer-events: none;
 }
 .search-overlay.open {
-  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
   pointer-events: auto;
 }
 .overlay-bar {
