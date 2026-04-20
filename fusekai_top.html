@@ -465,17 +465,15 @@ body::after {
 /* 予測サジェスト */
 .search-dropdown {
   display: none;
-  position: absolute;
-  top: 100%;
-  left: 1.5rem;
-  right: 1.5rem;
-  margin-top: 0.3rem;
+  position: fixed;
   background: rgba(255,255,255,0.97);
   border: 2px solid #1a0a30;
   border-radius: 16px;
   box-shadow: 4px 4px 0px #1a0a30;
   overflow: hidden;
   z-index: 50;
+  max-height: 55vh;
+  overflow-y: auto;
 }
 .suggestion-item {
   display: flex;
@@ -1187,7 +1185,14 @@ const toKana = s => s.replace(/[\u3041-\u3096]/g, c => String.fromCharCode(c.cha
 
 function getFiltered(q) {
   const qk = toKana(q);
-return cardData.filter(c => toKana(c.title).startsWith(qk) || toKana(c.author).startsWith(qk) || (c.yomi && (c.yomi.startsWith(q) || toKana(c.yomi).startsWith(qk))));
+  return cardData.filter(c => toKana(c.title).startsWith(qk) || toKana(c.author).startsWith(qk) || (c.yomi && (c.yomi.startsWith(q) || toKana(c.yomi).startsWith(qk))));
+}
+
+function positionDropdown() {
+  const rect = searchInput.getBoundingClientRect();
+  dropdown.style.top  = (rect.bottom + 4) + 'px';
+  dropdown.style.left = rect.left + 'px';
+  dropdown.style.right = (window.innerWidth - rect.right) + 'px';
 }
 
 searchInput.addEventListener('input', () => {
@@ -1217,6 +1222,7 @@ searchInput.addEventListener('input', () => {
       item.addEventListener('click', () => { selectCard(c); dropdown.style.display = 'none'; });
       dropdown.appendChild(item);
     });
+    positionDropdown();
     dropdown.style.display = 'block';
     noResults.style.display = 'none';
     resultArea.style.display = 'none';
@@ -1225,7 +1231,6 @@ searchInput.addEventListener('input', () => {
     resultArea.style.display = 'none';
     noResultsQuery.textContent = q;
     noResults.style.display = 'block';
-    setTimeout(() => noResults.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 300);
   }
 });
 
