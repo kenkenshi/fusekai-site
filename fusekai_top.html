@@ -803,8 +803,9 @@ body::after {
 .form-input { padding: 0.7rem 1rem; }
 .form-textarea {
   padding: 0.8rem 1rem;
-  min-height: 140px;
-  resize: vertical;
+  min-height: 52px;
+  resize: none;
+  overflow: hidden;
   line-height: 1.7;
 }
 .form-input:focus, .form-textarea:focus { box-shadow: 4px 4px 0px #ff50a0; border-color: #ff50a0; }
@@ -1923,6 +1924,11 @@ function copyGiftEmail() {
 
 document.getElementById('talk-textarea').addEventListener('input', function() {
   sessionStorage.setItem('talkDraft', this.value);
+  this.style.height = 'auto';
+  this.style.height = this.scrollHeight + 'px';
+});
+
+document.getElementById('letter-body').addEventListener('input', function() {
   this.style.height = 'auto';
   this.style.height = this.scrollHeight + 'px';
 });
