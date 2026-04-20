@@ -508,13 +508,11 @@ body::after {
   display: flex;
   flex-direction: column;
   opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.18s, visibility 0.18s;
   pointer-events: none;
+  transition: opacity 0.18s;
 }
 .search-overlay.open {
   opacity: 1;
-  visibility: visible;
   pointer-events: auto;
 }
 .overlay-bar {
@@ -1012,10 +1010,10 @@ body::after {
   </div>
 
   <!-- スマホ用：タップで全画面オーバーレイを開くボタン -->
-  <div class="search-trigger" id="search-trigger">
+  <label class="search-trigger" for="overlay-input">
     <span class="search-trigger-icon">🔍</span>
     <span class="search-trigger-text">おすすめ・語りたい作品/作者を検索してみて</span>
-  </div>
+  </label>
 
   <!-- PC用：Google風のびる検索窓 -->
   <div class="search-outer" id="search-outer">
@@ -1408,7 +1406,6 @@ searchInput.addEventListener('keydown', e => {
 
   function openOverlay() {
     overlay.classList.add('open');
-    overlayInput.focus();
   }
 
   function closeOverlay() {
@@ -1420,7 +1417,7 @@ searchInput.addEventListener('keydown', e => {
     overlayNoRes.style.display = 'none';
   }
 
-  trigger && trigger.addEventListener('click', openOverlay);
+  overlayInput.addEventListener('focus', openOverlay);
   overlayCancel.addEventListener('click', closeOverlay);
 
   overlayClear.addEventListener('click', () => {
