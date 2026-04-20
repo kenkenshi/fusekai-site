@@ -457,15 +457,25 @@ body::after {
   line-height: 1.7;
 }
 
+/* 検索ラッパー */
+.search-outer {
+  position: relative;
+}
+
 /* 予測サジェスト */
 .search-dropdown {
   display: none;
-  margin: 0.3rem 1.5rem 0;
+  position: absolute;
+  top: 100%;
+  left: 1.5rem;
+  right: 1.5rem;
+  margin-top: 0.3rem;
   background: rgba(255,255,255,0.97);
   border: 2px solid #1a0a30;
   border-radius: 16px;
   box-shadow: 4px 4px 0px #1a0a30;
   overflow: hidden;
+  z-index: 50;
 }
 .suggestion-item {
   display: flex;
@@ -888,17 +898,18 @@ body::after {
     </p>
   </div>
 
-  <div class="search-wrap">
-    <span class="search-icon">🔍</span>
-    <input class="search-input" id="search-input" type="text" placeholder="おすすめ・語りたい作品/作者を検索してみて">
+  <div class="search-outer">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" id="search-input" type="text" placeholder="おすすめ・語りたい作品/作者を検索してみて">
+    </div>
+    <div class="search-dropdown" id="search-dropdown"></div>
   </div>
   <div class="read-count-wrap">
     <p class="read-count-num" id="read-count-num">-- 作品</p>
     <p class="read-count-comment" id="read-count-comment"></p>
   </div>
   <p class="search-label">けんし既読作品検索（的な）</p>
-
-  <div class="search-dropdown" id="search-dropdown"></div>
 
   <div class="result-area" id="result-area">
     <div id="result-card"></div>
