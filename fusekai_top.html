@@ -1226,6 +1226,24 @@ body::after {
         <button class="btn btn-suggest" id="overlay-btn-suggest">おすすめする</button>
         <button class="btn btn-talk" id="overlay-btn-talk">語りたい / 布教したい</button>
       </div>
+      <button class="no-results-send" style="margin-top:0.6rem;width:100%;" id="overlay-btn-present">プレゼントする</button>
+      <div id="overlay-present-panel" style="display:none;margin-top:0.75rem;text-align:left;">
+        <div style="background:rgba(255,255,255,0.95);border:2px solid #1a0a30;border-radius:14px;box-shadow:3px 3px 0px #1a0a30;padding:1rem 1rem 0.8rem;margin-bottom:0.6rem;">
+          <p style="font-size:0.62rem;font-weight:700;color:#c040e0;letter-spacing:0.08em;margin-bottom:0.5rem;font-family:'DM Mono',monospace;">SHIPPING ADDRESS</p>
+          <p style="font-size:0.82rem;font-weight:700;color:#1a0a30;line-height:1.9;margin-bottom:0.4rem;">〒152-0035<br>東京都目黒区自由が丘2-16-12 RJ3</p>
+          <p style="font-size:0.72rem;color:#3a2060;margin-bottom:0.3rem;">宛名：けんし　または　山田けんし</p>
+          <p style="font-size:0.62rem;color:rgba(60,20,80,0.5);"><strong style="color:#e03090;">NG：</strong>食べ物・飲み物・生き物はお受け取りできません</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.95);border:2px solid #1a0a30;border-radius:14px;box-shadow:3px 3px 0px #1a0a30;padding:1rem 1rem 0.8rem;">
+          <p style="font-size:0.62rem;font-weight:700;color:#c040e0;letter-spacing:0.08em;margin-bottom:0.5rem;font-family:'DM Mono',monospace;">AMAZON GIFT CARD</p>
+          <p style="font-size:0.82rem;font-weight:700;color:#1a0a30;margin-bottom:0.5rem;">Amazonギフトカードで布教する</p>
+          <p style="font-size:0.72rem;color:#3a2060;line-height:1.8;margin-bottom:0.7rem;"><span style="display:inline-block;background:linear-gradient(135deg,#ffe0f4,#f0e0ff);border:1.5px solid #c040e0;border-radius:6px;padding:0.15rem 0.5rem;font-weight:700;color:#8020c0;font-size:0.68rem;">作品名をメッセージに必ず添えて</span><br>Eメールタイプで送ってください。</p>
+          <div style="display:flex;align-items:center;gap:0.5rem;background:rgba(180,80,240,0.06);border:1.5px solid rgba(180,80,240,0.3);border-radius:8px;padding:0.5rem 0.75rem;">
+            <span style="font-size:0.78rem;font-weight:700;color:#1a0a30;flex:1;">fusekai.gift@gmail.com</span>
+            <button onclick="copyGiftEmailOverlay()" id="copy-btn-overlay" style="font-size:0.65rem;font-weight:700;padding:0.25rem 0.65rem;border-radius:999px;border:1.5px solid #c040e0;background:linear-gradient(135deg,#f0e0ff,#ffe0f4);color:#8020c0;cursor:pointer;white-space:nowrap;transition:all 0.15s;">コピー</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -1540,6 +1558,11 @@ searchInput.addEventListener('keydown', e => {
     talkArea.style.display = 'block';
     setTimeout(() => talkArea.querySelector('textarea').focus(), 100);
   });
+
+  document.getElementById('overlay-btn-present').addEventListener('click', () => {
+    const panel = document.getElementById('overlay-present-panel');
+    panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+  });
 })();
 
 function showReadCard(c, push = true) {
@@ -1814,6 +1837,20 @@ shapeDefs.forEach(s => {
 function togglePresentPanel() {
   const panel = document.getElementById('no-results-present');
   panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+}
+
+function copyGiftEmailOverlay() {
+  navigator.clipboard.writeText('fusekai.gift@gmail.com').then(() => {
+    const btn = document.getElementById('copy-btn-overlay');
+    btn.textContent = 'コピーした！';
+    btn.style.background = 'linear-gradient(135deg,#c040e0,#ff50a0)';
+    btn.style.color = '#fff';
+    setTimeout(() => {
+      btn.textContent = 'コピー';
+      btn.style.background = 'linear-gradient(135deg,#f0e0ff,#ffe0f4)';
+      btn.style.color = '#8020c0';
+    }, 2000);
+  });
 }
 
 function copyGiftEmailInline() {
