@@ -1162,6 +1162,30 @@ body::after {
   <div style="height: 3rem;"></div>
 </div>
 
+<!-- ── スマホ用フルスクリーン検索オーバーレイ ── -->
+<div class="search-overlay" id="search-overlay">
+  <div class="overlay-bar">
+    <div class="overlay-input-wrap">
+      <span class="overlay-icon">🔍</span>
+      <input class="overlay-input" id="overlay-input" type="text" placeholder="作品名・作者名で検索" autocomplete="off" autocorrect="off" autocapitalize="off">
+      <span class="overlay-clear" id="overlay-clear">✕</span>
+    </div>
+    <span class="overlay-cancel" id="overlay-cancel">キャンセル</span>
+  </div>
+  <div class="overlay-results" id="overlay-results">
+    <p class="overlay-hint">SEARCH — けんし既読作品</p>
+    <div id="overlay-suggestion-list"></div>
+    <div class="overlay-no-results" id="overlay-no-results" style="display:none;">
+      <p class="overlay-no-results-text">けんしはまだ「<strong><span id="overlay-no-query"></span></strong>」を知らないかも！</p>
+      <p class="overlay-no-results-hint">けんしのラジオ・動画で使われるかも ✦</p>
+      <div class="overlay-no-results-btns">
+        <button class="btn btn-suggest" id="overlay-btn-suggest">おすすめする</button>
+        <button class="btn btn-talk" id="overlay-btn-talk">語りたい / 布教したい</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfS8nV_egG3PEdttzKOPq88-yOB6_fbjAounh4hJEVlWpHlMVGkQkaSi59VOkkBo8/exec';
 const CSV_URL    = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQlkVklqYpy0eGF2c8jDc8Dns5jRW7iUHs3QQarG3V6vOlkBESrykKtQK13HtWVwIY14XziYjWr-gBC/pub?output=csv';
@@ -1722,29 +1746,5 @@ document.addEventListener('focusout', e => {
   }
 });
 </script>
-
-<!-- ── スマホ用フルスクリーン検索オーバーレイ ── -->
-<div class="search-overlay" id="search-overlay">
-  <div class="overlay-bar">
-    <div class="overlay-input-wrap">
-      <span class="overlay-icon">🔍</span>
-      <input class="overlay-input" id="overlay-input" type="text" placeholder="作品名・作者名で検索" autocomplete="off" autocorrect="off" autocapitalize="off">
-      <span class="overlay-clear" id="overlay-clear">✕</span>
-    </div>
-    <span class="overlay-cancel" id="overlay-cancel">キャンセル</span>
-  </div>
-  <div class="overlay-results" id="overlay-results">
-    <p class="overlay-hint">SEARCH — けんし既読作品</p>
-    <div id="overlay-suggestion-list"></div>
-    <div class="overlay-no-results" id="overlay-no-results" style="display:none;">
-      <p class="overlay-no-results-text">けんしはまだ「<strong><span id="overlay-no-query"></span></strong>」を知らないかも！</p>
-      <p class="overlay-no-results-hint">けんしのラジオ・動画で使われるかも ✦</p>
-      <div class="overlay-no-results-btns">
-        <button class="btn btn-suggest" id="overlay-btn-suggest">おすすめする</button>
-        <button class="btn btn-talk" id="overlay-btn-talk">語りたい / 布教したい</button>
-      </div>
-    </div>
-  </div>
-</div>
 </body>
 </html>
