@@ -1046,6 +1046,7 @@ body::after {
       <button class="btn btn-talk" onclick="toggleTalk()">語りたい / 布教したい</button>
     </div>
     <div class="no-results-talk" id="no-results-talk">
+      <input id="talk-name" type="text" placeholder="ラジオネーム（任意）" style="width:100%;border:2px solid #1a0a30;border-radius:10px;padding:0.5rem 0.75rem;font-size:16px;font-family:'Noto Sans JP',sans-serif;margin-bottom:0.5rem;box-shadow:2px 2px 0px #1a0a30;outline:none;background:rgba(255,255,255,0.9);">
       <textarea id="talk-textarea" placeholder="どんな作品？どこが好き？けんしに布教してみよう…"></textarea>
       <label class="no-results-check">
         <input type="checkbox" id="use-ok-check" checked>
@@ -1622,13 +1623,15 @@ function toggleTalk() {
 
 function sendTalk() {
   const q     = noResultsQuery.textContent || searchInput.value.trim();
+  const name  = document.getElementById('talk-name').value.trim();
   const body  = document.getElementById('talk-textarea').value.trim();
   const useOk = document.getElementById('use-ok-check').checked;
   if (!body) { alert('内容を入力してください'); return; }
-  postToScript({ type: 'talk', title: q, author: '', body, target: '未読作品', radioOk: useOk ? 'yes' : 'no' });
+  postToScript({ type: 'talk', title: q, author: '', radioName: name, body, target: '未読作品', radioOk: useOk ? 'yes' : 'no' });
   document.getElementById('no-results-talk').style.display = 'none';
   suggestToast.textContent = 'けんしに届けました！';
   suggestToast.style.display = 'block';
+  document.getElementById('talk-name').value = '';
   document.getElementById('talk-textarea').value = '';
   sessionStorage.removeItem('talkDraft');
   sessionStorage.removeItem('lastNoResultsQuery');
