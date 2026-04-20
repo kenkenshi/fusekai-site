@@ -1060,7 +1060,7 @@ function parseCSV(text) {
 
 async function loadCards() {
   try {
-    const res  = await fetch(CSV_URL);
+    const res  = await fetch(CSV_URL + '&t=' + Date.now());
     const text = await res.text();
     const rows = parseCSV(text);
     cardData = rows.map(r => ({
@@ -1069,6 +1069,7 @@ async function loadCards() {
       volume: (r[2] || '').trim(),
       desc:   (r[3] || '').trim(),
       imgUrl: (r[5] || '').trim().replace(/sz=w\d+/, 'sz=w600'),
+      yomi:   (r[7] || '').trim(),
     })).filter(c => c.title);
     document.getElementById('bl-loading').style.display = 'none';
     updateReadCount();
@@ -1175,7 +1176,8 @@ const toKana = s => s.replace(/[\u3041-\u3096]/g, c => String.fromCharCode(c.cha
 
 function getFiltered(q) {
   const qk = toKana(q);
-  return cardData.filter(c => toKana(c.title).startsWith(qk) || toKana(c.author).startsWith(qk));
+  if (cardData.length > 0) { const d = cardData[2]; console.log('DEBUG yomi:', JSON.stringify(d?.yomi), 'q:', q, 'qk:', qk, 'match:', d?.yomi?.startsWith(q)); }
+  return cardData.filter(c => toKana(c.title).startsWith(qk) || toKana(c.author).startsWith(qk) || (c.yomi && (c.yomi.startsWith(q) || toKana(c.yomi).startsWith(qk))));
 }
 
 searchInput.addEventListener('input', () => {
@@ -1215,6 +1217,10 @@ searchInput.addEventListener('input', () => {
     noResults.style.display = 'block';
     setTimeout(() => noResults.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 300);
   }
+});
+
+searchInput.addEventListener('compositionend', () => {
+  searchInput.dispatchEvent(new Event('input'));
 });
 
 searchInput.addEventListener('keydown', e => {
