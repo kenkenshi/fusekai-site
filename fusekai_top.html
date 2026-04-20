@@ -1070,6 +1070,18 @@ body::after {
         <input type="checkbox" id="use-ok-check" checked>
         ラジオ・動画での使用OK
       </label>
+      <div class="letter-confirm-box">
+        <p class="letter-confirm-title">📋 送信前にご確認ください</p>
+        <ul class="letter-confirm-list">
+          <li>送信内容はラジオ・動画で参考にさせていただく場合があります</li>
+          <li>個人が特定される情報は含めないでください</li>
+          <li>直接的すぎる性表現は採用できない場合があります（けんしは笑いながら読みますが…）</li>
+        </ul>
+        <label class="form-check" style="margin:0.6rem 0 0;">
+          <input type="checkbox" id="talk-confirm-check">
+          上記を確認して送信する
+        </label>
+      </div>
       <button class="no-results-send" onclick="sendTalk()">送る ✦</button>
     </div>
   </div>
@@ -1594,6 +1606,18 @@ function showReadCard(c, push = true) {
             <input type="checkbox" id="talk-inline-use-ok" checked>
             ラジオ・動画での使用OK
           </label>
+          <div class="letter-confirm-box">
+            <p class="letter-confirm-title">📋 送信前にご確認ください</p>
+            <ul class="letter-confirm-list">
+              <li>送信内容はラジオ・動画で参考にさせていただく場合があります</li>
+              <li>個人が特定される情報は含めないでください</li>
+              <li>直接的すぎる性表現は採用できない場合があります（けんしは笑いながら読みますが…）</li>
+            </ul>
+            <label class="form-check" style="margin:0.6rem 0 0;">
+              <input type="checkbox" id="talk-inline-confirm-check">
+              上記を確認して送信する
+            </label>
+          </div>
           <button class="talk-inline-send" onclick="sendTalkInline('${titleEsc}','${authorEsc}')">送る ✦</button>
         </div>
       </div>
@@ -1655,10 +1679,12 @@ function sendTalkInline(title, author) {
   const body  = document.getElementById('talk-inline-textarea').value.trim();
   const useOk = document.getElementById('talk-inline-use-ok').checked;
   if (!body) { alert('内容を入力してください'); return; }
+  if (!document.getElementById('talk-inline-confirm-check').checked) { alert('送信前の確認チェックを入れてください'); return; }
   postToScript({ type: 'talk', title, author, radioName: name, body, target: 'この作品', radioOk: useOk ? 'yes' : 'no' });
   document.getElementById('talk-inline').style.display = 'none';
   document.getElementById('talk-inline-name').value = '';
   document.getElementById('talk-inline-textarea').value = '';
+  document.getElementById('talk-inline-confirm-check').checked = false;
   suggestToast.textContent = 'けんしに届けました！';
   suggestToast.style.display = 'block';
 }
@@ -1685,12 +1711,14 @@ function sendTalk() {
   const body  = document.getElementById('talk-textarea').value.trim();
   const useOk = document.getElementById('use-ok-check').checked;
   if (!body) { alert('内容を入力してください'); return; }
+  if (!document.getElementById('talk-confirm-check').checked) { alert('送信前の確認チェックを入れてください'); return; }
   postToScript({ type: 'talk', title: q, author: '', radioName: name, body, target: '未読作品', radioOk: useOk ? 'yes' : 'no' });
   document.getElementById('no-results-talk').style.display = 'none';
   suggestToast.textContent = 'けんしに届けました！';
   suggestToast.style.display = 'block';
   document.getElementById('talk-name').value = '';
   document.getElementById('talk-textarea').value = '';
+  document.getElementById('talk-confirm-check').checked = false;
   sessionStorage.removeItem('talkDraft');
   sessionStorage.removeItem('lastNoResultsQuery');
 }
