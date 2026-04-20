@@ -1058,7 +1058,10 @@ body::after {
   <div class="cards" id="cards-wrap"></div>
 
   <div class="footer-btns">
-    <button class="footer-btn pink" onclick="showPage('page-letter')">けんしにお便りを書く</button>
+    <button class="footer-btn pink" onclick="showPage('page-letter')">
+      けんしにお便りを書く
+      <span style="display:block;font-size:0.65rem;font-weight:400;opacity:0.8;margin-top:0.2rem;">日常・悩み・BL語り…なんでも</span>
+    </button>
     <button class="footer-btn blue" onclick="showPage('page-present')">けんしにプレゼントを送る</button>
   </div>
 </div>
@@ -1513,6 +1516,7 @@ function showReadCard(c, push = true) {
         ${badgeHtml ? `<div class="card-read-status">${badgeHtml}</div>` : ''}
         ${c.desc ? `<p class="card-desc">${c.desc}</p>` : ''}
         <p class="card-hint">けんしのラジオ・動画で使われるかも ✦</p>
+        <p style="font-size:0.62rem;color:rgba(80,40,100,0.45);margin-bottom:0.3rem;letter-spacing:0.03em;">この作品について</p>
         <div class="card-actions">
           <button class="btn btn-talk" onclick="toggleTalkInline('${titleEsc}','${authorEsc}')">語りたい / 布教したい</button>
         </div>
