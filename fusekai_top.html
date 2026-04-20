@@ -1353,6 +1353,7 @@ searchInput.addEventListener('input', () => {
     resultArea.style.display = 'none';
     noResults.style.display = 'none';
     sessionStorage.removeItem('lastSearch');
+    sessionStorage.removeItem('lastNoResultsQuery');
     return;
   }
 
@@ -1378,6 +1379,7 @@ searchInput.addEventListener('input', () => {
     resultArea.style.display = 'none';
     noResultsQuery.textContent = q;
     noResults.style.display = 'block';
+    sessionStorage.setItem('lastNoResultsQuery', q);
   }
 });
 
@@ -1479,6 +1481,7 @@ searchInput.addEventListener('keydown', e => {
     resultArea.style.display = 'none';
     noResultsQuery.textContent = q;
     noResults.style.display = 'block';
+    sessionStorage.setItem('lastNoResultsQuery', q);
     suggestBook();
   });
   overlayBtnTalk.addEventListener('click', () => {
@@ -1487,7 +1490,10 @@ searchInput.addEventListener('keydown', e => {
     resultArea.style.display = 'none';
     noResultsQuery.textContent = q;
     noResults.style.display = 'block';
-    toggleTalk();
+    sessionStorage.setItem('lastNoResultsQuery', q);
+    const talkArea = document.getElementById('no-results-talk');
+    talkArea.style.display = 'block';
+    setTimeout(() => talkArea.querySelector('textarea').focus(), 100);
   });
 })();
 
@@ -1550,11 +1556,20 @@ function updateReadCount() {
 
 function restoreSearchState() {
   const saved = sessionStorage.getItem('lastSearch');
-  if (!saved || !cardData.length) return;
-  const c = cardData.find(d => d.title === saved);
-  if (!c) return;
-  searchInput.value = c.title;
-  showReadCard(c);
+  if (saved && cardData.length) {
+    const c = cardData.find(d => d.title === saved);
+    if (c) { searchInput.value = c.title; showReadCard(c); return; }
+  }
+  const savedQ = sessionStorage.getItem('lastNoResultsQuery');
+  if (savedQ) {
+    noResultsQuery.textContent = savedQ;
+    noResults.style.display = 'block';
+    const savedTalk = sessionStorage.getItem('talkDraft');
+    if (savedTalk) {
+      document.getElementById('talk-textarea').value = savedTalk;
+      document.getElementById('no-results-talk').style.display = 'block';
+    }
+  }
 }
 
 function toggleTalkInline(title, author) {
@@ -1594,7 +1609,7 @@ function toggleTalk() {
 }
 
 function sendTalk() {
-  const q     = searchInput.value.trim();
+  const q     = noResultsQuery.textContent || searchInput.value.trim();
   const body  = document.getElementById('talk-textarea').value.trim();
   const useOk = document.getElementById('use-ok-check').checked;
   if (!body) { alert('内容を入力してください'); return; }
@@ -1603,6 +1618,8 @@ function sendTalk() {
   suggestToast.textContent = 'けんしに届けました！';
   suggestToast.style.display = 'block';
   document.getElementById('talk-textarea').value = '';
+  sessionStorage.removeItem('talkDraft');
+  sessionStorage.removeItem('lastNoResultsQuery');
 }
 
 /* ── お便り送信 ── */
@@ -1742,6 +1759,10 @@ shapeDefs.forEach(s => {
   makeWave('72%', '65%', 80,  '#ff50a0', 0.18, '9s',   '1.8s', '-8deg' );
   makeWave('88%', '20%', 95,  '#c040e0', 0.14, '7.5s', '0s',   '12deg' );
 })();
+
+document.getElementById('talk-textarea').addEventListener('input', function() {
+  sessionStorage.setItem('talkDraft', this.value);
+});
 
 loadCards();
 
