@@ -277,9 +277,10 @@ body::after {
   font-size: 0.78rem;
   color: #1a0a30;
   padding: 0.7rem 0.9rem;
-  min-height: 90px;
+  min-height: 52px;
   resize: none;
   outline: none;
+  overflow: hidden;
   box-shadow: 2px 2px 0px #1a0a30;
   line-height: 1.7;
 }
@@ -638,9 +639,10 @@ body::after {
   font-size: 0.78rem;
   color: #1a0a30;
   padding: 0.7rem 0.9rem;
-  min-height: 90px;
+  min-height: 52px;
   resize: none;
   outline: none;
+  overflow: hidden;
   box-shadow: 2px 2px 0px #1a0a30;
   line-height: 1.7;
 }
@@ -1671,7 +1673,17 @@ function toggleTalkInline(title, author) {
   const area   = document.getElementById('talk-inline');
   const isOpen = area.style.display === 'block';
   area.style.display = isOpen ? 'none' : 'block';
-  if (!isOpen) area.querySelector('textarea').focus();
+  if (!isOpen) {
+    const ta = area.querySelector('textarea');
+    if (!ta._autoResizeAttached) {
+      ta.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + 'px';
+      });
+      ta._autoResizeAttached = true;
+    }
+    ta.focus();
+  }
 }
 
 function sendTalkInline(title, author) {
@@ -1911,6 +1923,8 @@ function copyGiftEmail() {
 
 document.getElementById('talk-textarea').addEventListener('input', function() {
   sessionStorage.setItem('talkDraft', this.value);
+  this.style.height = 'auto';
+  this.style.height = this.scrollHeight + 'px';
 });
 
 loadCards();
