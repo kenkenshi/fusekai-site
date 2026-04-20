@@ -1072,14 +1072,16 @@ body::after {
     <span class="back-arrow">←</span> 戻る
   </button>
 
-  <p class="page-title">お便りを書く</p>
-  <p class="page-desc">
-    性癖、職場にバレた、妄想が止まらない…<br>
-    そんな腐女子の日常、腐世界でお焚き上げ！
-  </p>
-  <div class="letter-guide">
-    <span>📱 短め → ショート動画</span>
-    <span>🎙 長め → 横動画・ポッドキャスト</span>
+  <div style="margin:0 1.5rem 1.2rem;background:rgba(255,255,255,0.88);border:2px solid #1a0a30;border-radius:20px;box-shadow:4px 4px 0px #1a0a30;padding:1.4rem 1.2rem 1.2rem;text-align:center;">
+    <p class="page-title" style="padding:0 0 0.4rem;">お便りを書く</p>
+    <p style="font-size:0.82rem;color:#3a2060;line-height:1.9;margin-bottom:1rem;">
+      性癖、職場にバレた、妄想が止まらない…<br>
+      そんな腐女子の日常、腐世界でお焚き上げ！
+    </p>
+    <div class="letter-guide" style="padding:0;">
+      <span>📱 短め → ショート動画</span>
+      <span>🎙 長め → 横動画・ポッドキャスト</span>
+    </div>
   </div>
 
   <div id="letter-form-wrap">
@@ -1520,9 +1522,9 @@ function showReadCard(c, push = true) {
         ${badgeHtml ? `<div class="card-read-status">${badgeHtml}</div>` : ''}
         ${c.desc ? `<p class="card-desc">${c.desc}</p>` : ''}
         <p class="card-hint">けんしのラジオ・動画で使われるかも ✦</p>
-        <p style="font-size:0.72rem;color:rgba(80,40,100,0.5);margin-bottom:0.3rem;letter-spacing:0.03em;font-weight:500;">この作品について</p>
+        <p style="font-size:0.8rem;color:rgba(80,40,100,0.65);margin-bottom:0.4rem;letter-spacing:0.03em;font-weight:700;">この作品について</p>
         <div class="card-actions">
-          <button class="btn btn-talk" onclick="toggleTalkInline('${titleEsc}','${authorEsc}')">語りたい / 布教したい</button>
+          <button class="btn btn-talk" style="font-size:0.85rem;padding:0.5rem 1.3rem;border-width:2px;" onclick="toggleTalkInline('${titleEsc}','${authorEsc}')">語りたい / 布教したい</button>
         </div>
         <div class="talk-inline" id="talk-inline">
           <input id="talk-inline-name" type="text" placeholder="ラジオネーム（任意）" style="width:100%;border:2px solid #1a0a30;border-radius:10px;padding:0.5rem 0.75rem;font-size:16px;font-family:'Noto Sans JP',sans-serif;margin-bottom:0.5rem;box-shadow:2px 2px 0px #1a0a30;outline:none;">
