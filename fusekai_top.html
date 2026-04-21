@@ -1037,8 +1037,10 @@ body::after {
       <div style="flex:1;min-width:0;">
         <p id="rp-title" style="font-size:0.85rem;font-weight:700;color:#1a0a30;margin-bottom:0.2rem;line-height:1.4;"></p>
         <p id="rp-author" style="font-size:0.68rem;color:#6040a0;margin-bottom:0.35rem;"></p>
+        <div id="rp-badges" style="margin-bottom:0.3rem;display:none;"></div>
         <p id="rp-volume" style="font-size:0.62rem;color:rgba(180,80,240,0.8);font-weight:700;margin-bottom:0.3rem;font-family:'DM Mono',monospace;"></p>
-        <p id="rp-desc" style="font-size:0.68rem;color:#3a2060;line-height:1.6;"></p>
+        <p id="rp-desc" style="font-size:0.68rem;color:#3a2060;line-height:1.6;margin-bottom:0.5rem;"></p>
+        <div id="rp-talk-btn-wrap"></div>
       </div>
     </div>
   </div>
@@ -1330,6 +1332,18 @@ function renderRandomPick() {
   document.getElementById('rp-author').textContent = c.author;
   document.getElementById('rp-volume').textContent = c.volume ? '既読 ' + c.volume : '';
   document.getElementById('rp-desc').textContent   = c.desc || '';
+  const badgesEl = document.getElementById('rp-badges');
+  if (c.gift) {
+    badgesEl.innerHTML = '<span class="badge badge-gift">お嬢からのプレゼント</span>';
+    badgesEl.style.display = 'block';
+  } else {
+    badgesEl.innerHTML = '';
+    badgesEl.style.display = 'none';
+  }
+  const titleEsc2  = c.title.replace(/'/g, "\\'");
+  const authorEsc2 = c.author.replace(/'/g, "\\'");
+  document.getElementById('rp-talk-btn-wrap').innerHTML =
+    `<button class="btn btn-talk" style="font-size:0.75rem;padding:0.35rem 1rem;border-width:2px;width:100%;" onclick="randomPickTalkClick(event,'${titleEsc2}','${authorEsc2}')">語りたい / 布教したい</button>`;
   const imgEl = document.getElementById('rp-img');
   if (c.imgUrl) {
     imgEl.innerHTML = `<img src="${c.imgUrl}" alt="${c.title}" style="width:100%;height:100%;object-fit:cover;">`;
@@ -1340,6 +1354,12 @@ function renderRandomPick() {
 }
 function randomPickCardClick() {
   if (randomPickCard) showReadCard(randomPickCard, true);
+}
+function randomPickTalkClick(e, title, author) {
+  e.stopPropagation();
+  if (!randomPickCard) return;
+  showReadCard(randomPickCard, true);
+  toggleTalkInline(title, author);
 }
 
 function renderCards() {
