@@ -1352,7 +1352,7 @@ function renderCards() {
   cardData.forEach(c => {
     const imgHtml = c.imgUrl
       ? `<img src="${c.imgUrl}" alt="${c.title}" loading="lazy">`
-      : '📚';
+      : '<span style="font-size:0.6rem;font-weight:700;color:rgba(180,80,240,0.55);text-align:center;padding:0.5rem;line-height:1.8;">画像は<br>これから<br>更新するね！</span>';
     const div = document.createElement('div');
     div.className = 'card';
     div.innerHTML = `
