@@ -1460,6 +1460,7 @@ searchInput.addEventListener('input', () => {
     dropdown.style.display = 'none';
     resultArea.style.display = 'none';
     noResults.style.display = 'none';
+    if (cardData.length) document.getElementById('random-pick-section').style.display = 'block';
     sessionStorage.removeItem('lastSearch');
     sessionStorage.removeItem('lastNoResultsQuery');
     return;
@@ -1486,7 +1487,7 @@ searchInput.addEventListener('input', () => {
     dropdown.style.display = 'none';
     resultArea.style.display = 'none';
     noResultsQuery.textContent = q;
-    noResults.style.display = 'block';
+    noResults.style.display = 'block'; hideRandomPick();
     sessionStorage.setItem('lastNoResultsQuery', q);
   }
 });
@@ -1507,7 +1508,7 @@ searchInput.addEventListener('keydown', e => {
   } else {
     resultArea.style.display = 'none';
     noResultsQuery.textContent = q;
-    noResults.style.display = 'block';
+    noResults.style.display = 'block'; hideRandomPick();
   }
 });
 
@@ -1588,7 +1589,7 @@ searchInput.addEventListener('keydown', e => {
     closeOverlay();
     resultArea.style.display = 'none';
     noResultsQuery.textContent = q;
-    noResults.style.display = 'block';
+    noResults.style.display = 'block'; hideRandomPick();
     sessionStorage.setItem('lastNoResultsQuery', q);
     suggestBook();
   });
@@ -1597,7 +1598,7 @@ searchInput.addEventListener('keydown', e => {
     closeOverlay();
     resultArea.style.display = 'none';
     noResultsQuery.textContent = q;
-    noResults.style.display = 'block';
+    noResults.style.display = 'block'; hideRandomPick();
     sessionStorage.setItem('lastNoResultsQuery', q);
     const talkArea = document.getElementById('no-results-talk');
     talkArea.style.display = 'block';
@@ -1610,7 +1611,12 @@ searchInput.addEventListener('keydown', e => {
   });
 })();
 
+function hideRandomPick() {
+  document.getElementById('random-pick-section').style.display = 'none';
+}
+
 function showReadCard(c, push = true) {
+  hideRandomPick();
   const badgeHtml = [
     c.volume ? `<span class="badge badge-read">既読 ${c.volume}</span>` : '',
     c.gift   ? `<span class="badge badge-gift">お嬢からのプレゼント</span>` : '',
@@ -1692,7 +1698,7 @@ function restoreSearchState() {
   const savedQ = sessionStorage.getItem('lastNoResultsQuery');
   if (savedQ) {
     noResultsQuery.textContent = savedQ;
-    noResults.style.display = 'block';
+    noResults.style.display = 'block'; hideRandomPick();
     const savedTalk = sessionStorage.getItem('talkDraft');
     if (savedTalk) {
       document.getElementById('talk-textarea').value = savedTalk;
