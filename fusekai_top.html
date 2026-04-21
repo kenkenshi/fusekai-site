@@ -1397,6 +1397,13 @@ window.addEventListener('popstate', e => {
 
 /* ── ページ・フォーム復元 ── */
 (function() {
+  const navType = (performance.getEntriesByType('navigation')[0] || {}).type;
+  if (navType === 'reload' || navType === 'navigate') {
+    sessionStorage.removeItem('lastSearch');
+    sessionStorage.removeItem('lastNoResultsQuery');
+    sessionStorage.removeItem('talkDraft');
+  }
+
   const savedPage = sessionStorage.getItem('currentPage');
   if (savedPage && savedPage !== 'page-top') {
     showPage(savedPage, false);
