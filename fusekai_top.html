@@ -1334,7 +1334,7 @@ function renderRandomPick() {
   if (c.imgUrl) {
     imgEl.innerHTML = `<img src="${c.imgUrl}" alt="${c.title}" style="width:100%;height:100%;object-fit:cover;">`;
   } else {
-    imgEl.textContent = '📚';
+    imgEl.innerHTML = '<span style="font-size:0.6rem;font-weight:700;color:rgba(180,80,240,0.55);text-align:center;padding:0.5rem;line-height:1.8;">画像は<br>これから<br>更新するね！</span>';
   }
   document.getElementById('random-pick-section').style.display = 'block';
 }
@@ -1632,7 +1632,7 @@ function showReadCard(c, push = true) {
   ].join('');
   const imgHtml   = c.imgUrl
     ? `<img src="${c.imgUrl}" alt="${c.title}" loading="lazy">`
-    : '📚';
+    : '<span style="font-size:0.6rem;font-weight:700;color:rgba(180,80,240,0.55);text-align:center;padding:0.5rem;line-height:1.8;">画像は<br>これから<br>更新するね！</span>';
   const titleEsc  = c.title.replace(/'/g, "\\'");
   const authorEsc = c.author.replace(/'/g, "\\'");
   resultCard.innerHTML = `
