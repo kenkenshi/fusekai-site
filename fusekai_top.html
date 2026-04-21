@@ -1322,7 +1322,9 @@ async function loadCards() {
 let randomPickCard = null;
 function renderRandomPick() {
   if (!cardData.length) return;
-  randomPickCard = cardData[Math.floor(Math.random() * cardData.length)];
+  const withImg = cardData.filter(c => c.imgUrl);
+  if (!withImg.length) return;
+  randomPickCard = withImg[Math.floor(Math.random() * withImg.length)];
   const c = randomPickCard;
   document.getElementById('rp-title').textContent  = c.title;
   document.getElementById('rp-author').textContent = c.author;
