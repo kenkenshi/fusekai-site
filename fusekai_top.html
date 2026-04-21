@@ -1351,12 +1351,12 @@ function renderCards() {
   wrap.innerHTML = '';
   cardData.forEach(c => {
     const imgHtml = c.imgUrl
-      ? `<img src="${c.imgUrl}" alt="${c.title}" loading="lazy">`
-      : '<span style="font-size:0.6rem;font-weight:700;color:rgba(180,80,240,0.55);text-align:center;padding:0.5rem;line-height:1.8;">画像は<br>これから<br>更新するね！</span>';
+      ? `<div class="card-img"><img src="${c.imgUrl}" alt="${c.title}" loading="lazy"></div>`
+      : `<div style="padding:0.6rem 0.75rem 0;font-size:0.62rem;font-weight:700;color:rgba(180,80,240,0.55);line-height:1.7;">画像はこれから更新するね！</div>`;
     const div = document.createElement('div');
     div.className = 'card';
     div.innerHTML = `
-      <div class="card-img">${imgHtml}</div>
+      ${imgHtml}
       <div class="card-body">
         <p class="card-title">${c.title}</p>
         <p class="card-author">${c.author}</p>
@@ -1631,13 +1631,13 @@ function showReadCard(c, push = true) {
     c.gift   ? `<span class="badge badge-gift">お嬢からのプレゼント</span>` : '',
   ].join('');
   const imgHtml   = c.imgUrl
-    ? `<img src="${c.imgUrl}" alt="${c.title}" loading="lazy">`
-    : '<span style="font-size:0.6rem;font-weight:700;color:rgba(180,80,240,0.55);text-align:center;padding:0.5rem;line-height:1.8;">画像は<br>これから<br>更新するね！</span>';
+    ? `<div class="card-img"><img src="${c.imgUrl}" alt="${c.title}" loading="lazy"></div>`
+    : `<div style="padding:0.6rem 1rem 0;font-size:0.65rem;font-weight:700;color:rgba(180,80,240,0.55);line-height:1.7;">画像はこれから更新するね！</div>`;
   const titleEsc  = c.title.replace(/'/g, "\\'");
   const authorEsc = c.author.replace(/'/g, "\\'");
   resultCard.innerHTML = `
     <div class="card">
-      <div class="card-img">${imgHtml}</div>
+      ${imgHtml}
       <div class="card-body">
         <p class="card-title">${c.title}</p>
         <p class="card-author">${c.author}</p>
