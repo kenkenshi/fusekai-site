@@ -1853,8 +1853,8 @@ function postToScript(data, cb) {
   fetch(SCRIPT_URL, {
     method: 'POST',
     mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'payload=' + encodeURIComponent(JSON.stringify(data)),
   }).then(() => { if (cb) cb(); }).catch(() => { if (cb) cb(); });
 }
 
