@@ -1423,7 +1423,7 @@ function renderCards() {
       <div class="card-body">
         <p class="card-title">${c.title}</p>
         <p class="card-author">${c.author}</p>
-        ${(c.volume || c.gift) ? `<div class="card-badges">${c.volume === '積読' ? `<span class="badge badge-tsundoku">積読</span>` : c.volume ? `<span class="badge badge-read">既読 ${c.volume}</span>` : ''}${c.gift ? `<span class="badge badge-gift">お嬢からのプレゼント</span>` : ''}</div>` : ''}
+        ${(c.volume || c.gift) ? `<div class="card-badges">${c.volume === '積読' ? `<span class="badge badge-tsundoku">これから読む</span>` : c.volume ? `<span class="badge badge-read">既読 ${c.volume}</span>` : ''}${c.gift ? `<span class="badge badge-gift">お嬢からのプレゼント</span>` : ''}</div>` : ''}
         ${c.desc ? `<p class="card-desc">${c.desc}</p>` : ''}
       </div>`;
     wrap.appendChild(div);
@@ -1690,7 +1690,7 @@ function hideRandomPick() {
 function showReadCard(c, push = true) {
   hideRandomPick();
   const badgeHtml = [
-    c.volume === '積読' ? `<span class="badge badge-tsundoku">積読</span>`
+    c.volume === '積読' ? `<span class="badge badge-tsundoku">これから読む</span>`
       : c.volume ? `<span class="badge badge-read">既読 ${c.volume}</span>` : '',
     c.gift ? `<span class="badge badge-gift">お嬢からのプレゼント</span>` : '',
   ].join('');
@@ -1760,7 +1760,7 @@ function updateReadCount() {
   ];
   const comment = thresholds.find(t => readCount >= t.min).comment;
   document.getElementById('read-count-num').textContent = `既読 ${readCount} 作品`;
-  document.getElementById('read-count-tsundoku').textContent = tsundokuCount > 0 ? `積読 ${tsundokuCount} 作品` : '';
+  document.getElementById('read-count-tsundoku').textContent = tsundokuCount > 0 ? `これから読む ${tsundokuCount} 作品` : '';
   document.getElementById('read-count-comment').textContent = comment;
 }
 
