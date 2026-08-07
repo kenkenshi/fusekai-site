@@ -134,6 +134,8 @@ body::after {
   z-index: 2;
   max-width: 460px;
   margin: 0 auto;
+  container-type: inline-size;
+  container-name: page;
 }
 
 /* 戻るボタン */
@@ -206,37 +208,6 @@ body::after {
   font-size: 0.9rem;
   pointer-events: none;
 }
-.search-label {
-  text-align: center;
-  font-size: 0.68rem;
-  color: rgba(80,40,100,0.45);
-  font-family: 'DM Mono', monospace;
-  letter-spacing: 0.05em;
-  margin-top: 0.4rem;
-  padding: 0 1.5rem;
-}
-.read-count-wrap {
-  text-align: center;
-  padding: 0.8rem 1.5rem 0.2rem;
-}
-.read-count-num {
-  font-size: 1.1rem;
-  font-weight: 900;
-  color: #c040e0;
-  letter-spacing: 0.03em;
-}
-.read-count-tsundoku {
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: #c06000;
-  margin-top: 0.1rem;
-}
-.read-count-comment {
-  font-size: 0.7rem;
-  color: rgba(80,40,100,0.55);
-  margin-top: 0.15rem;
-}
-
 /* セクションラベル */
 .section-label {
   padding: 1.6rem 1.5rem 0.8rem;
@@ -451,12 +422,6 @@ body::after {
   box-shadow: 2px 2px 0px #e03090;
 }
 .btn-talk:hover { background: #fff0f8; transform: translate(-1px,-1px); box-shadow: 3px 3px 0px #e03090; }
-.btn-suggest {
-  border-color: #1a0a30; color: #fff;
-  background: linear-gradient(135deg, #ff70b8 0%, #ff50a0 100%);
-  box-shadow: 2px 2px 0px #1a0a30;
-}
-.btn-suggest:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0px #1a0a30; }
 
 /* おすすめ完了トースト */
 .suggest-toast {
@@ -613,11 +578,7 @@ body::after {
   justify-content: center;
 }
 
-/* メディアクエリ：スマホのみ切り替え */
-@media (max-width: 768px) {
-  .search-outer { display: none; }
-  .search-trigger { display: flex; }
-}
+/* スマホでも常にインライン検索窓を表示（フルスクリーンオーバーレイは廃止） */
 
 /* 検索結果カード（1枚・全幅） */
 .result-area {
@@ -1002,6 +963,65 @@ body::after {
   font-size: 0.78rem;
   color: rgba(80,40,100,0.5);
 }
+
+/* ── ヒーロー説明文（吹き出し） ── */
+.hero-sub-box {
+  position: relative;
+  margin: 1.4rem 0.65rem 0;
+  padding: 1rem 0.75rem;
+  background: linear-gradient(135deg, #fff0f8 0%, #f2e8ff 45%, #e0f8ff 100%);
+  border: 1.5px dashed rgba(180,80,240,0.4);
+  border-radius: 16px;
+}
+.hero-sub-deco { position: absolute; pointer-events: none; }
+.hero-sub-deco.book  { top: -14px; left: -6px; transform: rotate(-14deg); }
+.hero-sub-deco.phone { bottom: -12px; right: -4px; transform: rotate(11deg); }
+.hero-sub { font-size: 0.72rem; color: #3a2060; line-height: 1.7; letter-spacing: 0.02em; font-weight: 700; }
+.hero-sub-accent { color: #e03090; font-weight: 900; white-space: nowrap; }
+@container page (max-width: 400px) {
+  .hero-sub-box { margin: 1.4rem 0.4rem 0; padding: 0.85rem 0.5rem; }
+  .hero-sub { font-size: 0.6rem; letter-spacing: 0.01em; }
+}
+
+/* ── 漫画所持数・ナビボタン ── */
+.count-hero { text-align: center; padding: 1rem 1.5rem 0.2rem; }
+.count-hero-num { font-size: 1.5rem; font-weight: 900; color: #1a0a30; letter-spacing: 0.02em; }
+.count-hero-num span { background: linear-gradient(90deg, #ff50a0 0%, #c040e0 55%, #40c8f0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.count-hero-label { font-size: 0.64rem; color: rgba(80,40,100,0.5); font-family: 'DM Mono', monospace; letter-spacing: 0.08em; margin-top: 0.15rem; }
+
+.nav-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; padding: 1.1rem 1.5rem 0.3rem; }
+.nav-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.2rem; padding: 1.2rem 0.5rem; border-radius: 18px; border: 2px solid #1a0a30; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; transition: all .15s; }
+.nav-btn:hover { transform: translate(-1px,-1px); }
+.nav-btn-read { background: linear-gradient(135deg,#e8f8ff 0%,#d0f0ff 100%); box-shadow: 4px 4px 0px #1a0a30; }
+.nav-btn-read:hover { box-shadow: 6px 6px 0px #1a0a30; }
+.nav-btn-later { background: linear-gradient(135deg,#fff4e0 0%,#ffe8c8 100%); box-shadow: 4px 4px 0px #1a0a30; }
+.nav-btn-later:hover { box-shadow: 6px 6px 0px #1a0a30; }
+.nav-btn-title { font-size: 0.92rem; font-weight: 900; letter-spacing: 0.02em; color: #1a0a30; }
+.nav-btn-count { font-size: 0.68rem; font-weight: 700; font-family: 'DM Mono', monospace; }
+.nav-btn-read .nav-btn-count { color: #0090d0; }
+.nav-btn-later .nav-btn-count { color: #c06000; }
+
+/* ── 一覧フィードページ ── */
+#page-feed { background: rgba(255,255,255,0.72); min-height: 100vh; }
+.feed-title { font-family: 'Noto Sans JP', sans-serif; font-weight: 900; font-size: 1.5rem; letter-spacing: 0.04em; background: linear-gradient(90deg, #ff50a0 0%, #c040e0 55%, #40c8f0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; padding: 0.4rem 1.5rem 0; }
+.feed-count { font-size: 0.7rem; color: rgba(80,40,100,0.55); padding: 0 1.5rem; margin-bottom: 0.4rem; font-family: 'DM Mono', monospace; }
+.feed-search { position: sticky; top: 0; z-index: 6; background: #f8f0ff; padding: 0.5rem 1.5rem 0.7rem; margin-bottom: -0.2rem; }
+.feed-search .search-outer { margin: 0; }
+.feed-layout { display: flex; padding: 0 1.2rem 2.5rem 1.5rem; gap: 0.4rem; align-items: flex-start; }
+.feed-list { flex: 1; min-width: 0; }
+.feed-row-header { padding: 0.5rem 0 0.3rem; font-family: 'DM Mono', monospace; font-size: 0.72rem; font-weight: 700; color: #c040e0; letter-spacing: 0.1em; border-bottom: 1.5px dashed rgba(192,64,224,0.35); margin-top: 0.4rem; }
+.feed-card { display: flex; gap: 0.7rem; align-items: center; padding: 0.65rem 0; border-bottom: 1.5px solid rgba(26,10,48,0.08); cursor: pointer; }
+.feed-card:hover { background: rgba(255,255,255,0.5); }
+.feed-card-img { width: 50px; height: 68px; border-radius: 8px; overflow: hidden; background: linear-gradient(135deg,#ffe0f0,#e0f4ff); border: 1.5px solid rgba(26,10,48,0.15); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+.feed-card-img img { width: 100%; height: 100%; object-fit: cover; }
+.feed-card-title { font-size: 0.8rem; font-weight: 700; color: #1a0a30; line-height: 1.35; margin-bottom: 0.2rem; }
+.feed-card-author { font-size: 0.66rem; color: #c040e0; margin-bottom: 0.3rem; }
+.feed-card-badges { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+.feed-card-hint { font-size: 0.62rem; font-weight: 700; color: #c040e0; letter-spacing: 0.02em; margin-top: 0.3rem; }
+.kana-rail { width: 30px; flex-shrink: 0; position: sticky; top: 4.6rem; align-self: flex-start; display: flex; flex-direction: column; align-items: center; gap: 0.55rem; background: rgba(255,255,255,0.75); border: 1.5px solid rgba(26,10,48,0.15); border-radius: 14px; padding: 0.7rem 0.1rem; touch-action: none; }
+.kana-rail button { border: none; background: none; font-family: 'DM Mono', monospace; font-size: 0.72rem; font-weight: 700; color: #8020c0; cursor: pointer; line-height: 1; padding: 0.3rem 0; width: 100%; transition: all .12s; }
+.kana-rail button:hover { color: #ff50a0; transform: scale(1.25); }
+.kana-rail button.active { color: #ff50a0; font-weight: 900; transform: scale(1.3); }
 </style>
 </head>
 <body>
@@ -1021,10 +1041,20 @@ body::after {
 <div id="page-top" class="page active content">
   <div class="hero">
     <img src="logo.png" alt="けんしの腐世界生活" style="width:92%;max-width:400px;margin-bottom:1rem;cursor:pointer;" onclick="showPage('page-top')">
-    <p class="hero-sub">
-      腐女子・腐男子さんの恋愛事情・仕事・日常の失敗談と<br>
-      けんしが読んだBL漫画をショート動画で発信中・・・
-    </p>
+    <div class="hero-sub-box">
+      <svg class="hero-sub-deco book" width="30" height="36" viewBox="0 0 52 64">
+        <rect x="4" y="2" width="44" height="60" rx="4" stroke="#a060e0" stroke-width="3" fill="rgba(160,96,224,0.15)"/>
+        <line x1="13" y1="2" x2="13" y2="62" stroke="#a060e0" stroke-width="2.5"/>
+        <line x1="20" y1="18" x2="42" y2="18" stroke="rgba(160,96,224,0.5)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="20" y1="26" x2="38" y2="26" stroke="rgba(160,96,224,0.5)" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <svg class="hero-sub-deco phone" width="24" height="40" viewBox="0 0 40 68">
+        <rect x="2" y="2" width="36" height="64" rx="7" stroke="#e040a0" stroke-width="3" fill="rgba(255,112,184,0.15)"/>
+        <rect x="6" y="10" width="28" height="40" rx="3" fill="rgba(255,112,184,0.25)"/>
+        <circle cx="20" cy="58" r="4" stroke="#e040a0" stroke-width="2" fill="none"/>
+      </svg>
+      <p class="hero-sub">腐女子・腐男子さんから届いたおすすめBL漫画を<br>けんしが読んで、<span class="hero-sub-accent">YouTubeで紹介中！</span></p>
+    </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin:0.9rem 1.5rem 0;">
       <a href="https://x.com/secret_kenshi" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:0.4rem;padding:0.5rem 0;border-radius:999px;border:2px solid #1a0a30;background:rgba(255,255,255,0.85);box-shadow:2px 2px 0px #1a0a30;text-decoration:none;color:#1a0a30;font-size:0.72rem;font-weight:700;font-family:'Noto Sans JP',sans-serif;">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="#1a0a30"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L2.19 2.25h6.945l4.265 5.638L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
@@ -1059,25 +1089,19 @@ body::after {
     </div>
     <div class="search-dropdown" id="search-dropdown"></div>
   </div>
-  <div class="read-count-wrap">
-    <p class="read-count-num" id="read-count-num">既読 -- 作品</p>
-    <p class="read-count-tsundoku" id="read-count-tsundoku"></p>
-    <p class="read-count-comment" id="read-count-comment"></p>
+  <div class="count-hero">
+    <p class="count-hero-num">漫画所持数 <span id="total-count">--</span> 作品</p>
+    <p class="count-hero-label" id="count-comment"></p>
   </div>
-  <p class="search-label">けんし既読作品検索（的な）</p>
 
-  <div id="random-pick-section" style="display:none;margin:0 1rem 1.2rem;">
-    <p style="font-size:0.62rem;font-weight:700;color:rgba(180,80,240,0.7);letter-spacing:0.1em;font-family:'DM Mono',monospace;text-align:center;margin-bottom:0.5rem;">RANDOM PICK ✦</p>
-    <div id="random-pick-card" style="background:rgba(255,255,255,0.88);border:2px solid #1a0a30;border-radius:16px;box-shadow:4px 4px 0px #1a0a30;padding:0.9rem 1rem;display:flex;gap:0.75rem;align-items:flex-start;cursor:pointer;" onclick="randomPickCardClick()">
-      <div id="rp-img" style="width:60px;min-width:60px;height:80px;border-radius:8px;overflow:hidden;background:#e8d8f8;display:flex;align-items:center;justify-content:center;font-size:1.6rem;border:1.5px solid rgba(26,10,48,0.15);"></div>
-      <div style="flex:1;min-width:0;">
-        <p id="rp-title" style="font-size:0.85rem;font-weight:700;color:#1a0a30;margin-bottom:0.2rem;line-height:1.4;"></p>
-        <p id="rp-author" style="font-size:0.68rem;color:#6040a0;margin-bottom:0.35rem;"></p>
-        <div id="rp-badges" style="margin-bottom:0.3rem;display:none;"></div>
-        <p id="rp-volume" style="font-size:0.62rem;color:rgba(180,80,240,0.8);font-weight:700;margin-bottom:0.3rem;font-family:'DM Mono',monospace;"></p>
-        <p id="rp-desc" style="font-size:0.68rem;color:#3a2060;line-height:1.6;margin-bottom:0.5rem;"></p>
-        <div id="rp-talk-btn-wrap"></div>
-      </div>
+  <div class="nav-buttons">
+    <div class="nav-btn nav-btn-read" onclick="openFeed('read')">
+      <div class="nav-btn-title">既読本</div>
+      <div class="nav-btn-count" id="read-count-label">-- 作品</div>
+    </div>
+    <div class="nav-btn nav-btn-later" onclick="openFeed('later')">
+      <div class="nav-btn-title">あとで読む</div>
+      <div class="nav-btn-count" id="later-count-label">-- 作品</div>
     </div>
   </div>
 
@@ -1092,7 +1116,6 @@ body::after {
     <p class="no-results-text">けんしはまだ「<strong><span id="no-results-query"></span></strong>」を知らないかも！</p>
     <p class="no-results-hint">けんしのラジオ・動画で使われるかも ✦</p>
     <div class="no-results-btns">
-      <button class="btn btn-suggest" onclick="suggestBook()">おすすめする</button>
       <button class="btn btn-talk" onclick="toggleTalk()">語りたい / 布教したい</button>
     </div>
     <button class="btn btn-talk" style="margin-top:0.5rem;font-size:0.72rem;" onclick="togglePresentPanel()">プレゼントする</button>
@@ -1146,6 +1169,28 @@ body::after {
       <span style="display:block;font-size:0.65rem;font-weight:400;opacity:0.8;margin-top:0.2rem;">日常・悩み・BL語り…なんでも</span>
     </button>
     <button class="footer-btn blue" onclick="showPage('page-present')">けんしにプレゼントを送る</button>
+  </div>
+</div>
+
+<!-- ── 一覧フィードページ（既読本／あとで読む共通） ── -->
+<div id="page-feed" class="page content">
+  <button class="back-btn" onclick="showPage('page-top')">
+    <span class="back-arrow">←</span> 戻る
+  </button>
+  <p class="feed-title" id="feed-title">既読本</p>
+  <p class="feed-count" id="feed-count">-- 作品</p>
+  <div class="feed-search">
+    <div class="search-outer">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" id="feed-search-input" type="text" placeholder="作品名・作者で絞り込み" oninput="filterFeed(this.value)" onkeydown="feedSearchSubmit(event)">
+      </div>
+      <div class="search-dropdown" id="feed-search-dropdown"></div>
+    </div>
+  </div>
+  <div class="feed-layout">
+    <div class="feed-list" id="feed-list"></div>
+    <div class="kana-rail" id="kana-rail"></div>
   </div>
 </div>
 
@@ -1284,7 +1329,6 @@ body::after {
       <p class="overlay-no-results-text">けんしはまだ「<strong><span id="overlay-no-query"></span></strong>」を知らないかも！</p>
       <p class="overlay-no-results-hint">けんしのラジオ・動画で使われるかも ✦</p>
       <div class="overlay-no-results-btns">
-        <button class="btn btn-suggest" id="overlay-btn-suggest">おすすめする</button>
         <button class="btn btn-talk" id="overlay-btn-talk">語りたい / 布教したい</button>
       </div>
       <button class="btn btn-talk" style="margin-top:0.5rem;font-size:0.72rem;" id="overlay-btn-present">プレゼントする</button>
@@ -1355,54 +1399,218 @@ async function loadCards() {
       ranking: (r[13] || '').trim(),
     })).filter(c => c.title);
     document.getElementById('bl-loading').style.display = 'none';
-    updateReadCount();
-    renderRandomPick();
+    buildFeedItems();
+    updateCounts();
     restoreSearchState();
   } catch(e) {
     document.getElementById('bl-loading').textContent = '読み込みに失敗しました';
   }
 }
 
-let randomPickCard = null;
-function renderRandomPick() {
-  if (!cardData.length) return;
-  const withImg = cardData.filter(c => c.imgUrl && c.volume !== '積読');
-  if (!withImg.length) return;
-  randomPickCard = withImg[Math.floor(Math.random() * withImg.length)];
-  const c = randomPickCard;
-  document.getElementById('rp-title').textContent  = c.title;
-  document.getElementById('rp-author').textContent = c.author;
-  document.getElementById('rp-volume').textContent = c.volume && c.volume !== '積読' ? '既読 ' + c.volume : '';
-  document.getElementById('rp-desc').textContent   = c.desc || '';
-  const badgesEl = document.getElementById('rp-badges');
-  if (c.gift) {
-    badgesEl.innerHTML = '<span class="badge badge-gift">お嬢からのプレゼント</span>';
-    badgesEl.style.display = 'block';
-  } else {
-    badgesEl.innerHTML = '';
-    badgesEl.style.display = 'none';
+/* ── 既読本／あとで読む一覧（フィード） ── */
+const KANA_ROWS = {
+  'あ':'あいうえお', 'か':'かきくけこがぎぐげご', 'さ':'さしすせそざじずぜぞ',
+  'た':'たちつてとだぢづでど', 'な':'なにぬねの', 'は':'はひふへほばびぶべぼぱぴぷぺぽ',
+  'ま':'まみむめも', 'や':'やゆよ', 'ら':'らりるれろ', 'わ':'わをん'
+};
+function kanaRow(ch) {
+  for (const k in KANA_ROWS) if (KANA_ROWS[k].includes(ch)) return k;
+  return 'あ';
+}
+
+let feedItems = { read: [], later: [] };
+function buildFeedItems() {
+  feedItems = { read: [], later: [] };
+  cardData.forEach((c, idx) => {
+    if (!c.volume) return;
+    const row = c.yomi ? kanaRow(c.yomi[0]) : 'あ';
+    const entry = { c, idx, row };
+    if (c.volume === '積読') feedItems.later.push(entry);
+    else feedItems.read.push(entry);
+  });
+  feedItems.read.sort((a, b) => a.c.yomi.localeCompare(b.c.yomi, 'ja'));
+  feedItems.later.sort((a, b) => a.c.yomi.localeCompare(b.c.yomi, 'ja'));
+}
+
+function updateCounts() {
+  const readCount  = feedItems.read.length;
+  const laterCount = feedItems.later.length;
+  const total = readCount + laterCount;
+  const thresholds = [
+    { min: 150, comment: 'これは腐の仲間入り？か？' },
+    { min: 100, comment: '１００作品超えたぜ！' },
+    { min:   0, comment: 'まだ少ないよね' },
+  ];
+  document.getElementById('total-count').textContent   = total;
+  document.getElementById('count-comment').textContent = thresholds.find(t => total >= t.min).comment;
+  document.getElementById('read-count-label').textContent  = readCount + ' 作品';
+  document.getElementById('later-count-label').textContent = laterCount + ' 作品';
+}
+
+function feedBadgeHtml(c) {
+  let html = '';
+  if (c.volume === '積読') html += `<span class="badge badge-tsundoku">これから読む</span>`;
+  else if (c.volume) html += `<span class="badge badge-read">既読 ${c.volume}</span>`;
+  if (c.gift) html += `<span class="badge badge-gift">お嬢からのプレゼント</span>`;
+  return html;
+}
+
+function feedCardHtml(entry) {
+  const c = entry.c;
+  const img = c.imgUrl ? `<img src="${c.imgUrl}" loading="lazy" alt="">` : '📖';
+  return `<div class="feed-card" onclick="feedCardClick(${entry.idx})">
+    <div class="feed-card-img">${img}</div>
+    <div style="flex:1;min-width:0;">
+      <p class="feed-card-title">${c.title}</p>
+      <p class="feed-card-author">${c.author}</p>
+      <div class="feed-card-badges">${feedBadgeHtml(c)}</div>
+      <p class="feed-card-hint">これについて語りたい →</p>
+    </div>
+  </div>`;
+}
+
+function feedCardClick(idx) {
+  const c = cardData[idx];
+  if (c) { showPage('page-top', false); showReadCard(c, true); }
+}
+
+let currentFeedStatus = null;
+function openFeed(status) {
+  currentFeedStatus = status;
+  document.getElementById('feed-title').textContent = status === 'read' ? '既読本' : 'あとで読む';
+  document.getElementById('feed-count').textContent = feedItems[status].length + ' 作品';
+  document.getElementById('feed-search-input').value = '';
+  hideFeedDropdown();
+  renderFeedList(feedItems[status]);
+  showPage('page-feed');
+}
+
+function hideFeedDropdown() {
+  const dropdown = document.getElementById('feed-search-dropdown');
+  dropdown.style.display = 'none';
+  dropdown.innerHTML = '';
+}
+
+function renderFeedList(entries) {
+  const rowOrder = ['あ','か','さ','た','な','は','ま','や','ら','わ'];
+  const present = rowOrder.filter(r => entries.some(e => e.row === r));
+  document.getElementById('kana-rail').innerHTML =
+    present.map(r => `<button data-row="${r}" onclick="jumpTo('${r}')">${r}</button>`).join('');
+  document.getElementById('feed-list').innerHTML = entries.length
+    ? present.map(r => {
+        const rowItems = entries.filter(e => e.row === r);
+        return `<div class="feed-row-header" id="row-${r}">${r}</div>` + rowItems.map(feedCardHtml).join('');
+      }).join('')
+    : `<p style="padding:2.5rem 0;text-align:center;font-size:0.75rem;color:rgba(80,40,100,0.5);">見つからなかった…</p>`;
+  setupScrollSpy(present);
+}
+
+function filterFeed(query) {
+  const q = query.trim();
+  if (!q) {
+    hideFeedDropdown();
+    renderFeedList(feedItems[currentFeedStatus]);
+    return;
   }
-  const titleEsc2  = c.title.replace(/'/g, "\\'");
-  const authorEsc2 = c.author.replace(/'/g, "\\'");
-  document.getElementById('rp-talk-btn-wrap').innerHTML =
-    `<button class="btn btn-talk" style="font-size:0.75rem;padding:0.35rem 1rem;border-width:2px;width:100%;" onclick="randomPickTalkClick(event,'${titleEsc2}','${authorEsc2}')">語りたい / 布教したい</button>`;
-  const imgEl = document.getElementById('rp-img');
-  if (c.imgUrl) {
-    imgEl.innerHTML = `<img src="${c.imgUrl}" alt="${c.title}" style="width:100%;height:100%;object-fit:cover;">`;
+  const matches = getFiltered(q).filter(c => c.volume);
+  if (matches.length) {
+    const entries = matches.map(c => ({ c, idx: cardData.indexOf(c), row: c.yomi ? kanaRow(c.yomi[0]) : 'あ' }));
+    const dropdown = document.getElementById('feed-search-dropdown');
+    dropdown.innerHTML = entries.map(e => `
+      <div class="suggestion-item" onclick="feedCardClick(${e.idx})">
+        <span class="suggestion-icon">📚</span>
+        <div class="suggestion-texts">
+          <div class="suggestion-title">${e.c.title}</div>
+          <div class="suggestion-author">${e.c.author}</div>
+        </div>
+      </div>`).join('');
+    dropdown.style.display = 'block';
+    renderFeedList(entries);
   } else {
-    imgEl.innerHTML = '<span style="font-size:0.6rem;font-weight:700;color:rgba(180,80,240,0.55);text-align:center;padding:0.5rem;line-height:1.8;">画像は<br>これから<br>更新するね！</span>';
+    hideFeedDropdown();
+    document.getElementById('kana-rail').innerHTML = '';
+    if (railObserver) railObserver.disconnect();
+    document.getElementById('feed-list').innerHTML =
+      `<p style="padding:2.5rem 0;text-align:center;font-size:0.75rem;color:rgba(80,40,100,0.5);">見つからなかった…</p>`;
   }
-  document.getElementById('random-pick-section').style.display = 'block';
 }
-function randomPickCardClick() {
-  if (randomPickCard) showReadCard(randomPickCard, true);
+
+function feedSearchSubmit(e) {
+  if (e.key !== 'Enter') return;
+  const q = e.target.value.trim();
+  if (!q) return;
+  const matches = getFiltered(q).filter(c => c.volume);
+  if (matches.length) return;
+  feedShowNoResults(q);
 }
-function randomPickTalkClick(e, title, author) {
-  e.stopPropagation();
-  if (!randomPickCard) return;
-  showReadCard(randomPickCard, true);
-  toggleTalkInline(title, author);
+
+/* トップページと同じ「おすすめする／語りたい／プレゼントする」パネルを、
+   ページ遷移せずそのままフィード内に移動させて表示する */
+function feedShowNoResults(q) {
+  hideFeedDropdown();
+  document.getElementById('kana-rail').innerHTML = '';
+  if (railObserver) railObserver.disconnect();
+  const list = document.getElementById('feed-list');
+  list.innerHTML = '';
+  list.appendChild(noResults);
+  list.appendChild(suggestToast);
+  searchInput.value = q;
+  noResultsQuery.textContent = q;
+  noResults.style.display = 'block';
+  suggestToast.style.display = 'none';
+  document.getElementById('no-results-talk').style.display = 'none';
+  document.getElementById('no-results-present').style.display = 'none';
 }
+
+let railObserver = null;
+function setupScrollSpy(rows) {
+  if (railObserver) railObserver.disconnect();
+  const railButtons = {};
+  document.querySelectorAll('#kana-rail button').forEach(b => railButtons[b.dataset.row] = b);
+  if (rows.length) {
+    Object.values(railButtons).forEach(b => b.classList.remove('active'));
+    railButtons[rows[0]].classList.add('active');
+  }
+  railObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        Object.values(railButtons).forEach(b => b.classList.remove('active'));
+        const row = entry.target.id.replace('row-', '');
+        if (railButtons[row]) railButtons[row].classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+  rows.forEach(r => {
+    const el = document.getElementById('row-' + r);
+    if (el) railObserver.observe(el);
+  });
+}
+
+function jumpTo(row) {
+  const el = document.getElementById('row-' + row);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* あいうえお索引：指でなぞって(ドラッグして)ジャンプできるようにする */
+(function() {
+  const rail = document.getElementById('kana-rail');
+  let dragging = false;
+  function pick(clientY) {
+    const buttons = [...rail.querySelectorAll('button')];
+    if (!buttons.length) return;
+    let closest = buttons[0], closestDist = Infinity;
+    buttons.forEach(b => {
+      const r = b.getBoundingClientRect();
+      const mid = (r.top + r.bottom) / 2;
+      const dist = Math.abs(clientY - mid);
+      if (dist < closestDist) { closestDist = dist; closest = b; }
+    });
+    jumpTo(closest.dataset.row);
+  }
+  rail.addEventListener('pointerdown', e => { dragging = true; pick(e.clientY); });
+  rail.addEventListener('pointermove', e => { if (dragging) pick(e.clientY); });
+  window.addEventListener('pointerup', () => { dragging = false; });
+})();
 
 
 function renderCards() {
@@ -1522,6 +1730,12 @@ function getFiltered(q) {
   return cardData.filter(c => toKana(c.title).startsWith(qk) || toKana(c.author).startsWith(qk) || (c.yomi && (c.yomi.startsWith(q) || toKana(c.yomi).startsWith(qk))));
 }
 
+/* no-results/toastは既読本・あとで読む一覧の検索でも使い回すため、元の位置に戻す */
+function restoreNoResultsHome() {
+  resultArea.appendChild(suggestToast);
+  resultArea.after(noResults);
+}
+
 
 searchInput.addEventListener('input', () => {
   const q = searchInput.value.trim();
@@ -1532,7 +1746,6 @@ searchInput.addEventListener('input', () => {
     dropdown.style.display = 'none';
     resultArea.style.display = 'none';
     noResults.style.display = 'none';
-    if (cardData.length) document.getElementById('random-pick-section').style.display = 'block';
     sessionStorage.removeItem('lastSearch');
     sessionStorage.removeItem('lastNoResultsQuery');
     return;
@@ -1558,6 +1771,7 @@ searchInput.addEventListener('input', () => {
   } else {
     dropdown.style.display = 'none';
     resultArea.style.display = 'none';
+    restoreNoResultsHome();
     noResultsQuery.textContent = q;
     noResults.style.display = 'block'; hideRandomPick();
     sessionStorage.setItem('lastNoResultsQuery', q);
@@ -1579,6 +1793,7 @@ searchInput.addEventListener('keydown', e => {
     showReadCard(filtered[0]);
   } else {
     resultArea.style.display = 'none';
+    restoreNoResultsHome();
     noResultsQuery.textContent = q;
     noResults.style.display = 'block'; hideRandomPick();
   }
@@ -1594,7 +1809,6 @@ searchInput.addEventListener('keydown', e => {
   const suggestList   = document.getElementById('overlay-suggestion-list');
   const overlayNoRes  = document.getElementById('overlay-no-results');
   const overlayNoQ    = document.getElementById('overlay-no-query');
-  const overlayBtnSuggest = document.getElementById('overlay-btn-suggest');
   const overlayBtnTalk    = document.getElementById('overlay-btn-talk');
 
   function openOverlay() {
@@ -1655,20 +1869,11 @@ searchInput.addEventListener('keydown', e => {
 
   overlayInput.addEventListener('input', handleOverlayInput);
   overlayInput.addEventListener('compositionend', handleOverlayInput);
-
-  overlayBtnSuggest.addEventListener('click', () => {
-    const q = overlayInput.value.trim();
-    closeOverlay();
-    resultArea.style.display = 'none';
-    noResultsQuery.textContent = q;
-    noResults.style.display = 'block'; hideRandomPick();
-    sessionStorage.setItem('lastNoResultsQuery', q);
-    suggestBook();
-  });
   overlayBtnTalk.addEventListener('click', () => {
     const q = overlayInput.value.trim();
     closeOverlay();
     resultArea.style.display = 'none';
+    restoreNoResultsHome();
     noResultsQuery.textContent = q;
     noResults.style.display = 'block'; hideRandomPick();
     sessionStorage.setItem('lastNoResultsQuery', q);
@@ -1683,9 +1888,7 @@ searchInput.addEventListener('keydown', e => {
   });
 })();
 
-function hideRandomPick() {
-  document.getElementById('random-pick-section').style.display = 'none';
-}
+function hideRandomPick() {}
 
 function showReadCard(c, push = true) {
   hideRandomPick();
@@ -1750,20 +1953,6 @@ function saveSearchState(title) {
   sessionStorage.setItem('lastSearch', title);
 }
 
-function updateReadCount() {
-  const readCount     = cardData.filter(c => c.volume && c.volume !== '積読').length;
-  const tsundokuCount = cardData.filter(c => c.volume === '積読').length;
-  const thresholds = [
-    { min: 150, comment: 'これは腐の仲間入り？か？' },
-    { min: 100, comment: '１００作品超えたぜ！' },
-    { min:   0, comment: 'まだ少ないよね' },
-  ];
-  const comment = thresholds.find(t => readCount >= t.min).comment;
-  document.getElementById('read-count-num').textContent = `既読 ${readCount} 作品`;
-  document.getElementById('read-count-tsundoku').textContent = tsundokuCount > 0 ? `これから読む ${tsundokuCount} 作品` : '';
-  document.getElementById('read-count-comment').textContent = comment;
-}
-
 function restoreSearchState() {
   const saved = sessionStorage.getItem('lastSearch');
   if (saved && cardData.length) {
@@ -1772,6 +1961,7 @@ function restoreSearchState() {
   }
   const savedQ = sessionStorage.getItem('lastNoResultsQuery');
   if (savedQ) {
+    restoreNoResultsHome();
     noResultsQuery.textContent = savedQ;
     noResults.style.display = 'block'; hideRandomPick();
     const savedTalk = sessionStorage.getItem('talkDraft');
@@ -1815,14 +2005,6 @@ function sendTalkInline(title, author) {
 }
 
 /* ── 未読おすすめ・語りたい ── */
-function suggestBook() {
-  const q = searchInput.value.trim();
-  postToScript({ type: 'recommend', title: q, author: '' });
-  suggestToast.textContent = 'けんしに届けました！読んでくれるかも';
-  suggestToast.style.display = 'block';
-  document.getElementById('no-results-talk').style.display = 'none';
-}
-
 function toggleTalk() {
   const area   = document.getElementById('no-results-talk');
   const isOpen = area.style.display === 'block';
