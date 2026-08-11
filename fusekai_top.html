@@ -1892,6 +1892,7 @@ function hideRandomPick() {}
 
 function showReadCard(c, push = true) {
   hideRandomPick();
+  restoreNoResultsHome();
   const badgeHtml = [
     c.volume === '積読' ? `<span class="badge badge-tsundoku">これから読む</span>`
       : c.volume ? `<span class="badge badge-read">既読 ${c.volume}</span>` : '',
