@@ -899,12 +899,6 @@ body::after {
   color: #1a0a30;
   margin-bottom: 0.5rem;
 }
-.sent-msg {
-  font-size: 0.78rem;
-  color: rgba(60,20,80,0.6);
-  line-height: 1.9;
-}
-
 /* ── プレゼントページ ── */
 .address-card {
   margin: 0 1.5rem;
@@ -1108,7 +1102,7 @@ body::after {
   <div class="result-area" id="result-area">
     <div id="result-card"></div>
     <div class="suggest-toast" id="suggest-toast">
-      けんしに届けました！<br>読んでくれるかも
+      お便りありがとう！
     </div>
   </div>
 
@@ -1258,11 +1252,7 @@ body::after {
 
   <div class="sent-view" id="sent-view">
     <span class="sent-icon">✦</span>
-    <p class="sent-title">お便り、届きました！</p>
-    <p class="sent-msg">
-      けんしが読むのを楽しみにしてます。<br>
-      動画で紹介できたら嬉しいです。
-    </p>
+    <p class="sent-title">お便りありがとう！</p>
   </div>
 </div>
 
@@ -2001,7 +1991,7 @@ function sendTalkInline(title, author) {
   document.getElementById('talk-inline-name').value = '';
   document.getElementById('talk-inline-textarea').value = '';
   document.getElementById('talk-inline-confirm-check').checked = false;
-  suggestToast.textContent = 'けんしに届けました！';
+  suggestToast.textContent = 'お便りありがとう！';
   suggestToast.style.display = 'block';
 }
 
@@ -2022,7 +2012,7 @@ function sendTalk() {
   if (!document.getElementById('talk-confirm-check').checked) { alert('送信前の確認チェックを入れてください'); return; }
   postToScript({ type: 'talk', title: q, author: '', radioName: name, body, target: '未読作品', radioOk: useOk ? 'yes' : 'no' });
   document.getElementById('no-results-talk').style.display = 'none';
-  suggestToast.textContent = 'けんしに届けました！';
+  suggestToast.textContent = 'お便りありがとう！';
   suggestToast.style.display = 'block';
   document.getElementById('talk-name').value = '';
   document.getElementById('talk-textarea').value = '';
