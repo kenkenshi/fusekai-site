@@ -1722,8 +1722,8 @@ function getFiltered(q) {
 
 /* no-results/toastは既読本・あとで読む一覧の検索でも使い回すため、元の位置に戻す */
 function restoreNoResultsHome() {
-  resultArea.appendChild(suggestToast);
   resultArea.after(noResults);
+  noResults.after(suggestToast);
 }
 
 
