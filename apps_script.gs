@@ -1,4 +1,49 @@
 // =============================================
+// けんしの腐世界生活 - スプレッドシート管理スクリプト
+// =============================================
+// ★ 以下2関数はBL既読リストのスプレッドシートにバインドされたスクリプトにコピーして使う
+
+function fillMissingImageUrls() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  const lastRow = sheet.getLastRow();
+  const folder = DriveApp.getFolderById("1mA7LNSRtsDKpgYvkffdNu7KZW728cOnE");
+  let count = 0;
+
+  for (let i = 2; i <= lastRow; i++) {
+    const title = sheet.getRange(i, 1).getValue();
+    const currentUrl = sheet.getRange(i, 6).getValue();
+    if (!title || currentUrl) continue;
+
+    const files = folder.getFilesByName(title + ".JPG");
+    if (files.hasNext()) {
+      const file = files.next();
+      const url = "https://drive.google.com/thumbnail?id=" + file.getId() + "&sz=w200";
+      sheet.getRange(i, 6).setValue(url);
+      count++;
+    }
+  }
+  Browser.msgBox(count + "件の画像URLを追加しました！");
+}
+
+function updateEscapeJourney() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  const lastRow = sheet.getLastRow();
+  const data = sheet.getRange(1, 1, lastRow, 1).getValues();
+
+  for (let i = 0; i < data.length; i++) {
+    if (data[i][0] === "エスケープジャーニー") {
+      const row = i + 1;
+      sheet.getRange(row, 9).setValue("大学生,再会,元カレ");
+      sheet.getRange(row, 10).setValue("シリアス");
+      sheet.getRange(row, 11).setValue("コミュ障,一途,同級生");
+      sheet.getRange(row, 12).setValue("チャラ男,コミュ力高,強がり");
+      break;
+    }
+  }
+  Browser.msgBox("エスケープジャーニーのタグを更新しました！");
+}
+
+// =============================================
 // けんしの腐世界生活 - お便り受信スクリプト
 // =============================================
 var MAIL_TO = "kenkenkenshi365@gmail.com";
