@@ -432,11 +432,20 @@ body::after {
   border: 2px solid #ff50a0;
   border-radius: 12px;
   box-shadow: 3px 3px 0px #ff50a0;
-  font-size: 0.75rem;
-  color: #c040a0;
-  font-weight: 500;
   text-align: center;
   line-height: 1.7;
+}
+.toast-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: rgba(60,20,80,0.5);
+  margin-bottom: 0.15rem;
+}
+.toast-main {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #c040a0;
 }
 
 /* 予測サジェスト */
@@ -893,6 +902,13 @@ body::after {
   70% { transform: scale(1.2); }
   100% { transform: scale(1); }
 }
+.sent-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: rgba(60,20,80,0.5);
+  margin-bottom: 0.3rem;
+}
 .sent-title {
   font-size: 1.1rem;
   font-weight: 700;
@@ -1102,7 +1118,8 @@ body::after {
   <div class="result-area" id="result-area">
     <div id="result-card"></div>
     <div class="suggest-toast" id="suggest-toast">
-      お便りありがとう！
+      <p class="toast-label">正常に届きました</p>
+      <p class="toast-main">お便りありがとう！</p>
     </div>
   </div>
 
@@ -1252,6 +1269,7 @@ body::after {
 
   <div class="sent-view" id="sent-view">
     <span class="sent-icon">✦</span>
+    <p class="sent-label">正常に届きました</p>
     <p class="sent-title">お便りありがとう！</p>
   </div>
 </div>
@@ -1991,7 +2009,7 @@ function sendTalkInline(title, author) {
   document.getElementById('talk-inline-name').value = '';
   document.getElementById('talk-inline-textarea').value = '';
   document.getElementById('talk-inline-confirm-check').checked = false;
-  suggestToast.textContent = 'お便りありがとう！';
+  suggestToast.innerHTML = '<p class="toast-label">正常に届きました</p><p class="toast-main">お便りありがとう！</p>';
   suggestToast.style.display = 'block';
 }
 
@@ -2012,7 +2030,7 @@ function sendTalk() {
   if (!document.getElementById('talk-confirm-check').checked) { alert('送信前の確認チェックを入れてください'); return; }
   postToScript({ type: 'talk', title: q, author: '', radioName: name, body, target: '未読作品', radioOk: useOk ? 'yes' : 'no' });
   document.getElementById('no-results-talk').style.display = 'none';
-  suggestToast.textContent = 'お便りありがとう！';
+  suggestToast.innerHTML = '<p class="toast-label">正常に届きました</p><p class="toast-main">お便りありがとう！</p>';
   suggestToast.style.display = 'block';
   document.getElementById('talk-name').value = '';
   document.getElementById('talk-textarea').value = '';
