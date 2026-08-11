@@ -436,10 +436,9 @@ body::after {
   line-height: 1.7;
 }
 .toast-label {
-  font-size: 0.62rem;
+  font-size: 0.85rem;
   font-weight: 700;
-  letter-spacing: 0.05em;
-  color: rgba(60,20,80,0.5);
+  color: #16a35d;
   margin-bottom: 0.15rem;
 }
 .toast-main {
@@ -903,10 +902,9 @@ body::after {
   100% { transform: scale(1); }
 }
 .sent-label {
-  font-size: 0.68rem;
+  font-size: 1.1rem;
   font-weight: 700;
-  letter-spacing: 0.05em;
-  color: rgba(60,20,80,0.5);
+  color: #16a35d;
   margin-bottom: 0.3rem;
 }
 .sent-title {
@@ -1901,6 +1899,8 @@ function hideRandomPick() {}
 function showReadCard(c, push = true) {
   hideRandomPick();
   restoreNoResultsHome();
+  resultCard.style.display = 'block';
+  suggestToast.style.display = 'none';
   const badgeHtml = [
     c.volume === '積読' ? `<span class="badge badge-tsundoku">これから読む</span>`
       : c.volume ? `<span class="badge badge-read">既読 ${c.volume}</span>` : '',
@@ -2005,10 +2005,10 @@ function sendTalkInline(title, author) {
   if (!body) { alert('内容を入力してください'); return; }
   if (!document.getElementById('talk-inline-confirm-check').checked) { alert('送信前の確認チェックを入れてください'); return; }
   postToScript({ type: 'talk', title, author, radioName: name, body, target: 'この作品', radioOk: useOk ? 'yes' : 'no' });
-  document.getElementById('talk-inline').style.display = 'none';
   document.getElementById('talk-inline-name').value = '';
   document.getElementById('talk-inline-textarea').value = '';
   document.getElementById('talk-inline-confirm-check').checked = false;
+  resultCard.style.display = 'none';
   suggestToast.innerHTML = '<p class="toast-label">正常に届きました</p><p class="toast-main">お便りありがとう！</p>';
   suggestToast.style.display = 'block';
 }
@@ -2029,7 +2029,7 @@ function sendTalk() {
   if (!body) { alert('内容を入力してください'); return; }
   if (!document.getElementById('talk-confirm-check').checked) { alert('送信前の確認チェックを入れてください'); return; }
   postToScript({ type: 'talk', title: q, author: '', radioName: name, body, target: '未読作品', radioOk: useOk ? 'yes' : 'no' });
-  document.getElementById('no-results-talk').style.display = 'none';
+  noResults.style.display = 'none';
   suggestToast.innerHTML = '<p class="toast-label">正常に届きました</p><p class="toast-main">お便りありがとう！</p>';
   suggestToast.style.display = 'block';
   document.getElementById('talk-name').value = '';
