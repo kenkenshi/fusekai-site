@@ -53,7 +53,7 @@ var SPREADSHEET_ID = "1OAcUhNCdSCPtG5V1x1uX9yACcamlZH93Q9V8Zi0qfBY";
 
 // 腐便り・語りたいを1本化する統合タブ
 var UNIFIED_SHEET_NAME = "お便り一覧";
-var UNIFIED_HEADERS = ["送信日時", "種別", "ラジオネーム", "作品名", "作者名", "対象", "カテゴリ", "本文", "使用可否"];
+var UNIFIED_HEADERS = ["番号", "送信日時", "種別", "ラジオネーム", "作品名", "作者名", "対象", "カテゴリ", "本文", "使用可否"];
 
 // =============================================
 // メインの受信処理
@@ -139,14 +139,14 @@ function normalizeDash_(v) {
   return (v === "―" || v === "-") ? "" : (v || "");
 }
 
-// 統合タブを取得（なければヘッダー付きで作成）
+// 統合タブを取得（なければ作成。ヘッダー行は毎回書き直して常に最新の列構成に揃える）
 function getUnifiedSheet_() {
   var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   var sheet = ss.getSheetByName(UNIFIED_SHEET_NAME);
   if (!sheet) {
     sheet = ss.insertSheet(UNIFIED_SHEET_NAME);
-    sheet.appendRow(UNIFIED_HEADERS);
   }
+  sheet.getRange(1, 1, 1, UNIFIED_HEADERS.length).setValues([UNIFIED_HEADERS]);
   return sheet;
 }
 
@@ -155,7 +155,9 @@ function getUnifiedSheet_() {
 // =============================================
 function saveLetter(data) {
   var sheet = getUnifiedSheet_();
+  var num = sheet.getLastRow(); // ヘッダー行数を引いた既存件数+1と一致する
   sheet.appendRow([
+    num,
     new Date(),
     "腐便り",
     data.radioName || "（匿名）",
@@ -197,7 +199,9 @@ function sendLetterMail(data) {
 // =============================================
 function saveTalk(data) {
   var sheet = getUnifiedSheet_();
+  var num = sheet.getLastRow();
   sheet.appendRow([
+    num,
     new Date(),
     "語りたい",
     data.radioName || "（匿名）",
@@ -256,73 +260,38 @@ function saveRecommend(data) {
 // =============================================
 // 復旧用：Gmailに残っている全履歴から「お便り一覧」タブを作り直す
 // ★ スプレッドシートのメニュー「拡張機能 > Apps Script」のエディタで
-//    この関数を選択して▶ボタンを押すと実行できる（1回でOK、再実行しても安全）
+//    この関数を選択して▶ボタンを押すと実行できる（何度実行しても安全。
+//    毎回ヘッダー以外を全部クリアしてから、番号1番から振り直す）
 // =============================================
 function rebuildFromGmail() {
   var sheet = getUnifiedSheet_();
-
-  // ヘッダー以外をクリアしてから作り直す（旧・腐便り/語りたいタブは触らない）
   var lastRow = sheet.getLastRow();
   if (lastRow > 1) {
     sheet.getRange(2, 1, lastRow - 1, UNIFIED_HEADERS.length).clearContent();
   }
 
   var rows = [];
-  rows = rows.concat(collectLetters_());
-  rows = rows.concat(collectTalks_());
+  rows = rows.concat(searchAndParse_('subject:"【腐便り】"', "letters"));
+  rows = rows.concat(searchAndParse_('subject:"【語りたい】"', "talks"));
 
-  // 送信日時の古い順に並べる
+  // 送信日時の古い順に並べてから、1番から番号を振る
   rows.sort(function (a, b) { return a[0] - b[0]; });
+  var numberedRows = rows.map(function (r, idx) { return [idx + 1].concat(r); });
 
-  if (rows.length > 0) {
-    sheet.getRange(2, 1, rows.length, UNIFIED_HEADERS.length).setValues(rows);
+  if (numberedRows.length > 0) {
+    sheet.getRange(2, 1, numberedRows.length, UNIFIED_HEADERS.length).setValues(numberedRows);
   }
-  Browser.msgBox("Gmailから" + rows.length + "件を復元しました！（腐便り＋語りたい合計）");
+
+  try {
+    Browser.msgBox("Gmailから" + numberedRows.length + "件を復元しました！（腐便り＋語りたい合計）");
+  } catch (e) {
+    // スクリプトエディタから直接実行するとポップアップが出せないことがある。
+    // ここまでの書き込みはもう完了しているので、失敗しても無視してOK。
+  }
 }
 
-function collectLetters_() {
-  return searchAndParse_('subject:"【腐便り】"', function (text) {
-    var radioName  = extractField_(text, "ラジオネーム");
-    var categories = extractField_(text, "カテゴリ");
-    var radioOk    = extractField_(text, "使用可否");
-    var body       = extractBody_(text);
-    var dateStr    = extractField_(text, "送信日時");
-    return [
-      parseDate_(dateStr),
-      "腐便り",
-      radioName || "（匿名）",
-      "", "", "",
-      normalizeDash_(categories),
-      body,
-      radioOk || "未選択"
-    ];
-  });
-}
-
-function collectTalks_() {
-  return searchAndParse_('subject:"【語りたい】"', function (text) {
-    var radioName = extractField_(text, "ラジオネーム");
-    var title     = normalizeDash_(extractField_(text, "作品名"));
-    var author    = normalizeDash_(extractField_(text, "作者名"));
-    var target    = extractField_(text, "対象");
-    var body      = extractBody_(text);
-    var dateStr   = extractField_(text, "送信日時");
-    return [
-      parseDate_(dateStr),
-      "語りたい",
-      radioName || "（匿名）",
-      title,
-      author,
-      formatTarget_(target),
-      "",
-      body,
-      ""
-    ];
-  });
-}
-
-// Gmail検索してヒットした全メッセージ本文をparseFnでパースする（100件ずつページング）
-function searchAndParse_(query, parseFn) {
+// Gmail検索してヒットした全メッセージ本文をパースする（100件ずつページング）
+function searchAndParse_(query, kind) {
   var results = [];
   var start = 0;
   var pageSize = 100;
@@ -332,13 +301,51 @@ function searchAndParse_(query, parseFn) {
     for (var i = 0; i < threads.length; i++) {
       var messages = threads[i].getMessages();
       for (var j = 0; j < messages.length; j++) {
-        results.push(parseFn(messages[j].getPlainBody()));
+        var text = messages[j].getPlainBody();
+        results.push(kind === "letters" ? parseLetterText_(text) : parseTalkText_(text));
       }
     }
     if (threads.length < pageSize) break;
     start += pageSize;
   }
   return results;
+}
+
+function parseLetterText_(text) {
+  var radioName  = extractField_(text, "ラジオネーム");
+  var categories = extractField_(text, "カテゴリ");
+  var radioOk    = extractField_(text, "使用可否");
+  var body       = extractBody_(text);
+  var dateStr    = extractField_(text, "送信日時");
+  return [
+    parseDate_(dateStr),
+    "腐便り",
+    radioName || "（匿名）",
+    "", "", "",
+    normalizeDash_(categories),
+    body,
+    radioOk || "未選択"
+  ];
+}
+
+function parseTalkText_(text) {
+  var radioName = extractField_(text, "ラジオネーム");
+  var title     = normalizeDash_(extractField_(text, "作品名"));
+  var author    = normalizeDash_(extractField_(text, "作者名"));
+  var target    = extractField_(text, "対象");
+  var body      = extractBody_(text);
+  var dateStr   = extractField_(text, "送信日時");
+  return [
+    parseDate_(dateStr),
+    "語りたい",
+    radioName || "（匿名）",
+    title,
+    author,
+    formatTarget_(target),
+    "",
+    body,
+    ""
+  ];
 }
 
 // 本文中の「ラベル：値」の値部分を1行分だけ取り出す
