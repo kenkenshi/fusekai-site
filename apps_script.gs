@@ -147,6 +147,9 @@ function getUnifiedSheet_() {
     sheet = ss.insertSheet(UNIFIED_SHEET_NAME);
   }
   sheet.getRange(1, 1, 1, UNIFIED_HEADERS.length).setValues([UNIFIED_HEADERS]);
+  // A列（番号）に古い日付書式が残っていると「40」が「1900/02/09」のように
+  // 日付扱いで表示されてしまうため、常に整数表示に固定する
+  sheet.getRange("A:A").setNumberFormat("0");
   return sheet;
 }
 
