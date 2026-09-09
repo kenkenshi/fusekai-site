@@ -1565,6 +1565,7 @@ function filterFeed(query) {
       </div>`).join('');
     dropdown.style.display = 'block';
     renderFeedList(entries);
+    setTimeout(() => dropdown.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60);
   } else {
     hideFeedDropdown();
     document.getElementById('kana-rail').innerHTML = '';
@@ -1817,6 +1818,7 @@ searchInput.addEventListener('input', () => {
     dropdown.style.display = 'block';
     noResults.style.display = 'none';
     resultArea.style.display = 'none';
+    setTimeout(() => dropdown.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60);
   } else {
     dropdown.style.display = 'none';
     resultArea.style.display = 'none';
