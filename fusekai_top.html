@@ -191,7 +191,7 @@ body::after {
 }
 .search-input {
   width: 100%;
-  padding: 0.85rem 1.2rem 0.85rem 3rem;
+  padding: 0.85rem 2.6rem 0.85rem 3rem;
   background: transparent;
   border: none;
   outline: none;
@@ -208,6 +208,35 @@ body::after {
   font-size: 0.9rem;
   pointer-events: none;
 }
+.search-clear {
+  position: absolute;
+  right: 0.7rem;
+  top: 50%;
+  transform: translateY(-50%) scale(0.7);
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(80,40,100,0.12);
+  color: #5a3a70;
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .12s ease, transform .12s ease, background .12s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.search-outer.has-value .search-clear {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(-50%) scale(1);
+}
+.search-clear:hover { background: rgba(255,80,160,0.22); color: #ff50a0; }
+.search-clear:active { transform: translateY(-50%) scale(0.9); }
 /* セクションラベル */
 .section-label {
   padding: 1.6rem 1.5rem 0.8rem;
@@ -1094,6 +1123,7 @@ body::after {
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
       <input class="search-input" id="search-input" type="text" placeholder="おすすめ・語りたい作品/作者を検索してみて">
+      <button class="search-clear" id="search-clear" aria-label="検索文字をクリア" type="button">✕</button>
     </div>
     <div class="search-dropdown" id="search-dropdown"></div>
   </div>
@@ -1189,10 +1219,11 @@ body::after {
   <p class="feed-title" id="feed-title">既読本</p>
   <p class="feed-count" id="feed-count">-- 作品</p>
   <div class="feed-search">
-    <div class="search-outer">
+    <div class="search-outer" id="feed-search-outer">
       <div class="search-wrap">
         <span class="search-icon">🔍</span>
         <input class="search-input" id="feed-search-input" type="text" placeholder="作品名・作者で絞り込み" oninput="filterFeed(this.value)" onkeydown="feedSearchSubmit(event)">
+        <button class="search-clear" id="feed-search-clear" aria-label="検索文字をクリア" type="button">✕</button>
       </div>
       <div class="search-dropdown" id="feed-search-dropdown"></div>
     </div>
@@ -1486,6 +1517,7 @@ function openFeed(status) {
   document.getElementById('feed-title').textContent = status === 'read' ? '既読本' : 'あとで読む';
   document.getElementById('feed-count').textContent = feedItems[status].length + ' 作品';
   document.getElementById('feed-search-input').value = '';
+  document.getElementById('feed-search-outer').classList.remove('has-value');
   hideFeedDropdown();
   renderFeedList(feedItems[status]);
   showPage('page-feed');
@@ -1513,6 +1545,7 @@ function renderFeedList(entries) {
 
 function filterFeed(query) {
   const q = query.trim();
+  document.getElementById('feed-search-outer').classList.toggle('has-value', !!q);
   if (!q) {
     hideFeedDropdown();
     renderFeedList(feedItems[currentFeedStatus]);
@@ -1540,6 +1573,13 @@ function filterFeed(query) {
       `<p style="padding:2.5rem 0;text-align:center;font-size:0.75rem;color:rgba(80,40,100,0.5);">見つからなかった…</p>`;
   }
 }
+
+document.getElementById('feed-search-clear').addEventListener('click', () => {
+  const input = document.getElementById('feed-search-input');
+  input.value = '';
+  filterFeed('');
+  input.focus();
+});
 
 function feedSearchSubmit(e) {
   if (e.key !== 'Enter') return;
@@ -1722,6 +1762,8 @@ window.addEventListener('popstate', e => {
 
 /* ── 検索 ── */
 const searchInput    = document.getElementById('search-input');
+const searchOuter    = document.getElementById('search-outer');
+const searchClear    = document.getElementById('search-clear');
 const dropdown       = document.getElementById('search-dropdown');
 const resultArea     = document.getElementById('result-area');
 const resultCard     = document.getElementById('result-card');
@@ -1745,6 +1787,7 @@ function restoreNoResultsHome() {
 
 searchInput.addEventListener('input', () => {
   const q = searchInput.value.trim();
+  searchOuter.classList.toggle('has-value', !!q);
   suggestToast.style.display = 'none';
   dropdown.innerHTML = '';
 
@@ -1786,6 +1829,12 @@ searchInput.addEventListener('input', () => {
 
 searchInput.addEventListener('compositionend', () => {
   searchInput.dispatchEvent(new Event('input'));
+});
+
+searchClear.addEventListener('click', () => {
+  searchInput.value = '';
+  searchInput.dispatchEvent(new Event('input'));
+  searchInput.focus();
 });
 
 searchInput.addEventListener('keydown', e => {
