@@ -1467,7 +1467,7 @@ function buildFeedItems() {
     if (!c.volume) return;
     const row = c.yomi ? kanaRow(c.yomi[0]) : 'あ';
     const entry = { c, idx, row };
-    if (c.volume === '積読') feedItems.later.push(entry);
+    if (isTsundoku(c)) feedItems.later.push(entry);
     else feedItems.read.push(entry);
   });
   feedItems.read.sort((a, b) => a.c.yomi.localeCompare(b.c.yomi, 'ja'));
@@ -1489,10 +1489,19 @@ function updateCounts() {
   document.getElementById('later-count-label').textContent = laterCount + ' 作品';
 }
 
+const isTsundoku = c => c.volume.startsWith('積読');
+
+function statusBadgeHtml(c) {
+  if (!c.volume) return '';
+  if (isTsundoku(c)) {
+    const vol = c.volume.replace(/^積読[\s　:：・,，]*/, '');
+    return `<span class="badge badge-tsundoku">これから読む${vol ? ' ' + vol : ''}</span>`;
+  }
+  return `<span class="badge badge-read">既読 ${c.volume}</span>`;
+}
+
 function feedBadgeHtml(c) {
-  let html = '';
-  if (c.volume === '積読') html += `<span class="badge badge-tsundoku">これから読む</span>`;
-  else if (c.volume) html += `<span class="badge badge-read">既読 ${c.volume}</span>`;
+  let html = statusBadgeHtml(c);
   if (c.gift) html += `<span class="badge badge-gift">お嬢からのプレゼント</span>`;
   return html;
 }
@@ -1683,7 +1692,7 @@ function renderCards() {
       <div class="card-body">
         <p class="card-title">${c.title}</p>
         <p class="card-author">${c.author}</p>
-        ${(c.volume || c.gift) ? `<div class="card-badges">${c.volume === '積読' ? `<span class="badge badge-tsundoku">これから読む</span>` : c.volume ? `<span class="badge badge-read">既読 ${c.volume}</span>` : ''}${c.gift ? `<span class="badge badge-gift">お嬢からのプレゼント</span>` : ''}</div>` : ''}
+        ${(c.volume || c.gift) ? `<div class="card-badges">${statusBadgeHtml(c)}${c.gift ? `<span class="badge badge-gift">お嬢からのプレゼント</span>` : ''}</div>` : ''}
         ${c.desc ? `<p class="card-desc">${c.desc}</p>` : ''}
       </div>`;
     wrap.appendChild(div);
@@ -1958,8 +1967,7 @@ function showReadCard(c, push = true) {
   resultCard.style.display = 'block';
   suggestToast.style.display = 'none';
   const badgeHtml = [
-    c.volume === '積読' ? `<span class="badge badge-tsundoku">これから読む</span>`
-      : c.volume ? `<span class="badge badge-read">既読 ${c.volume}</span>` : '',
+    statusBadgeHtml(c),
     c.gift ? `<span class="badge badge-gift">お嬢からのプレゼント</span>` : '',
   ].join('');
   const imgHtml   = c.imgUrl
