@@ -1065,6 +1065,8 @@ body::after {
 .kana-rail button:hover { color: #ff50a0; transform: scale(1.25); }
 .kana-rail button.active { color: #ff50a0; font-weight: 900; transform: scale(1.3); }
 </style>
+<link rel="stylesheet" href="desktop.css?v=20261006-1">
+<script src="desktop.js?v=20261006-1" defer></script>
 </head>
 <body>
 
@@ -1078,6 +1080,17 @@ body::after {
 <div class="deco-layer" id="deco-stars"></div>
 <div class="deco-layer" id="deco-shapes"></div>
 <div class="deco-layer" id="deco-icons"></div>
+
+<nav class="desktop-nav" aria-label="サイトのメニュー">
+  <button class="desktop-brand" type="button" onclick="desktopHome()" aria-label="トップへ"><img src="logo.png" alt="けんしの腐世界生活"></button>
+  <div class="desktop-nav-links">
+    <button type="button" data-desktop-page="page-top" onclick="desktopHome()">トップ</button>
+    <button type="button" data-desktop-page="read" onclick="openFeed('read')">既読本</button>
+    <button type="button" data-desktop-page="later" onclick="openFeed('later')">あとで読む</button>
+    <button type="button" data-desktop-page="page-letter" onclick="showPage('page-letter')">お便り</button>
+    <button type="button" data-desktop-page="page-present" onclick="showPage('page-present')">プレゼント</button>
+  </div>
+</nav>
 
 <!-- ── トップページ ── -->
 <div id="page-top" class="page active content">
@@ -1149,6 +1162,7 @@ body::after {
   </div>
 
   <div class="result-area" id="result-area">
+    <button type="button" class="desktop-detail-back" onclick="desktopBackToBooks()">← 本棚に戻る</button>
     <div id="result-card"></div>
     <div class="suggest-toast" id="suggest-toast">
       <p class="toast-label">正常に届きました</p>
@@ -1214,6 +1228,10 @@ body::after {
     </button>
     <button class="footer-btn blue" onclick="showPage('page-present')">けんしにプレゼントを送る</button>
   </div>
+  <section class="desktop-shelf" id="desktop-shelf" hidden aria-label="既読本をのぞく">
+    <div class="desktop-shelf-heading"><h2>既読本をのぞく</h2><button type="button" onclick="openFeed('read')">すべて見る →</button></div>
+    <div class="desktop-shelf-books" id="desktop-shelf-books"></div>
+  </section>
 </div>
 
 <!-- ── 一覧フィードページ（既読本／あとで読む共通） ── -->
@@ -1245,7 +1263,7 @@ body::after {
     <span class="back-arrow">←</span> 戻る
   </button>
 
-  <div style="margin:0 1.5rem 1.2rem;background:rgba(255,255,255,0.88);border:2px solid #1a0a30;border-radius:20px;box-shadow:4px 4px 0px #1a0a30;padding:1.4rem 1.2rem 1.2rem;text-align:center;">
+  <div class="desktop-letter-intro" style="margin:0 1.5rem 1.2rem;background:rgba(255,255,255,0.88);border:2px solid #1a0a30;border-radius:20px;box-shadow:4px 4px 0px #1a0a30;padding:1.4rem 1.2rem 1.2rem;text-align:center;">
     <p class="page-title" style="padding:0 0 0.4rem;">お便りを書く</p>
     <p style="font-size:0.82rem;color:#3a2060;line-height:1.9;margin-bottom:1rem;">
       性癖、職場にバレた、妄想が止まらない…<br>
@@ -1314,7 +1332,7 @@ body::after {
     <span class="back-arrow">←</span> 戻る
   </button>
 
-  <div style="margin:0 1.5rem 1.2rem;background:rgba(255,255,255,0.88);border:2px solid #1a0a30;border-radius:20px;box-shadow:4px 4px 0px #1a0a30;padding:1.4rem 1.2rem 1.2rem;text-align:center;">
+  <div class="desktop-present-intro" style="margin:0 1.5rem 1.2rem;background:rgba(255,255,255,0.88);border:2px solid #1a0a30;border-radius:20px;box-shadow:4px 4px 0px #1a0a30;padding:1.4rem 1.2rem 1.2rem;text-align:center;">
     <p class="page-title" style="padding:0 0 0.4rem;">プレゼントを送る</p>
     <p style="font-size:0.82rem;color:#3a2060;line-height:1.9;margin:0;">
       けんしへのプレゼントはこちらの住所まで。<br>
@@ -1332,7 +1350,7 @@ body::after {
     <p class="address-ng"><strong>NG：</strong>食べ物・飲み物・生き物はお受け取りできません</p>
   </div>
 
-  <div style="margin:1rem 1.5rem 0;background:rgba(255,255,255,0.92);border:2px solid #1a0a30;border-radius:16px;box-shadow:4px 4px 0px #1a0a30;padding:1.2rem 1.2rem 1rem;">
+  <div class="desktop-gift-card" style="margin:1rem 1.5rem 0;background:rgba(255,255,255,0.92);border:2px solid #1a0a30;border-radius:16px;box-shadow:4px 4px 0px #1a0a30;padding:1.2rem 1.2rem 1rem;">
     <p style="font-size:0.65rem;font-weight:700;color:#c040e0;letter-spacing:0.08em;margin-bottom:0.6rem;font-family:'DM Mono',monospace;">AMAZON GIFT CARD</p>
     <p style="font-size:0.85rem;font-weight:700;color:#1a0a30;margin-bottom:0.5rem;">Amazonギフトカードで布教する</p>
     <p style="font-size:0.75rem;color:#3a2060;line-height:1.9;margin-bottom:0.9rem;">
@@ -1487,6 +1505,7 @@ function updateCounts() {
   document.getElementById('count-comment').textContent = thresholds.find(t => total >= t.min).comment;
   document.getElementById('read-count-label').textContent  = readCount + ' 作品';
   document.getElementById('later-count-label').textContent = laterCount + ' 作品';
+  if (window.renderDesktopShelf) window.renderDesktopShelf();
 }
 
 const isTsundoku = c => c.volume.startsWith('積読');
@@ -1509,7 +1528,7 @@ function feedBadgeHtml(c) {
 function feedCardHtml(entry) {
   const c = entry.c;
   const img = c.imgUrl ? `<img src="${c.imgUrl}" loading="lazy" alt="">` : '📖';
-  return `<div class="feed-card" onclick="feedCardClick(${entry.idx})">
+  return `<div class="feed-card" role="button" tabindex="0" onclick="feedCardClick(${entry.idx})">
     <div class="feed-card-img">${img}</div>
     <div style="flex:1;min-width:0;">
       <p class="feed-card-title">${c.title}</p>
@@ -1703,6 +1722,7 @@ function renderCards() {
 function showPage(id, pushHistory = true) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
+  if (window.syncDesktopNav) window.syncDesktopNav();
   window.scrollTo(0, 0);
   sessionStorage.setItem('currentPage', id);
   if (pushHistory) {

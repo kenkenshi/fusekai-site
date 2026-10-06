@@ -198,6 +198,16 @@ body {
   line-height: 2;
   display: none;
 }
+
+@media (min-width:960px) {
+  body {display:grid;grid-template-columns:minmax(0,420px) minmax(0,620px);justify-content:center;column-gap:40px;padding:24px 40px 60px;background:radial-gradient(circle,rgba(180,80,240,.18) 1.5px,transparent 1.5px) 0 0/24px 24px,linear-gradient(120deg,#edf6ff,#f8edff,#ffeaf7);color:#1a0a30;}
+  .header {grid-column:1 / -1;width:100%;max-width:none;padding:10px 0 30px;}
+  .hero {grid-column:1;width:100%;max-width:none;margin:0;padding:30px 24px;background:#fff;border:2px solid #1a0a30;border-radius:20px;box-shadow:4px 4px 0 #1a0a30;align-self:start;}
+  .hero-title {font-size:1.6rem;font-weight:700;color:#d64bbb;}
+  .form-section {grid-column:2;max-width:none;width:100%;margin:0;padding:30px;background:#fff;border:2px solid #1a0a30;border-radius:20px;box-shadow:4px 4px 0 #1a0a30;}
+  .form-textarea {min-height:240px;}
+  .submit-btn {background:linear-gradient(135deg,#ff70b8,#ff50a0);border:2px solid #1a0a30;border-radius:999px;box-shadow:3px 3px 0 #1a0a30;}
+}
 </style>
 </head>
 <body>
