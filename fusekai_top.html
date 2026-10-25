@@ -537,10 +537,31 @@ async function loadBooks() {
 }
 
 /* ── 表紙 ── */
-const imgAt = (url, w) => url.replace(/sz=w\d+/, 'sz=w' + w);
+const imgAt = (url, w) => {
+  const m = url.match(/[?&]id=([^&]+)/);
+  return m ? 'https://lh3.googleusercontent.com/d/' + m[1] + '=w' + w : url.replace(/sz=w\d+/, 'sz=w' + w);
+};
+const imgBackup = (url, w) => url.replace(/sz=w\d+/, 'sz=w' + w);
+
+// 表紙は画面に近づいたものから読み込む（ブラウザ任せの遅延読み込みは、iPhoneで読み込まれないことがあるため自前で行う）
+const lazyIO = 'IntersectionObserver' in window
+  ? new IntersectionObserver(entries => entries.forEach(e => {
+      if (e.isIntersecting) { loadImg(e.target); lazyIO.unobserve(e.target); }
+    }), { rootMargin: '600px 0px' })
+  : null;
+function loadImg(img) {
+  if (img.src) return;
+  img.addEventListener('error', () => {
+    if (img.dataset.backup && img.src !== img.dataset.backup) img.src = img.dataset.backup;
+  });
+  img.src = img.dataset.src;
+}
+function watchImgs(root) {
+  root.querySelectorAll('img[data-src]').forEach(img => lazyIO ? lazyIO.observe(img) : loadImg(img));
+}
 const volText = b => b.vol.replace(/^積読[\s　:：・,，]*/, '').replace(/〜/g, '-');
 function coverHTML(b, w, showLater) {
-  const img = b.img ? `<img loading="lazy" src="${esc(imgAt(b.img, w))}" alt="">` : `<div class="noimg">${esc(b.title)}</div>`;
+  const img = b.img ? `<img data-src="${esc(imgAt(b.img, w))}" data-backup="${esc(imgBackup(b.img, w))}" alt="">` : `<div class="noimg">${esc(b.title)}</div>`;
   return `<div class="cover">${img}${showLater && b.later ? '<span class="ltag">これから読む</span>' : ''}${b.gift ? `<span class="badge" title="お嬢からのプレゼント">${GIFT_SVG}</span>` : ''}${volText(b) ? `<span class="vol">${esc(volText(b))}</span>` : ''}</div>`;
 }
 function bookHTML(b, showLater) {
@@ -584,6 +605,7 @@ function renderLib() {
   const groups = [...ROWS.map(r => r[0]), '英'].map(k => [k, list.filter(b => rowOf(b) === k)]).filter(([, l]) => l.length);
   $('kana').innerHTML = groups.map(([k], i) => `<button class="${i ? '' : 'on'}" data-k="${k}">${k}</button>`).join('');
   $('groups').innerHTML = groups.map(([k, l]) => `<section class="group" id="g-${k}"><h3>${k === '英' ? '英数字' : k + '行'} <small>${l.length}冊</small></h3><div class="grid">${l.map(b => bookHTML(b, cat === 'all')).join('')}</div></section>`).join('');
+  watchImgs($('groups'));
   document.querySelectorAll('.seg button').forEach(b => b.classList.toggle('on', b.dataset.cat === cat));
 }
 let spyLock = 0;
@@ -602,6 +624,7 @@ let current = null;
 function renderWork(b) {
   current = b;
   $('w-cover').innerHTML = coverHTML(b, 600, false);
+  $('w-cover').querySelectorAll('img[data-src]').forEach(loadImg);
   $('w-label').textContent = b.later ? 'これから読む' : '既読';
   $('w-label').className = 'label' + (b.later ? ' later' : '');
   $('w-title').textContent = b.title;
@@ -612,6 +635,7 @@ function renderWork(b) {
   resetTalk(box);
   const same = b.author ? books.filter(x => x !== b && x.vol && x.author === b.author) : [];
   $('w-same').innerHTML = same.length ? same.map(x => bookHTML(x, false)).join('') : '<p class="only">本棚にはこの1冊だけ</p>';
+  watchImgs($('w-same'));
 }
 
 /* ── 語りたい・布教したい ── */
@@ -751,7 +775,7 @@ document.addEventListener('click', e => {
   if (k) {
     document.querySelectorAll('.kana button').forEach(x => x.classList.toggle('on', x === k));
     spyLock = Date.now() + 800;
-    $('g-' + k.dataset.k).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    $('g-' + k.dataset.k).scrollIntoView({ block: 'start' });
     return;
   }
   if (e.target.closest('[data-back]')) {
