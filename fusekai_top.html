@@ -19,2321 +19,748 @@
 <meta name="twitter:title" content="けんしの腐世界生活">
 <meta name="twitter:description" content="腐女子・腐男子さんの恋愛事情・仕事・日常の失敗談と、けんしが読んだBL漫画をショーケース。お便り・おすすめ作品も受付中。">
 <meta name="twitter:image" content="https://kenkenshi.github.io/fusekai-site/logo.png">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=DM+Mono:wght@300;400&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
+:root {
+  --ink: #1a0a30;
+  --ink-soft: #5a4a78;
+  --bg: #f6efff;
+  --purple: #b03ad8;
+  --pink: #ff4f9e;
+  --cyan: #19bde0;
+  --orange: #ff8a3d;
+  --line: #e6d8f5;
+  --radius: 18px;
+}
 * { margin: 0; padding: 0; box-sizing: border-box; }
-input:not([type="checkbox"]), textarea { font-size: 16px !important; }
-
+html { -webkit-text-size-adjust: 100%; }
 body {
-  background: #f8f0ff;
-  color: #1a0a30;
   font-family: 'Noto Sans JP', sans-serif;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
+  color: var(--ink);
   background:
-    radial-gradient(ellipse at 0% 0%, rgba(0,210,240,0.18) 0%, transparent 50%),
-    radial-gradient(ellipse at 100% 0%, rgba(255,80,160,0.18) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 100%, rgba(180,80,240,0.12) 0%, transparent 55%),
-    linear-gradient(160deg, #fdf4ff 0%, #f8f0ff 50%, #f0f8ff 100%);
-  z-index: 0;
+    radial-gradient(ellipse at 0% 0%, rgba(25,189,224,.16) 0%, transparent 45%),
+    radial-gradient(ellipse at 100% 0%, rgba(255,79,158,.16) 0%, transparent 45%),
+    var(--bg);
+  background-attachment: fixed;
+  min-height: 100vh;
+  padding-bottom: calc(70px + env(safe-area-inset-bottom));
 }
-
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-  background-size: 200px 200px;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.4;
-}
-
-.deco-layer {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-  overflow: hidden;
-}
-
-.deco-circle-tl {
-  position: absolute;
-  top: -120px; left: -120px;
-  width: 320px; height: 320px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #00d8f0 0%, #40b8ff 60%, #8090ff 100%);
-  opacity: 0.22;
-}
-.deco-circle-tr {
-  position: absolute;
-  top: -80px; right: -100px;
-  width: 260px; height: 260px;
-  border-radius: 50%;
-  background: linear-gradient(225deg, #ff50a0 0%, #ff80c8 55%, #d060e8 100%);
-  opacity: 0.22;
-}
-.deco-circle-mr {
-  position: absolute;
-  top: 38%; right: -40px;
-  width: 110px; height: 110px;
-  border-radius: 50%;
-  background: linear-gradient(180deg, #30e0f8 0%, #60b8ff 100%);
-  opacity: 0.28;
-}
-.deco-circle-bl {
-  position: absolute;
-  bottom: 60px; left: -60px;
-  width: 180px; height: 180px;
-  border-radius: 50%;
-  background: linear-gradient(45deg, #ff60b0 0%, #ff90d0 100%);
-  opacity: 0.2;
-}
-
-.dots-grid {
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle, rgba(180,80,240,0.18) 1.5px, transparent 1.5px);
-  background-size: 24px 24px;
-}
-
-.deco-star, .deco-shape {
-  position: absolute;
-  line-height: 1;
-  animation: deco-pop var(--d, 3s) ease-in-out infinite;
-  animation-delay: var(--delay, 0s);
-}
-.deco-star {
-  font-size: var(--sz, 1rem);
-  color: var(--c, #ff50a0);
-  font-weight: 900;
-  filter: drop-shadow(0 0 4px var(--c, #ff50a0));
-}
-.deco-shape {
-  font-size: var(--sz, 1.2rem);
-  color: var(--c, #ff50a0);
-  opacity: var(--op, 0.7);
-}
-.deco-svg {
-  position: absolute;
-  animation: deco-pop var(--d, 3s) ease-in-out infinite;
-  animation-delay: var(--delay, 0s);
-}
-@keyframes deco-pop {
-  0%, 100% { opacity: 0.45; transform: scale(0.92) rotate(var(--r0, 0deg)); }
-  50%       { opacity: 0.9;  transform: scale(1.08) rotate(var(--r1, 8deg)); }
-}
-
-/* ページシステム */
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+.round { font-family: 'Zen Maru Gothic', 'Noto Sans JP', sans-serif; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
 .page { display: none; }
-.page.active { display: block; }
+.page.on { display: block; }
 
-.content {
-  position: relative;
-  z-index: 2;
-  max-width: 460px;
-  margin: 0 auto;
-  container-type: inline-size;
-  container-name: page;
+/* ===== 上の帯 ===== */
+.bar {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(255,250,255,.86);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
 }
+.bar .home-link img { height: 34px; display: block; }
+body[data-page="top"] .bar .home-link { visibility: hidden; }
+.bar nav { display: none; gap: 4px; }
+.bar nav button { padding: 8px 14px; border-radius: 999px; font-weight: 700; font-size: 14px; color: var(--ink-soft); }
+.bar nav button.on { background: var(--ink); color: #fff; }
+.bar .count { font-size: 12px; font-weight: 700; color: var(--ink-soft); padding: 6px 10px 6px 12px; border-radius: 999px; background: #fff; border: 1.5px solid var(--line); }
+.bar .count b { color: var(--pink); font-size: 15px; }
+.bar .count i { font-style: normal; font-weight: 900; margin-left: 2px; }
 
-/* 戻るボタン */
-.back-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 1.4rem 1.5rem 0;
-  background: none;
-  border: none;
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: #1a0a30;
-  cursor: pointer;
-  letter-spacing: 0.03em;
+/* ===== トップ ===== */
+.home { min-height: calc(100vh - 56px - 70px); display: flex; flex-direction: column; }
+.finder { flex: 1; width: 100%; max-width: 560px; margin: 0 auto; padding: 48px 0 24px; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+.hero-logo { display: block; width: 72%; max-width: 320px; margin: 0 auto; }
+.lead { margin-top: 10px; font-size: 16px; font-weight: 900; line-height: 1.6; }
+.lead em { font-style: normal; color: var(--pink); }
+.lead small { display: block; font-size: 12px; font-weight: 500; color: var(--ink-soft); }
+.search-box { margin-top: 20px; text-align: left; }
+.search {
+  display: flex; align-items: center; gap: 8px;
+  background: #fff; border: 2px solid var(--ink); border-radius: 999px;
+  padding: 14px 14px 14px 18px; box-shadow: 0 4px 0 var(--ink);
 }
-.back-btn:hover { opacity: 0.6; }
-.back-arrow {
-  width: 28px; height: 28px;
-  border: 2px solid #1a0a30;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.8rem;
-  box-shadow: 2px 2px 0px #1a0a30;
-}
+.search input { border: none; outline: none; font: inherit; font-size: 16px; flex: 1; min-width: 0; background: none; color: var(--ink); }
+.sicon { width: 20px; height: 20px; flex: 0 0 auto; color: var(--ink-soft); }
+.search .clear { width: 28px; height: 28px; border-radius: 50%; background: #efe6f8; font-weight: 900; color: var(--ink-soft); display: none; }
+.search.has .clear { display: block; }
+.sugg, .none { display: none; margin-top: 10px; background: #fff; border: 2px solid var(--ink); border-radius: 16px; box-shadow: 0 4px 0 var(--ink); }
+.sugg { overflow: hidden; }
+.sugg.on, .none.on { display: block; }
+.sugg .head { padding: 8px 14px; font-size: 11px; font-weight: 900; color: var(--purple); background: #faf3ff; }
+.hit { display: grid; grid-template-columns: 42px 1fr auto; gap: 12px; align-items: center; width: 100%; padding: 9px 14px; text-align: left; }
+.hit + .hit { border-top: 1px solid var(--line); }
+.hit img, .hit .ph { width: 42px; height: 58px; object-fit: cover; border-radius: 5px; background: #efe1fb; display: block; }
+.hit b { display: block; font-size: 14px; line-height: 1.4; }
+.hit small { display: block; font-size: 11.5px; color: var(--ink-soft); margin-top: 2px; }
+.pill { padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 900; color: #fff; background: var(--cyan); white-space: nowrap; }
+.pill.later { background: var(--orange); }
+.none { padding: 18px; text-align: center; }
+.none > p { font-weight: 900; line-height: 1.6; }
+.none > p em { font-style: normal; color: var(--pink); word-break: break-all; }
+.none > small { display: block; margin-top: 6px; font-size: 12.5px; color: var(--ink-soft); }
+.none .talk { text-align: left; }
+.menu { margin-top: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; text-align: left; }
+.menu .m { position: relative; display: block; text-align: left; padding: 14px 14px 13px; background: #fff; border-radius: 16px; border: 2px solid var(--ink); box-shadow: 0 4px 0 var(--ink); transition: transform .08s, box-shadow .08s; }
+.menu .m:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--ink); }
+.menu .m::after { content: ''; position: absolute; right: 14px; top: 22px; width: 8px; height: 8px; border-top: 2.5px solid var(--ink); border-right: 2.5px solid var(--ink); transform: rotate(45deg); }
+.menu .m i { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 11px; color: #fff; }
+.menu .m i svg { width: 22px; height: 22px; }
+.menu .read i { background: var(--cyan); }
+.menu .later i { background: var(--orange); }
+.menu .letter i { background: var(--pink); }
+.menu .gift i { background: var(--purple); }
+.menu .m b { display: block; margin-top: 10px; font-size: 15.5px; font-weight: 900; }
+.menu .m span { display: block; margin-top: 2px; font-size: 12px; font-weight: 700; color: var(--ink-soft); }
+.menu .m span em { font-style: normal; font-size: 15px; font-weight: 900; color: var(--ink); margin-right: 1px; }
+.foot { padding: 22px 0 10px; border-top: 1px dashed var(--line); text-align: center; }
+.foot .sns { display: flex; justify-content: center; gap: 10px; }
+.foot .sns a { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: #fff; border: 1.5px solid var(--ink); }
+.foot .sns svg { width: 18px; height: 18px; }
+.foot p { margin-top: 12px; font-size: 11px; color: var(--ink-soft); }
 
-/* ヒーロー */
-.hero {
-  text-align: center;
-  padding: 3rem 1.5rem 1.5rem;
+/* ===== 本の表紙 ===== */
+.book { display: block; width: 100%; text-align: left; }
+.cover {
+  position: relative; width: 100%; aspect-ratio: 3/4.2; border-radius: 8px; overflow: hidden;
+  background: linear-gradient(160deg, #efe1fb, #fde6f2);
+  box-shadow: 0 2px 0 rgba(26,10,48,.08), 0 8px 18px rgba(80,30,130,.16);
 }
-.hero-sub {
-  font-size: 0.76rem;
-  color: rgba(40,10,60,0.78);
-  line-height: 2;
-  letter-spacing: 0.04em;
-  font-weight: 500;
-}
+.cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cover .noimg { position: absolute; inset: 0; display: grid; place-items: center; padding: 10px; text-align: center; font-size: 12px; font-weight: 900; color: var(--ink-soft); }
+.badge { position: absolute; left: 6px; top: 6px; width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; background: var(--pink); color: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.2); }
+.badge svg { width: 14px; height: 14px; }
+.ltag { position: absolute; left: 0; right: 0; top: 0; padding: 3px 0; text-align: center; font-size: 10px; font-weight: 900; color: #fff; background: rgba(240,122,28,.92); }
+.ltag ~ .badge { top: 24px; }
+.vol { position: absolute; right: 6px; bottom: 6px; padding: 2px 7px; border-radius: 6px; font-size: 10.5px; font-weight: 700; color: #fff; background: rgba(26,10,48,.72); }
+.book .t { margin-top: 7px; font-size: 12.5px; font-weight: 700; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.book .a { margin-top: 2px; font-size: 11px; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* 検索 */
-.search-outer {
-  position: relative;
-  margin: 1.2rem 1.5rem 0;
-  background: rgba(255,255,255,0.92);
-  border: 2px solid #ff70b8;
-  border-radius: 24px;
-  box-shadow: 3px 3px 0px #ff70b8;
-  overflow: hidden;
+/* ===== 本棚 ===== */
+.lib-head { padding: 18px 0 0; }
+.seg { display: inline-flex; padding: 4px; border-radius: 999px; background: #fff; border: 1.5px solid var(--ink); max-width: 100%; }
+.seg button { padding: 8px 14px; border-radius: 999px; font-weight: 900; font-size: 14px; white-space: nowrap; }
+.seg button small { font-size: 11px; font-weight: 700; opacity: .7; }
+.seg button.on { background: var(--ink); color: #fff; }
+.kana {
+  position: sticky; top: 55px; z-index: 10;
+  display: flex; gap: 6px; overflow-x: auto; margin: 12px -16px 0; padding: 10px 16px;
+  background: rgba(246,239,255,.92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); scrollbar-width: none;
 }
-.search-wrap {
-  position: relative;
-}
-.search-input {
-  width: 100%;
-  padding: 0.85rem 2.6rem 0.85rem 3rem;
-  background: transparent;
-  border: none;
-  outline: none;
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 16px;
-  color: #1a0a30;
-}
-.search-input::placeholder { color: rgba(80,40,100,0.4); }
-.search-icon {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.9rem;
-  pointer-events: none;
-}
-.search-clear {
-  position: absolute;
-  right: 0.7rem;
-  top: 50%;
-  transform: translateY(-50%) scale(0.7);
-  width: 26px;
-  height: 26px;
-  border: none;
-  border-radius: 50%;
-  background: rgba(80,40,100,0.12);
-  color: #5a3a70;
-  font-size: 0.85rem;
-  line-height: 1;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .12s ease, transform .12s ease, background .12s ease;
-  -webkit-tap-highlight-color: transparent;
-}
-.search-outer.has-value .search-clear {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(-50%) scale(1);
-}
-.search-clear:hover { background: rgba(255,80,160,0.22); color: #ff50a0; }
-.search-clear:active { transform: translateY(-50%) scale(0.9); }
-/* セクションラベル */
-.section-label {
-  padding: 1.6rem 1.5rem 0.8rem;
-  font-family: 'Dancing Script', cursive;
-  font-size: 1.7rem;
-  background: linear-gradient(90deg, #ff50a0 0%, #c040e0 55%, #40c8f0 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: 0.02em;
-  filter: drop-shadow(1px 1px 0px rgba(255,80,160,0.3));
-}
+.kana::-webkit-scrollbar { display: none; }
+.kana button { flex: 0 0 auto; min-width: 40px; height: 36px; padding: 0 10px; border-radius: 999px; background: #fff; border: 1px solid var(--line); font-weight: 900; font-size: 14px; }
+.kana button.on { background: var(--pink); border-color: var(--pink); color: #fff; }
+.group { scroll-margin-top: 120px; }
+.group h3 { margin: 20px 0 10px; font-size: 15px; font-weight: 900; display: flex; align-items: center; gap: 8px; }
+.group h3 small { color: var(--ink-soft); font-weight: 700; }
+.group h3::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 10px; padding-bottom: 8px; }
+.loading { padding: 40px 0; text-align: center; color: var(--ink-soft); font-size: 13px; }
 
-/* 検索結果なし */
-.no-results {
-  margin: 0.5rem 1.5rem 0;
-  padding: 1.1rem 1.2rem;
-  background: rgba(255,255,255,0.85);
-  border: 2px solid #1a0a30;
-  border-radius: 16px;
-  box-shadow: 4px 4px 0px #1a0a30;
-  text-align: center;
-}
-.no-results-text {
-  font-size: 0.78rem;
-  color: rgba(60,20,80,0.6);
-  line-height: 1.8;
-  margin-bottom: 0.75rem;
-}
-.no-results-text strong { color: #1a0a30; font-weight: 700; }
-.no-results-hint {
-  font-size: 0.65rem;
-  color: #c040e0;
-  letter-spacing: 0.03em;
-  margin-bottom: 0.7rem;
-}
-.no-results-btns {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: center;
-  margin-bottom: 0;
-}
-.no-results-talk {
-  display: none;
-  margin-top: 0.85rem;
-  text-align: left;
-}
-.no-results-talk textarea {
-  width: 100%;
-  border: 2px solid #1a0a30;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.9);
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 0.78rem;
-  color: #1a0a30;
-  padding: 0.7rem 0.9rem;
-  min-height: 52px;
-  resize: none;
-  outline: none;
-  overflow: hidden;
-  box-shadow: 2px 2px 0px #1a0a30;
-  line-height: 1.7;
-}
-.no-results-talk textarea::placeholder { color: rgba(80,40,100,0.35); }
-.no-results-check {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.6rem;
-  font-size: 0.7rem;
-  color: rgba(60,20,80,0.65);
-  cursor: pointer;
-}
-.no-results-check input[type="checkbox"] {
-  width: 16px; height: 16px;
-  accent-color: #ff50a0;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-.no-results-send {
-  display: block;
-  width: 100%;
-  margin-top: 0.6rem;
-  padding: 0.5rem;
-  border-radius: 999px;
-  border: 2px solid #1a0a30;
-  background: linear-gradient(135deg, #ff70b8 0%, #ff50a0 100%);
-  color: #fff;
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 2px 2px 0px #1a0a30;
-  transition: all 0.15s;
-}
-.no-results-send:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0px #1a0a30; }
+/* ===== 作品 ===== */
+.work { padding-top: 18px; padding-bottom: 24px; }
+.back { font-size: 13px; font-weight: 700; color: var(--purple); }
+.work-main { margin-top: 12px; }
+.work-cover { width: 62%; max-width: 260px; margin: 0 auto; }
+.work-info { margin-top: 18px; }
+.label { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 900; color: #fff; background: var(--cyan); }
+.label.later { background: var(--orange); }
+.work-info h1 { margin-top: 8px; font-size: 23px; font-weight: 900; line-height: 1.4; }
+.work-info .au { margin-top: 4px; color: var(--ink-soft); font-size: 14px; }
+.memo { margin-top: 16px; background: #fff; border-radius: var(--radius); border: 2px solid var(--ink); padding: 14px 16px; font-size: 15px; line-height: 1.8; white-space: pre-wrap; }
+.memo::before { content: 'けんしのひとこと'; display: block; font-size: 11px; font-weight: 900; color: var(--pink); margin-bottom: 4px; white-space: normal; }
+.acts { margin-top: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.acts button { padding: 14px 0; border-radius: 14px; font-weight: 900; border: 2px solid var(--ink); box-shadow: 0 4px 0 var(--ink); background: #fff; }
+.acts button.main { background: var(--ink); color: #fff; }
+.same { margin-top: 26px; }
+.same h2 { font-size: 16px; font-weight: 900; margin-bottom: 10px; }
+.row { display: flex; gap: 12px; overflow-x: auto; margin: 0 -16px; padding: 4px 16px 16px; scrollbar-width: none; }
+.row::-webkit-scrollbar { display: none; }
+.row .book { flex: 0 0 116px; }
+.same .only { font-size: 13px; color: var(--ink-soft); }
 
-/* カード */
-.cards {
-  padding: 0 1.5rem 1.5rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
-}
-.card {
-  background: rgba(255,255,255,0.92);
-  border: 2px solid #1a0a30;
-  border-radius: 16px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 4px 4px 0px #1a0a30;
-  transition: box-shadow 0.15s, transform 0.15s;
-}
-.card:hover {
-  box-shadow: 6px 6px 0px #1a0a30;
-  transform: translate(-1px, -1px);
-}
-.card-img {
-  width: 100%;
-  aspect-ratio: 2 / 3;
-  background: linear-gradient(135deg, #ffe0f0 0%, #e0f4ff 100%);
-  border-bottom: 2px solid #1a0a30;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 2.8rem;
-  flex-shrink: 0;
-  overflow: hidden;
-}
-.card-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-}
-.card-body {
-  flex: 1;
-  padding: 0.7rem 0.75rem;
-  display: flex;
-  flex-direction: column;
-}
-.card-title {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: #1a0a30;
-  margin-bottom: 0.2rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.card-author {
-  font-size: 0.68rem;
-  color: #c040e0;
-  margin-bottom: 0.4rem;
-  font-weight: 500;
-}
-.card-badges {
-  display: flex; gap: 0.3rem;
-  margin-bottom: 0.45rem;
-  flex-wrap: wrap;
-}
-.badge {
-  font-size: 0.58rem;
-  padding: 0.12rem 0.45rem;
-  border-radius: 999px;
-  letter-spacing: 0.02em;
-  font-weight: 500;
-  border: 1.5px solid;
-}
-.badge-read     { background: #e8f8ff; color: #0090d0; border-color: #0090d0; }
-.badge-tsundoku { background: #fff4e0; color: #c06000; border-color: #d08000; }
-.badge-gift     { background: #fff0f8; color: #d040a0; border-color: #e060b0; }
-.card-desc {
-  font-size: 0.68rem;
-  color: #3a2060;
-  line-height: 1.65;
-  margin-bottom: 0.6rem;
-  flex: 1;
-}
-.card-read-status {
-  display: flex;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-  margin-bottom: 0.5rem;
-}
-.card-read-status .badge {
-  font-size: 0.72rem;
-  padding: 0.2rem 0.7rem;
-  font-weight: 700;
-}
-.card-hint {
-  font-size: 0.65rem;
-  color: #c040e0;
-  letter-spacing: 0.03em;
-  margin-bottom: 0.5rem;
-  margin-top: auto;
-}
-.card-actions { display: flex; gap: 0.4rem; flex-wrap: wrap; }
-.btn {
-  font-size: 0.72rem;
-  padding: 0.3rem 0.85rem;
-  border-radius: 999px;
-  border: 1.5px solid;
-  font-family: 'Noto Sans JP', sans-serif;
-  cursor: pointer;
-  letter-spacing: 0.03em;
-  font-weight: 500;
-  transition: all 0.15s;
-}
-.btn-talk {
-  border-color: #e03090; color: #e03090; background: transparent;
-  box-shadow: 2px 2px 0px #e03090;
-}
-.btn-talk:hover { background: #fff0f8; transform: translate(-1px,-1px); box-shadow: 3px 3px 0px #e03090; }
+/* ===== 語りたいフォーム・お便り ===== */
+.talk { display: none; margin-top: 14px; background: #fff; border: 2px solid var(--ink); border-radius: 16px; box-shadow: 0 4px 0 var(--ink); padding: 16px; }
+.talk.on { display: block; }
+.talk h3 { font-size: 15px; font-weight: 900; margin-bottom: 12px; }
+.f + .f { margin-top: 16px; }
+.f > label { display: block; font-size: 14px; font-weight: 900; margin-bottom: 8px; }
+.f > label small { margin-left: 6px; font-size: 11px; font-weight: 700; color: var(--ink-soft); }
+.f input, .f textarea { width: 100%; font: inherit; font-size: 16px; padding: 12px 14px; border-radius: 12px; border: 1.5px solid var(--line); background: #faf6ff; outline: none; resize: vertical; color: var(--ink); }
+.f input:focus, .f textarea:focus { border-color: var(--purple); background: #fff; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { padding: 8px 12px; border-radius: 999px; border: 1.5px solid var(--line); background: #faf6ff; font-size: 13px; font-weight: 700; }
+.chip.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+.tg { display: flex; align-items: center; gap: 10px; margin-top: 16px; font-size: 14px; font-weight: 700; cursor: pointer; }
+.tg input { position: absolute; opacity: 0; pointer-events: none; }
+.tg span { flex: 0 0 auto; width: 22px; height: 22px; border-radius: 7px; border: 2px solid var(--ink); background: #fff; display: grid; place-items: center; }
+.tg input:checked + span { background: var(--pink); border-color: var(--pink); }
+.tg input:checked + span::after { content: ''; width: 9px; height: 5px; border-left: 2.5px solid #fff; border-bottom: 2.5px solid #fff; transform: translateY(-1px) rotate(-45deg); }
+.note { margin-top: 16px; padding: 14px; border-radius: 14px; background: #faf3ff; border: 1.5px dashed #d9c3ef; text-align: left; }
+.note b { font-size: 13px; }
+.note ul { margin: 6px 0 0 18px; font-size: 12.5px; line-height: 1.75; color: var(--ink-soft); }
+.note .tg { margin-top: 12px; }
+.send { margin-top: 18px; width: 100%; padding: 16px 0; border-radius: 16px; font-size: 16px; font-weight: 900; color: #fff; background: linear-gradient(135deg, #ff6fb0, #c64be6); border: 2px solid var(--ink); box-shadow: 0 4px 0 var(--ink); }
+.send:disabled { background: #d8cfe3; cursor: not-allowed; }
+.err { display: none; margin-top: 10px; font-size: 13px; font-weight: 700; color: #e03b6f; text-align: center; }
+.err.on { display: block; }
+.thanks { display: none; margin-top: 14px; text-align: center; background: #fff; border: 2px solid var(--ink); border-radius: 16px; box-shadow: 0 4px 0 var(--ink); padding: 22px 16px; }
+.thanks.on { display: block; }
+.thanks .ring { width: 56px; height: 56px; margin: 0 auto; border-radius: 50%; background: var(--pink); color: #fff; display: grid; place-items: center; }
+.thanks .ring svg { width: 30px; height: 30px; }
+.thanks h3 { margin-top: 12px; font-size: 19px; font-weight: 900; }
+.thanks p { margin-top: 6px; font-size: 13.5px; line-height: 1.8; color: var(--ink-soft); }
+.thanks button { margin-top: 14px; padding: 11px 22px; border-radius: 999px; border: 2px solid var(--ink); font-weight: 900; }
 
-/* おすすめ完了トースト */
-.suggest-toast {
-  display: none;
-  margin: 0.75rem 1.5rem 0;
-  padding: 0.75rem 1rem;
-  background: rgba(255,255,255,0.92);
-  border: 2px solid #ff50a0;
-  border-radius: 12px;
-  box-shadow: 3px 3px 0px #ff50a0;
-  text-align: center;
-  line-height: 1.7;
-}
-.toast-label {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: #16a35d;
-  margin-bottom: 0.15rem;
-}
-.toast-main {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: #c040a0;
-}
+.sheet { max-width: 640px; padding-top: 20px; padding-bottom: 24px; }
+.s-head { text-align: center; }
+.s-head h1 { font-size: 26px; font-weight: 900; }
+.s-head p { margin-top: 8px; font-size: 13.5px; line-height: 1.8; color: var(--ink-soft); }
+.s-head p em { font-style: normal; font-weight: 900; color: var(--pink); }
+.card { margin-top: 20px; background: #fff; border: 2px solid var(--ink); border-radius: 20px; box-shadow: 0 5px 0 var(--ink); padding: 18px 16px; }
+.l-done.thanks { margin-top: 20px; padding: 32px 18px; border-radius: 20px; }
 
-/* 予測サジェスト */
-.search-dropdown {
-  display: none;
-  border-top: 1.5px solid rgba(255,112,184,0.25);
-  max-height: 55vh;
-  overflow-y: auto;
-}
-.suggestion-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
-  cursor: pointer;
-  border-bottom: 1px solid rgba(255,112,184,0.15);
-  transition: background 0.12s;
-}
-.suggestion-item:last-child { border-bottom: none; }
-.suggestion-item:active, .suggestion-item:hover { background: rgba(255,112,184,0.08); }
-.suggestion-icon { font-size: 1.1rem; flex-shrink: 0; }
-.suggestion-texts { flex: 1; }
-.suggestion-title { font-size: 0.82rem; font-weight: 700; color: #1a0a30; }
-.suggestion-author { font-size: 0.65rem; color: #c040e0; margin-top: 0.1rem; }
+/* ===== プレゼント ===== */
+.g-cards { margin-top: 20px; display: grid; gap: 16px; }
+.g-cards .card { margin-top: 0; padding: 16px; }
+.g-top { display: flex; align-items: center; gap: 12px; }
+.g-top b { display: block; font-size: 16px; font-weight: 900; line-height: 1.4; }
+.g-top small { display: block; font-size: 12px; font-weight: 700; color: var(--ink-soft); }
+.gi { flex: 0 0 auto; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; color: #fff; }
+.gi svg { width: 22px; height: 22px; }
+.gi.pink { background: var(--pink); }
+.gi.purple { background: var(--purple); }
+.g-box { margin-top: 14px; padding: 14px; border-radius: 14px; background: #faf6ff; border: 1.5px solid var(--line); }
+.g-box.row2 { display: flex; align-items: center; gap: 10px; }
+.g-box.row2 > div { flex: 1; min-width: 0; }
+.g-label { display: block; font-size: 11px; font-weight: 900; color: var(--purple); }
+.g-label + p { margin-top: 2px; }
+.g-addr { font-size: 15px; font-weight: 900; line-height: 1.7; margin-bottom: 10px; }
+.g-name { font-size: 14px; font-weight: 700; }
+.g-mail { font-size: 15px; font-weight: 900; word-break: break-all; }
+.g-copy { flex: 0 0 auto; padding: 8px 14px; border-radius: 999px; border: 2px solid var(--ink); background: #fff; font-size: 13px; font-weight: 900; box-shadow: 0 2px 0 var(--ink); }
+.g-box:not(.row2) .g-copy { margin-top: 12px; }
+.g-copy.done { background: var(--ink); color: #fff; }
+.g-ng { margin-top: 12px; font-size: 13px; color: var(--ink-soft); }
+.g-ng b { display: inline-block; margin-right: 8px; padding: 2px 8px; border-radius: 6px; font-size: 11px; color: #fff; background: #e03b6f; }
+.g-text { margin-top: 12px; font-size: 13.5px; line-height: 1.8; }
+.g-text em { font-style: normal; font-weight: 900; color: var(--pink); }
+.g-hint { margin-top: 8px; font-size: 11.5px; line-height: 1.7; color: var(--ink-soft); }
+.g-foot { margin-top: 18px; text-align: center; font-size: 12.5px; color: var(--ink-soft); }
 
-/* ── スマホ用検索トリガー（PC非表示） ── */
-.search-trigger {
-  display: none;
-  align-items: center;
-  gap: 0.6rem;
-  margin: 1.2rem 1.5rem 0;
-  padding: 0.85rem 1.2rem;
-  background: rgba(255,255,255,0.92);
-  border: 2px solid #ff70b8;
-  border-radius: 24px;
-  box-shadow: 3px 3px 0px #ff70b8;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
+/* ===== スマホの下のタブ ===== */
+.tabbar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  background: rgba(255,250,255,.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid var(--line); padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
 }
-.search-trigger-icon { font-size: 1rem; flex-shrink: 0; }
-.search-trigger-text { font-size: 0.88rem; color: rgba(80,40,100,0.4); }
+.tabbar button { display: grid; justify-items: center; gap: 2px; padding: 4px 0; font-size: 10.5px; font-weight: 700; color: var(--ink-soft); }
+.tabbar button svg { width: 24px; height: 24px; }
+.tabbar button.on { color: var(--pink); }
 
-/* ── フルスクリーン検索オーバーレイ ── */
-.search-overlay {
-  position: fixed;
-  inset: 0;
-  background: #fff;
-  z-index: 200;
-  display: flex;
-  flex-direction: column;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.18s;
+/* ===== PC（960px以上） ===== */
+@media (min-width: 960px) {
+  body { padding-bottom: 0; }
+  .tabbar { display: none; }
+  .bar { padding: 12px 32px; }
+  .bar .home-link img { height: 40px; }
+  .bar nav { display: flex; }
+  .wrap { padding: 0 32px; }
+  .home { min-height: calc(100vh - 65px); }
+  .finder { padding-top: 64px; }
+  .kana { top: 65px; margin: 14px 0 0; padding: 10px 0; }
+  .grid { grid-template-columns: repeat(6, 1fr); gap: 22px 18px; }
+  .work-main { display: grid; grid-template-columns: 320px 1fr; gap: 40px; align-items: start; }
+  .work-cover { width: 100%; max-width: none; margin: 0; position: sticky; top: 90px; }
+  .work-info { margin-top: 0; }
+  .work-info h1 { font-size: 32px; }
+  .acts, .work-info .talk, .work-info .thanks { max-width: 520px; }
+  .row { margin: 0; padding: 4px 0 16px; }
+  .row .book { flex-basis: 140px; }
+  #p-gift .sheet { max-width: 900px; }
+  .g-cards { grid-template-columns: 1fr 1fr; align-items: start; }
 }
-.search-overlay.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-.overlay-bar {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.9rem 1rem 0.75rem;
-  border-bottom: 1.5px solid rgba(255,112,184,0.25);
-  background: #fff;
-  flex-shrink: 0;
-}
-.overlay-cancel {
-  font-size: 0.85rem;
-  color: #c040e0;
-  font-weight: 700;
-  cursor: pointer;
-  white-space: nowrap;
-  flex-shrink: 0;
-  padding: 0.3rem 0;
-  -webkit-tap-highlight-color: transparent;
-}
-.overlay-input-wrap {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: rgba(255,112,184,0.08);
-  border: 1.5px solid rgba(255,112,184,0.4);
-  border-radius: 999px;
-  padding: 0.55rem 1rem;
-  min-width: 0;
-}
-.overlay-icon { font-size: 0.9rem; flex-shrink: 0; }
-.overlay-input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 16px;
-  color: #1a0a30;
-  min-width: 0;
-}
-.overlay-input::placeholder { color: rgba(80,40,100,0.38); }
-.overlay-clear {
-  font-size: 0.85rem;
-  color: rgba(80,40,100,0.35);
-  cursor: pointer;
-  display: none;
-  flex-shrink: 0;
-  -webkit-tap-highlight-color: transparent;
-}
-.overlay-results {
-  flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-.overlay-hint {
-  padding: 1rem 1.2rem 0.5rem;
-  font-size: 0.65rem;
-  font-family: 'DM Mono', monospace;
-  color: rgba(80,40,100,0.4);
-  letter-spacing: 0.06em;
-}
-.overlay-no-results {
-  padding: 1.5rem 1.2rem;
-  text-align: center;
-}
-.overlay-no-results-text {
-  font-size: 0.82rem;
-  color: #1a0a30;
-  line-height: 1.8;
-  margin-bottom: 0.4rem;
-}
-.overlay-no-results-hint {
-  font-size: 0.7rem;
-  color: #e040a0;
-  margin-bottom: 1rem;
-}
-.overlay-no-results-btns {
-  display: flex;
-  gap: 0.6rem;
-  justify-content: center;
-}
-
-/* スマホでも常にインライン検索窓を表示（フルスクリーンオーバーレイは廃止） */
-
-/* 検索結果カード（1枚・全幅） */
-.result-area {
-  display: none;
-  padding: 0.8rem 1.5rem 0;
-}
-.result-area .card {
-  flex-direction: column;
-  width: 100%;
-}
-.result-area .card-img {
-  width: 100%;
-  aspect-ratio: 2 / 3;
-  height: auto;
-  border-radius: 0;
-  font-size: 3.5rem;
-}
-
-/* 語りたいインラインフォーム */
-.talk-inline {
-  display: none;
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
-  border-top: 1.5px solid rgba(26,10,48,0.1);
-}
-.talk-inline textarea {
-  width: 100%;
-  border: 2px solid #1a0a30;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.9);
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 0.78rem;
-  color: #1a0a30;
-  padding: 0.7rem 0.9rem;
-  min-height: 52px;
-  resize: none;
-  outline: none;
-  overflow: hidden;
-  box-shadow: 2px 2px 0px #1a0a30;
-  line-height: 1.7;
-}
-.talk-inline textarea::placeholder { color: rgba(80,40,100,0.35); }
-.talk-inline-check {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.6rem;
-  font-size: 0.7rem;
-  color: rgba(60,20,80,0.65);
-  cursor: pointer;
-}
-.talk-inline-check input[type="checkbox"] {
-  width: 16px; height: 16px;
-  accent-color: #ff50a0;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-.talk-inline-send {
-  display: block;
-  width: 100%;
-  margin-top: 0.6rem;
-  padding: 0.5rem;
-  border-radius: 999px;
-  border: 2px solid #1a0a30;
-  background: linear-gradient(135deg, #ff70b8 0%, #ff50a0 100%);
-  color: #fff;
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 2px 2px 0px #1a0a30;
-  transition: all 0.15s;
-}
-.talk-inline-send:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0px #1a0a30; }
-
-/* フッターボタン */
-.footer-btns {
-  padding: 0.5rem 1.5rem 3rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-.footer-btn {
-  flex: 1;
-  padding: 0.85rem 0.5rem;
-  border-radius: 999px;
-  border: 2px solid #1a0a30;
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  text-align: center;
-  transition: all 0.15s;
-  box-shadow: 3px 3px 0px #1a0a30;
-}
-.footer-btn:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0px #1a0a30; }
-.footer-btn.pink {
-  background: linear-gradient(135deg, #ff70b8 0%, #ff50a0 100%);
-  color: #fff;
-}
-.footer-btn.blue {
-  background: linear-gradient(135deg, #40d8f8 0%, #20b8ff 100%);
-  color: #fff;
-}
-
-/* ── お便りページ ── */
-.page-title {
-  text-align: center;
-  padding: 1.8rem 1.5rem 0.4rem;
-  font-family: 'Dancing Script', cursive;
-  font-size: 2rem;
-  background: linear-gradient(90deg, #ff50a0 0%, #c040e0 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  filter: drop-shadow(1px 1px 0px rgba(255,80,160,0.25));
-}
-.page-desc {
-  text-align: center;
-  font-size: 0.75rem;
-  color: rgba(60,20,80,0.6);
-  line-height: 1.9;
-  padding: 0 2rem 1.5rem;
-}
-
-.letter-guide {
-  display: flex;
-  justify-content: center;
-  gap: 0.6rem;
-  padding: 0 1.5rem 1.4rem;
-  flex-wrap: wrap;
-}
-.letter-guide span {
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: rgba(60,20,80,0.75);
-  background: rgba(180,80,240,0.08);
-  border: 1.5px solid rgba(180,80,240,0.22);
-  border-radius: 8px;
-  padding: 0.3rem 0.8rem;
-  letter-spacing: 0.03em;
-}
-.letter-confirm-box {
-  border: 2px solid rgba(180,80,240,0.35);
-  border-radius: 12px;
-  background: rgba(255,255,255,0.95);
-  box-shadow: 3px 3px 0px rgba(180,80,240,0.15);
-  padding: 0.9rem 1rem;
-  margin: 0.4rem 0 0.6rem;
-}
-.letter-confirm-title {
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: rgba(40,10,60,0.85);
-  margin-bottom: 0.5rem;
-}
-.letter-confirm-list {
-  padding-left: 1.1rem;
-  margin: 0;
-}
-.letter-confirm-list li {
-  font-size: 0.68rem;
-  color: rgba(40,10,60,0.75);
-  line-height: 1.7;
-  margin-bottom: 0.2rem;
-}
-.form-wrap { padding: 0 1.5rem; }
-.form-group { margin-bottom: 1rem; }
-.form-label {
-  display: block;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: #1a0a30;
-  margin-bottom: 0.4rem;
-  letter-spacing: 0.04em;
-}
-.form-label span {
-  font-size: 0.62rem;
-  font-weight: 400;
-  color: rgba(80,40,100,0.5);
-  margin-left: 0.4rem;
-}
-.form-input, .form-textarea {
-  width: 100%;
-  border: 2px solid #1a0a30;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.88);
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 0.85rem;
-  color: #1a0a30;
-  outline: none;
-  box-shadow: 3px 3px 0px #1a0a30;
-  transition: box-shadow 0.15s;
-}
-.form-input { padding: 0.7rem 1rem; }
-.form-textarea {
-  padding: 0.8rem 1rem;
-  min-height: 52px;
-  resize: none;
-  overflow: hidden;
-  line-height: 1.7;
-}
-.form-input:focus, .form-textarea:focus { box-shadow: 4px 4px 0px #ff50a0; border-color: #ff50a0; }
-.form-input::placeholder, .form-textarea::placeholder { color: rgba(80,40,100,0.35); }
-.form-check {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: -0.3rem;
-  margin-bottom: 0.5rem;
-  font-size: 0.72rem;
-  color: rgba(60,20,80,0.65);
-  cursor: pointer;
-}
-.category-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
-  margin-top: 0.3rem;
-}
-.category-label {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.55rem 1rem;
-  border: 1.5px solid rgba(180,80,240,0.3);
-  border-radius: 10px;
-  background: rgba(255,255,255,0.7);
-  font-size: 0.75rem;
-  color: rgba(60,20,80,0.7);
-  cursor: pointer;
-  transition: all 0.15s;
-  user-select: none;
-}
-.category-label:has(input:checked) {
-  background: linear-gradient(135deg, #ffe0f4 0%, #f0e0ff 100%);
-  border-color: #c040e0;
-  color: #8020c0;
-  font-weight: 700;
-}
-.category-check-box {
-  width: 16px;
-  height: 16px;
-  border: 1.5px solid rgba(180,80,240,0.4);
-  border-radius: 4px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.7rem;
-  color: transparent;
-  background: #fff;
-  transition: all 0.15s;
-}
-.category-label:has(input:checked) .category-check-box {
-  background: #c040e0;
-  border-color: #c040e0;
-  color: #fff;
-}
-.category-label input[type="checkbox"] {
-  display: none;
-}
-.form-check input[type="checkbox"] {
-  width: 16px; height: 16px;
-  accent-color: #ff50a0;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.submit-btn {
-  width: 100%;
-  padding: 0.9rem;
-  margin-top: 0.5rem;
-  border-radius: 999px;
-  border: 2px solid #1a0a30;
-  background: linear-gradient(135deg, #ff70b8 0%, #ff50a0 100%);
-  color: #fff;
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  cursor: pointer;
-  box-shadow: 3px 3px 0px #1a0a30;
-  transition: all 0.15s;
-}
-.submit-btn:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0px #1a0a30; }
-.submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
-.form-note {
-  text-align: center;
-  font-size: 0.65rem;
-  color: rgba(80,40,100,0.45);
-  padding: 0.9rem 1.5rem 3rem;
-  line-height: 1.8;
-}
-
-/* 送信完了 */
-.sent-view {
-  display: none;
-  text-align: center;
-  padding: 3rem 2rem;
-}
-.sent-icon {
-  font-size: 3.5rem;
-  display: block;
-  margin-bottom: 1rem;
-  animation: sent-bounce 0.5s ease;
-}
-@keyframes sent-bounce {
-  0% { transform: scale(0); }
-  70% { transform: scale(1.2); }
-  100% { transform: scale(1); }
-}
-.sent-label {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #16a35d;
-  margin-bottom: 0.3rem;
-}
-.sent-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #1a0a30;
-  margin-bottom: 0.5rem;
-}
-/* ── プレゼントページ ── */
-.address-card {
-  margin: 0 1.5rem;
-  background: rgba(255,255,255,0.92);
-  border: 2px solid #1a0a30;
-  border-radius: 16px;
-  padding: 1.4rem 1.4rem 1.2rem;
-  box-shadow: 4px 4px 0px #1a0a30;
-}
-.address-label {
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: #c040e0;
-  letter-spacing: 0.08em;
-  margin-bottom: 0.75rem;
-  font-family: 'DM Mono', monospace;
-}
-.address-text {
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: #1a0a30;
-  line-height: 1.9;
-  margin-bottom: 0.75rem;
-}
-.address-name {
-  font-size: 0.78rem;
-  color: #3a2060;
-  line-height: 1.7;
-  margin-bottom: 0.5rem;
-}
-.address-ng {
-  font-size: 0.65rem;
-  color: rgba(60,20,80,0.5);
-  line-height: 1.7;
-  padding-top: 0.6rem;
-  border-top: 1px dashed rgba(180,80,240,0.25);
-}
-.address-ng strong { color: #e03090; }
-
-.present-note {
-  margin: 0.9rem 1.5rem 0;
-  padding: 1rem;
-  background: rgba(255,255,255,0.7);
-  border: 1.5px solid rgba(180,80,240,0.3);
-  border-radius: 12px;
-  font-size: 0.68rem;
-  color: rgba(60,20,80,0.6);
-  line-height: 1.9;
-}
-.present-note strong { color: #c040e0; font-weight: 700; }
-
-/* ローディング */
-.loading {
-  text-align: center;
-  padding: 2rem 1.5rem;
-  font-size: 0.78rem;
-  color: rgba(80,40,100,0.5);
-}
-
-/* ── ヒーロー説明文（吹き出し） ── */
-.hero-sub-box {
-  position: relative;
-  margin: 1.4rem 0.65rem 0;
-  padding: 1rem 0.75rem;
-  background: linear-gradient(135deg, #fff0f8 0%, #f2e8ff 45%, #e0f8ff 100%);
-  border: 1.5px dashed rgba(180,80,240,0.4);
-  border-radius: 16px;
-}
-.hero-sub-deco { position: absolute; pointer-events: none; }
-.hero-sub-deco.book  { top: -14px; left: -6px; transform: rotate(-14deg); }
-.hero-sub-deco.phone { bottom: -12px; right: -4px; transform: rotate(11deg); }
-.hero-sub { font-size: 0.72rem; color: #3a2060; line-height: 1.7; letter-spacing: 0.02em; font-weight: 700; }
-.hero-sub-accent { color: #e03090; font-weight: 900; white-space: nowrap; }
-@container page (max-width: 400px) {
-  .hero-sub-box { margin: 1.4rem 0.4rem 0; padding: 0.85rem 0.5rem; }
-  .hero-sub { font-size: 0.6rem; letter-spacing: 0.01em; }
-}
-
-/* ── 漫画所持数・ナビボタン ── */
-.count-hero { text-align: center; padding: 1rem 1.5rem 0.2rem; }
-.count-hero-num { font-size: 1.5rem; font-weight: 900; color: #1a0a30; letter-spacing: 0.02em; }
-.count-hero-num span { display: inline-block; color: #c0157a; background: #fff; border: 2px solid #1a0a30; border-radius: 8px; padding: 0.02em 0.42em; box-shadow: 2px 2px 0 #1a0a30; }
-.count-hero-label { font-size: 0.64rem; color: rgba(80,40,100,0.5); font-family: 'DM Mono', monospace; letter-spacing: 0.08em; margin-top: 0.15rem; }
-
-.nav-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; padding: 1.1rem 1.5rem 0.3rem; }
-.nav-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.2rem; padding: 1.2rem 0.5rem; border-radius: 18px; border: 2px solid #1a0a30; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; transition: all .15s; }
-.nav-btn:hover { transform: translate(-1px,-1px); }
-.nav-btn-read { background: linear-gradient(135deg,#e8f8ff 0%,#d0f0ff 100%); box-shadow: 4px 4px 0px #1a0a30; }
-.nav-btn-read:hover { box-shadow: 6px 6px 0px #1a0a30; }
-.nav-btn-later { background: linear-gradient(135deg,#fff4e0 0%,#ffe8c8 100%); box-shadow: 4px 4px 0px #1a0a30; }
-.nav-btn-later:hover { box-shadow: 6px 6px 0px #1a0a30; }
-.nav-btn-title { font-size: 0.92rem; font-weight: 900; letter-spacing: 0.02em; color: #1a0a30; }
-.nav-btn-count { font-size: 0.68rem; font-weight: 700; font-family: 'DM Mono', monospace; }
-.nav-btn-read .nav-btn-count { color: #0090d0; }
-.nav-btn-later .nav-btn-count { color: #c06000; }
-
-/* ── 一覧フィードページ ── */
-#page-feed { background: rgba(255,255,255,0.72); min-height: 100vh; }
-.feed-title { font-family: 'Noto Sans JP', sans-serif; font-weight: 900; font-size: 1.5rem; letter-spacing: 0.04em; background: linear-gradient(90deg, #ff50a0 0%, #c040e0 55%, #40c8f0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; padding: 0.4rem 1.5rem 0; }
-.feed-count { font-size: 0.7rem; color: rgba(80,40,100,0.55); padding: 0 1.5rem; margin-bottom: 0.4rem; font-family: 'DM Mono', monospace; }
-.feed-search { position: sticky; top: 0; z-index: 6; background: #f8f0ff; padding: 0.5rem 1.5rem 0.7rem; margin-bottom: -0.2rem; }
-.feed-search .search-outer { margin: 0; }
-.feed-layout { display: flex; padding: 0 1.2rem 2.5rem 1.5rem; gap: 0.4rem; align-items: flex-start; }
-.feed-list { flex: 1; min-width: 0; }
-.feed-row-header { padding: 0.5rem 0 0.3rem; font-family: 'DM Mono', monospace; font-size: 0.72rem; font-weight: 700; color: #c040e0; letter-spacing: 0.1em; border-bottom: 1.5px dashed rgba(192,64,224,0.35); margin-top: 0.4rem; }
-.feed-card { display: flex; gap: 0.7rem; align-items: center; padding: 0.65rem 0; border-bottom: 1.5px solid rgba(26,10,48,0.08); cursor: pointer; }
-.feed-card:hover { background: rgba(255,255,255,0.5); }
-.feed-card-img { width: 50px; height: 68px; border-radius: 8px; overflow: hidden; background: linear-gradient(135deg,#ffe0f0,#e0f4ff); border: 1.5px solid rgba(26,10,48,0.15); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
-.feed-card-img img { width: 100%; height: 100%; object-fit: cover; }
-.feed-card-title { font-size: 0.8rem; font-weight: 700; color: #1a0a30; line-height: 1.35; margin-bottom: 0.2rem; }
-.feed-card-author { font-size: 0.66rem; color: #c040e0; margin-bottom: 0.3rem; }
-.feed-card-badges { display: flex; gap: 0.3rem; flex-wrap: wrap; }
-.feed-card-hint { font-size: 0.62rem; font-weight: 700; color: #c040e0; letter-spacing: 0.02em; margin-top: 0.3rem; }
-.kana-rail { width: 30px; flex-shrink: 0; position: sticky; top: 4.6rem; align-self: flex-start; display: flex; flex-direction: column; align-items: center; gap: 0.55rem; background: rgba(255,255,255,0.75); border: 1.5px solid rgba(26,10,48,0.15); border-radius: 14px; padding: 0.7rem 0.1rem; touch-action: none; }
-.kana-rail button { border: none; background: none; font-family: 'DM Mono', monospace; font-size: 0.72rem; font-weight: 700; color: #8020c0; cursor: pointer; line-height: 1; padding: 0.3rem 0; width: 100%; transition: all .12s; }
-.kana-rail button:hover { color: #ff50a0; transform: scale(1.25); }
-.kana-rail button.active { color: #ff50a0; font-weight: 900; transform: scale(1.3); }
 </style>
-<link rel="stylesheet" href="desktop.css?v=20261006-1">
-<script src="desktop.js?v=20261006-1" defer></script>
 </head>
-<body>
+<body data-page="top">
 
-<div class="deco-layer">
-  <div class="dots-grid"></div>
-  <div class="deco-circle-tl"></div>
-  <div class="deco-circle-tr"></div>
-  <div class="deco-circle-mr"></div>
-  <div class="deco-circle-bl"></div>
-</div>
-<div class="deco-layer" id="deco-stars"></div>
-<div class="deco-layer" id="deco-shapes"></div>
-<div class="deco-layer" id="deco-icons"></div>
+<header class="bar">
+  <a class="home-link" href="#" data-go="top"><img src="logo.png" alt="けんしの腐世界生活"></a>
+  <nav>
+    <button data-go="top">トップ</button>
+    <button data-go="lib" data-cat="all">本棚</button>
+    <button data-go="letter">お便り</button>
+    <button data-go="gift">プレゼント</button>
+  </nav>
+  <button class="count" data-go="lib" data-cat="all">漫画 <b id="total">-</b> 冊 <i>›</i></button>
+</header>
 
-<nav class="desktop-nav" aria-label="サイトのメニュー">
-  <button class="desktop-brand" type="button" onclick="desktopHome()" aria-label="トップへ"><img src="logo.png" alt="けんしの腐世界生活"></button>
-  <div class="desktop-nav-links">
-    <button type="button" data-desktop-page="page-top" onclick="desktopHome()">トップ</button>
-    <button type="button" data-desktop-page="read" onclick="openFeed('read')">既読本</button>
-    <button type="button" data-desktop-page="later" onclick="openFeed('later')">あとで読む</button>
-    <button type="button" data-desktop-page="page-letter" onclick="showPage('page-letter')">お便り</button>
-    <button type="button" data-desktop-page="page-present" onclick="showPage('page-present')">プレゼント</button>
+<!-- トップ -->
+<main class="page on" id="p-top">
+  <div class="wrap home">
+    <section class="finder">
+      <img class="hero-logo" src="logo.png" alt="けんしの腐世界生活">
+      <p class="lead">布教の前に、<em>けんしの本棚をチェック！</em><small>作品名・作者名で <span id="n-all">-</span> 冊から探せます</small></p>
+      <div class="search-box">
+        <label class="search"><svg class="sicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/></svg><input id="q" type="search" enterkeyhint="search" placeholder="作品名・作者名を入れてみて" autocomplete="off" autocorrect="off" autocapitalize="off"><button type="button" class="clear" id="q-clear" aria-label="消す">×</button></label>
+        <div class="sugg" id="sugg"></div>
+        <div class="none" id="none">
+          <p>けんしはまだ<br><em id="none-q"></em>を知らないかも！</p>
+          <small>ぜひ教えてください。動画で読むかもしれません</small>
+          <div class="acts"><button type="button" class="main" id="none-talk">布教したい</button><button type="button" data-go="gift">プレゼントする</button></div>
+          <div class="talk" data-target="未読作品"></div>
+          <div class="thanks"></div>
+        </div>
+      </div>
+      <div class="menu">
+        <button class="m read" data-go="lib" data-cat="read"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5C4.5 4 7.5 4 12 6c4.5-2 7.5-2 10-.5V19c-2.5-1.5-5.5-1.5-10 .5-4.5-2-7.5-2-10-.5z"/><path d="M12 6v13.5"/></svg></i><b>既読</b><span><em id="n-read">-</em>冊</span></button>
+        <button class="m later" data-go="lib" data-cat="later"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg></i><b>これから読む</b><span><em id="n-later">-</em>冊</span></button>
+        <button class="m letter" data-go="letter"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg></i><b>お便りを書く</b><span>ラジオで読むかも</span></button>
+        <button class="m gift" data-go="gift"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v8h14v-8M12 8v12"/><path d="M12 8C10 4 6.5 4.5 7.5 7.5 8 8 12 8 12 8zM12 8c2-4 5.5-3.5 4.5-.5C16 8 12 8 12 8z"/></svg></i><b>プレゼント</b><span>本やギフト券を送る</span></button>
+      </div>
+    </section>
+    <footer class="foot">
+      <div class="sns">
+        <a href="https://x.com/secret_kenshi" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24" fill="#1a0a30"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L2.19 2.25h6.945l4.265 5.638L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="https://youtube.com/@kenshi-blbook" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="#c00"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+        <a href="https://www.tiktok.com/@kenshi_bl" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="#1a0a30"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg></a>
+        <a href="https://www.instagram.com/kenshi.bl/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="#1a0a30"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
+      </div>
+      <p>けんしの腐世界生活</p>
+    </footer>
   </div>
+</main>
+
+<!-- 本棚 -->
+<main class="page" id="p-lib">
+  <div class="wrap">
+    <div class="lib-head">
+      <div class="seg">
+        <button data-cat="all">すべて <small id="s-all"></small></button>
+        <button data-cat="read">既読 <small id="s-read"></small></button>
+        <button data-cat="later">これから読む <small id="s-later"></small></button>
+      </div>
+    </div>
+    <div class="kana" id="kana"></div>
+    <div id="groups"><p class="loading">本棚を読み込み中…</p></div>
+  </div>
+</main>
+
+<!-- 作品 -->
+<main class="page" id="p-work">
+  <div class="wrap work">
+    <button class="back" data-back>← もどる</button>
+    <div class="work-main">
+      <div class="work-cover" id="w-cover"></div>
+      <div class="work-info">
+        <span class="label" id="w-label"></span>
+        <h1 id="w-title"></h1>
+        <div class="au" id="w-author"></div>
+        <div class="memo" id="w-memo"></div>
+        <div class="acts"><button type="button" class="main" data-talk="語りたい">語りたい</button><button type="button" data-talk="布教したい">布教したい</button></div>
+        <div class="talk" data-target="この作品"></div>
+        <div class="thanks"></div>
+        <section class="same">
+          <h2 class="round">同じ作者の本</h2>
+          <div class="row" id="w-same"></div>
+        </section>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- お便り -->
+<main class="page" id="p-letter">
+  <div class="wrap sheet">
+    <section class="s-head">
+      <h1 class="round">お便りを書く</h1>
+      <p>届いたお便りは、<em>YouTubeの実写ラジオ</em>で読むかも！</p>
+    </section>
+    <form class="card" id="l-form" onsubmit="return false">
+      <div class="f">
+        <label>カテゴリ<small>いくつでも</small></label>
+        <div class="chips" id="l-cats">
+          <button type="button" class="chip">けんしにメッセージ（質問など）</button>
+          <button type="button" class="chip">腐女子あるある・告白</button>
+          <button type="button" class="chip">恋愛・仕事のお悩み</button>
+          <button type="button" class="chip">聞いて欲しいこと</button>
+          <button type="button" class="chip">オススメ漫画・布教</button>
+        </div>
+      </div>
+      <div class="f">
+        <label for="l-name">ラジオネーム<small>なくてもOK</small></label>
+        <input id="l-name" maxlength="50" placeholder="腐女子Aさん、匿名希望 など">
+      </div>
+      <div class="f">
+        <label for="l-body">お便りの内容</label>
+        <textarea id="l-body" rows="6" maxlength="5000" placeholder="けんしへのメッセージ、おすすめ作品、感想など自由に書いてください"></textarea>
+      </div>
+      <label class="tg"><input type="checkbox" id="l-use" checked><span></span>ラジオ・動画で使ってOK</label>
+      <div class="note">
+        <b>送る前に確認してね</b>
+        <ul>
+          <li>ラジオ・動画で紹介させてもらうことがあります</li>
+          <li>名前や住所など、個人が分かることは書かないでください</li>
+          <li>直接的すぎる性表現は採用できないことがあります（けんしは笑いながら読みますが…）</li>
+        </ul>
+        <label class="tg"><input type="checkbox" id="l-ok"><span></span>確認しました</label>
+      </div>
+      <button type="button" class="send" id="l-send" disabled>お便りを送る</button>
+      <p class="err" id="l-err"></p>
+    </form>
+    <section class="thanks l-done" id="l-done">
+      <div class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <h3 class="round">お便りありがとう！</h3>
+      <p>ちゃんと届きました。<br>ラジオで読まれるかも、お楽しみに。</p>
+      <button type="button" data-go="top">トップにもどる</button>
+    </section>
+  </div>
+</main>
+
+<!-- プレゼント -->
+<main class="page" id="p-gift">
+  <div class="wrap sheet">
+    <section class="s-head">
+      <h1 class="round">プレゼントを送る</h1>
+      <p>いただいた本は、<em>本棚の「これから読む」</em>に並びます。<br>ひとつひとつ大切に受け取ります。</p>
+    </section>
+    <div class="g-cards">
+      <section class="card">
+        <div class="g-top"><i class="gi pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5L12 3l9 4.5v9L12 21l-9-4.5z"/><path d="M3 7.5l9 4.5 9-4.5M12 12v9M7.5 5.2l9 4.6"/></svg></i><div><b>本や物を送る</b><small>郵送・宅配</small></div></div>
+        <div class="g-box">
+          <span class="g-label">送り先</span>
+          <p class="g-addr">〒152-0035<br>東京都目黒区自由が丘2-16-12 RJ3</p>
+          <span class="g-label">宛名</span>
+          <p class="g-name">けんし　または　山田けんし</p>
+          <button type="button" class="g-copy" data-copy="〒152-0035 東京都目黒区自由が丘2-16-12 RJ3 けんし">住所をコピー</button>
+        </div>
+        <p class="g-ng"><b>受け取れないもの</b>食べ物・飲み物・生き物</p>
+      </section>
+      <section class="card">
+        <div class="g-top"><i class="gi purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg></i><div><b>Amazonギフトカードで布教する</b><small>Eメールタイプ</small></div></div>
+        <p class="g-text">「〇〇買ってくれ」「〇〇作品代」など、<em>読んでほしい作品をメッセージに添えて</em>送ってください。けんしが買って読みます（動画にするかも）。</p>
+        <div class="g-box row2">
+          <div><span class="g-label">受取人のメールアドレス</span><p class="g-mail">fusekai.gift@gmail.com</p></div>
+          <button type="button" class="g-copy" data-copy="fusekai.gift@gmail.com">コピー</button>
+        </div>
+        <p class="g-hint">Amazonでギフトカードを買うときの「受取人のメールアドレス」に入れてください</p>
+      </section>
+    </div>
+    <p class="g-foot">いただいたプレゼントは、動画やSNSでご報告します</p>
+  </div>
+</main>
+
+<nav class="tabbar">
+  <button data-go="top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>トップ</button>
+  <button data-go="lib" data-cat="all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h4v16H4zM10 4h4v16h-4zM16.5 5l3.5 1-3.5 14-3.5-1z"/></svg>本棚</button>
+  <button data-go="letter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18v12H3z"/><path d="M3 6l9 7 9-7"/></svg>お便り</button>
+  <button data-go="gift"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10h16v10H4zM3 7h18v3H3zM12 7v13"/><path d="M12 7c-2-4-6-3-5 0M12 7c2-4 6-3 5 0"/></svg>プレゼント</button>
 </nav>
 
-<!-- ── トップページ ── -->
-<div id="page-top" class="page active content">
-  <div class="hero">
-    <img src="logo.png" alt="けんしの腐世界生活" style="width:92%;max-width:400px;margin-bottom:1rem;cursor:pointer;" onclick="showPage('page-top')">
-    <div class="hero-sub-box">
-      <svg class="hero-sub-deco book" width="30" height="36" viewBox="0 0 52 64">
-        <rect x="4" y="2" width="44" height="60" rx="4" stroke="#a060e0" stroke-width="3" fill="rgba(160,96,224,0.15)"/>
-        <line x1="13" y1="2" x2="13" y2="62" stroke="#a060e0" stroke-width="2.5"/>
-        <line x1="20" y1="18" x2="42" y2="18" stroke="rgba(160,96,224,0.5)" stroke-width="2" stroke-linecap="round"/>
-        <line x1="20" y1="26" x2="38" y2="26" stroke="rgba(160,96,224,0.5)" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-      <svg class="hero-sub-deco phone" width="24" height="40" viewBox="0 0 40 68">
-        <rect x="2" y="2" width="36" height="64" rx="7" stroke="#e040a0" stroke-width="3" fill="rgba(255,112,184,0.15)"/>
-        <rect x="6" y="10" width="28" height="40" rx="3" fill="rgba(255,112,184,0.25)"/>
-        <circle cx="20" cy="58" r="4" stroke="#e040a0" stroke-width="2" fill="none"/>
-      </svg>
-      <p class="hero-sub">腐女子・腐男子さんから届いたおすすめBL漫画を<br>けんしが読んで、<span class="hero-sub-accent">YouTubeで紹介中！</span></p>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin:0.9rem 1.5rem 0;">
-      <a href="https://x.com/secret_kenshi" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:0.4rem;padding:0.5rem 0;border-radius:999px;border:2px solid #1a0a30;background:rgba(255,255,255,0.85);box-shadow:2px 2px 0px #1a0a30;text-decoration:none;color:#1a0a30;font-size:0.72rem;font-weight:700;font-family:'Noto Sans JP',sans-serif;">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="#1a0a30"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L2.19 2.25h6.945l4.265 5.638L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-        X
-      </a>
-      <a href="https://youtube.com/@kenshi-blbook" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:0.4rem;padding:0.5rem 0;border-radius:999px;border:2px solid #1a0a30;background:rgba(255,255,255,0.85);box-shadow:2px 2px 0px #1a0a30;text-decoration:none;color:#1a0a30;font-size:0.72rem;font-weight:700;font-family:'Noto Sans JP',sans-serif;">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="#c00"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-        YouTube
-      </a>
-      <a href="https://www.tiktok.com/@kenshi_bl" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:0.4rem;padding:0.5rem 0;border-radius:999px;border:2px solid #1a0a30;background:rgba(255,255,255,0.85);box-shadow:2px 2px 0px #1a0a30;text-decoration:none;color:#1a0a30;font-size:0.72rem;font-weight:700;font-family:'Noto Sans JP',sans-serif;">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="#1a0a30"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg>
-        TikTok
-      </a>
-      <a href="https://www.instagram.com/kenshi.bl/" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:0.4rem;padding:0.5rem 0;border-radius:999px;border:2px solid #1a0a30;background:rgba(255,255,255,0.85);box-shadow:2px 2px 0px #1a0a30;text-decoration:none;color:#1a0a30;font-size:0.72rem;font-weight:700;font-family:'Noto Sans JP',sans-serif;">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="#1a0a30"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
-        Instagram
-      </a>
-    </div>
+<template id="talk-tpl">
+  <h3 class="round"></h3>
+  <div class="f"><label>ラジオネーム<small>なくてもOK</small></label><input class="t-name" maxlength="50" placeholder="腐女子Aさん、匿名希望 など"></div>
+  <div class="f"><label>内容</label><textarea class="t-body" rows="5" maxlength="5000" placeholder="どんなところが好き？けんしに布教してみよう"></textarea></div>
+  <label class="tg"><input type="checkbox" class="t-use" checked><span></span>ラジオ・動画で使ってOK</label>
+  <div class="note">
+    <b>送る前に確認してね</b>
+    <ul>
+      <li>ラジオ・動画で紹介させてもらうことがあります</li>
+      <li>名前や住所など、個人が分かることは書かないでください</li>
+      <li>直接的すぎる性表現は採用できないことがあります（けんしは笑いながら読みますが…）</li>
+    </ul>
+    <label class="tg"><input type="checkbox" class="t-ok"><span></span>確認しました</label>
   </div>
-
-  <!-- スマホ用：タップで全画面オーバーレイを開くボタン -->
-  <label class="search-trigger" for="overlay-input">
-    <span class="search-trigger-icon">🔍</span>
-    <span class="search-trigger-text">おすすめ・語りたい作品/作者を検索してみて</span>
-  </label>
-
-  <!-- PC用：Google風のびる検索窓 -->
-  <div class="search-outer" id="search-outer">
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input class="search-input" id="search-input" type="text" placeholder="おすすめ・語りたい作品/作者を検索してみて">
-      <button class="search-clear" id="search-clear" aria-label="検索文字をクリア" type="button">✕</button>
-    </div>
-    <div class="search-dropdown" id="search-dropdown"></div>
-  </div>
-  <div class="count-hero">
-    <p class="count-hero-num">漫画所持数 <span id="total-count">--</span> 作品</p>
-    <p class="count-hero-label" id="count-comment"></p>
-  </div>
-
-  <div class="nav-buttons">
-    <div class="nav-btn nav-btn-read" onclick="openFeed('read')">
-      <div class="nav-btn-title">既読本</div>
-      <div class="nav-btn-count" id="read-count-label">-- 作品</div>
-    </div>
-    <div class="nav-btn nav-btn-later" onclick="openFeed('later')">
-      <div class="nav-btn-title">あとで読む</div>
-      <div class="nav-btn-count" id="later-count-label">-- 作品</div>
-    </div>
-  </div>
-
-  <div class="result-area" id="result-area">
-    <button type="button" class="desktop-detail-back" onclick="desktopBackToBooks()">← 本棚に戻る</button>
-    <div id="result-card"></div>
-    <div class="suggest-toast" id="suggest-toast">
-      <p class="toast-label">正常に届きました</p>
-      <p class="toast-main">お便りありがとう！</p>
-    </div>
-  </div>
-
-  <div class="no-results" id="no-results" style="display:none;">
-    <p class="no-results-text">けんしはまだ「<strong><span id="no-results-query"></span></strong>」を知らないかも！</p>
-    <p class="no-results-hint">けんしのラジオ・動画で使われるかも ✦</p>
-    <div class="no-results-btns">
-      <button class="btn btn-talk" onclick="toggleTalk()">語りたい / 布教したい</button>
-    </div>
-    <button class="btn btn-talk" style="margin-top:0.5rem;font-size:0.72rem;" onclick="togglePresentPanel()">プレゼントする</button>
-    <div id="no-results-present" style="display:none;margin-top:0.75rem;text-align:left;">
-      <div style="background:rgba(255,255,255,0.95);border:2px solid #1a0a30;border-radius:14px;box-shadow:3px 3px 0px #1a0a30;padding:1rem 1rem 0.8rem;margin-bottom:0.6rem;">
-        <p style="font-size:0.62rem;font-weight:700;color:#c040e0;letter-spacing:0.08em;margin-bottom:0.5rem;font-family:'DM Mono',monospace;">SHIPPING ADDRESS</p>
-        <p style="font-size:0.82rem;font-weight:700;color:#1a0a30;line-height:1.9;margin-bottom:0.4rem;">〒152-0035<br>東京都目黒区自由が丘2-16-12 RJ3</p>
-        <p style="font-size:0.72rem;color:#3a2060;margin-bottom:0.3rem;">宛名：けんし　または　山田けんし</p>
-        <p style="font-size:0.62rem;color:rgba(60,20,80,0.5);"><strong style="color:#e03090;">NG：</strong>食べ物・飲み物・生き物はお受け取りできません</p>
-      </div>
-      <div style="background:rgba(255,255,255,0.95);border:2px solid #1a0a30;border-radius:14px;box-shadow:3px 3px 0px #1a0a30;padding:1rem 1rem 0.8rem;">
-        <p style="font-size:0.62rem;font-weight:700;color:#c040e0;letter-spacing:0.08em;margin-bottom:0.5rem;font-family:'DM Mono',monospace;">AMAZON GIFT CARD</p>
-        <p style="font-size:0.82rem;font-weight:700;color:#1a0a30;margin-bottom:0.5rem;">Amazonギフトカードで布教する</p>
-        <p style="font-size:0.72rem;color:#3a2060;line-height:1.8;margin-bottom:0.7rem;"><span style="display:inline-block;background:linear-gradient(135deg,#ffe0f4,#f0e0ff);border:1.5px solid #c040e0;border-radius:6px;padding:0.15rem 0.5rem;font-weight:700;color:#8020c0;font-size:0.68rem;">作品名をメッセージに必ず添えて</span><br>Eメールタイプで送ってください。</p>
-        <div style="display:flex;align-items:center;gap:0.5rem;background:rgba(180,80,240,0.06);border:1.5px solid rgba(180,80,240,0.3);border-radius:8px;padding:0.5rem 0.75rem;">
-          <span style="font-size:0.78rem;font-weight:700;color:#1a0a30;flex:1;">fusekai.gift@gmail.com</span>
-          <button onclick="copyGiftEmailInline()" id="copy-btn-inline" style="font-size:0.65rem;font-weight:700;padding:0.25rem 0.65rem;border-radius:999px;border:1.5px solid #c040e0;background:linear-gradient(135deg,#f0e0ff,#ffe0f4);color:#8020c0;cursor:pointer;white-space:nowrap;transition:all 0.15s;">コピー</button>
-        </div>
-      </div>
-    </div>
-    <div class="no-results-talk" id="no-results-talk">
-      <input id="talk-name" type="text" placeholder="ラジオネーム（任意）" style="width:100%;border:2px solid #1a0a30;border-radius:10px;padding:0.5rem 0.75rem;font-size:16px;font-family:'Noto Sans JP',sans-serif;margin-bottom:0.5rem;box-shadow:2px 2px 0px #1a0a30;outline:none;background:rgba(255,255,255,0.9);">
-      <textarea id="talk-textarea" placeholder="どんな作品？どこが好き？けんしに布教してみよう…"></textarea>
-      <label class="no-results-check">
-        <input type="checkbox" id="use-ok-check" checked>
-        ラジオ・動画での使用OK
-      </label>
-      <div class="letter-confirm-box">
-        <p class="letter-confirm-title">📋 送信前にご確認ください</p>
-        <ul class="letter-confirm-list">
-          <li>送信内容はラジオ・動画で参考にさせていただく場合があります</li>
-          <li>個人が特定される情報は含めないでください</li>
-          <li>直接的すぎる性表現は採用できない場合があります（けんしは笑いながら読みますが…）</li>
-        </ul>
-        <label class="form-check" style="margin:0.6rem 0 0;">
-          <input type="checkbox" id="talk-confirm-check">
-          上記を確認して送信する
-        </label>
-      </div>
-      <button class="no-results-send" onclick="sendTalk()">送る ✦</button>
-    </div>
-  </div>
-
-  <p class="section-label" id="bl-section-label" style="display:none;">BL List ✦</p>
-  <div class="loading" id="bl-loading">読み込み中…</div>
-  <div class="cards" id="cards-wrap"></div>
-
-  <div class="footer-btns">
-    <button class="footer-btn pink" onclick="showPage('page-letter')">
-      けんしにお便りを書く
-      <span style="display:block;font-size:0.65rem;font-weight:400;opacity:0.8;margin-top:0.2rem;">日常・悩み・BL語り…なんでも</span>
-    </button>
-    <button class="footer-btn blue" onclick="showPage('page-present')">けんしにプレゼントを送る</button>
-  </div>
-  <section class="desktop-shelf" id="desktop-shelf" hidden aria-label="既読本をのぞく">
-    <div class="desktop-shelf-heading"><h2>既読本をのぞく</h2><button type="button" onclick="openFeed('read')">すべて見る →</button></div>
-    <div class="desktop-shelf-books" id="desktop-shelf-books"></div>
-  </section>
-</div>
-
-<!-- ── 一覧フィードページ（既読本／あとで読む共通） ── -->
-<div id="page-feed" class="page content">
-  <button class="back-btn" onclick="showPage('page-top')">
-    <span class="back-arrow">←</span> 戻る
-  </button>
-  <p class="feed-title" id="feed-title">既読本</p>
-  <p class="feed-count" id="feed-count">-- 作品</p>
-  <div class="feed-search">
-    <div class="search-outer" id="feed-search-outer">
-      <div class="search-wrap">
-        <span class="search-icon">🔍</span>
-        <input class="search-input" id="feed-search-input" type="text" placeholder="作品名・作者で絞り込み" oninput="filterFeed(this.value)" onkeydown="feedSearchSubmit(event)">
-        <button class="search-clear" id="feed-search-clear" aria-label="検索文字をクリア" type="button">✕</button>
-      </div>
-      <div class="search-dropdown" id="feed-search-dropdown"></div>
-    </div>
-  </div>
-  <div class="feed-layout">
-    <div class="feed-list" id="feed-list"></div>
-    <div class="kana-rail" id="kana-rail"></div>
-  </div>
-</div>
-
-<!-- ── お便りページ ── -->
-<div id="page-letter" class="page content">
-  <button class="back-btn" onclick="showPage('page-top')">
-    <span class="back-arrow">←</span> 戻る
-  </button>
-
-  <div class="desktop-letter-intro" style="margin:0 1.5rem 1.2rem;background:rgba(255,255,255,0.88);border:2px solid #1a0a30;border-radius:20px;box-shadow:4px 4px 0px #1a0a30;padding:1.4rem 1.2rem 1.2rem;text-align:center;">
-    <p class="page-title" style="padding:0 0 0.4rem;">お便りを書く</p>
-    <p style="font-size:0.82rem;color:#3a2060;line-height:1.9;margin-bottom:1rem;">
-      性癖、職場にバレた、妄想が止まらない…<br>
-      そんな腐女子の日常、腐世界でお焚き上げ！
-    </p>
-    <div class="letter-guide" style="padding:0;">
-      <span>📱 短め → ショート動画</span>
-      <span>🎙 長め → 横動画・ポッドキャスト</span>
-    </div>
-  </div>
-
-  <div id="letter-form-wrap">
-    <div class="form-wrap">
-      <div class="form-group">
-        <label class="form-label">カテゴリ <span>（複数選択可）</span></label>
-        <div class="category-group">
-          <label class="category-label"><input type="checkbox" name="category" value="けんしにメッセージ（質問など）"><span class="category-check-box">✓</span>けんしにメッセージ（質問など）</label>
-          <label class="category-label"><input type="checkbox" name="category" value="腐女子あるある・告白"><span class="category-check-box">✓</span>腐女子あるある・告白</label>
-          <label class="category-label"><input type="checkbox" name="category" value="恋愛・仕事のお悩み"><span class="category-check-box">✓</span>恋愛・仕事のお悩み</label>
-          <label class="category-label"><input type="checkbox" name="category" value="聞いて欲しいこと"><span class="category-check-box">✓</span>聞いて欲しいこと</label>
-          <label class="category-label"><input type="checkbox" name="category" value="オススメ漫画・布教"><span class="category-check-box">✓</span>オススメ漫画・布教</label>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">ラジオネーム <span>（任意）</span></label>
-        <input class="form-input" id="letter-name" type="text" placeholder="腐女子Aさん、匿名希望　など">
-      </div>
-      <div class="form-group">
-        <label class="form-label">お便りの内容</label>
-        <textarea class="form-textarea" id="letter-body" placeholder="けんしへのメッセージ、おすすめ作品、感想など自由に書いてください…"></textarea>
-      </div>
-      <label class="form-check">
-        <input type="checkbox" id="letter-use-ok" checked>
-        ラジオ・動画での使用OK
-      </label>
-      <div class="letter-confirm-box">
-        <p class="letter-confirm-title">📋 送信前にご確認ください</p>
-        <ul class="letter-confirm-list">
-          <li>送信内容はラジオ・動画で参考にさせていただく場合があります</li>
-          <li>個人が特定される情報は含めないでください</li>
-          <li>直接的すぎる性表現は採用できない場合があります（けんしは笑いながら読みますが…）</li>
-        </ul>
-        <label class="form-check" style="margin:0.6rem 0 0;">
-          <input type="checkbox" id="letter-confirm-check">
-          上記を確認して送信する
-        </label>
-      </div>
-      <button class="submit-btn" id="letter-submit-btn" onclick="sendLetter()">腐世界にお焚き上げする ✦</button>
-    </div>
-    <p class="form-note">
-      送信内容は動画・SNS等で紹介させていただく場合があります。<br>
-      個人情報は記載しないようご注意ください。
-    </p>
-  </div>
-
-  <div class="sent-view" id="sent-view">
-    <span class="sent-icon">✦</span>
-    <p class="sent-label">正常に届きました</p>
-    <p class="sent-title">お便りありがとう！</p>
-  </div>
-</div>
-
-<!-- ── プレゼントページ ── -->
-<div id="page-present" class="page content">
-  <button class="back-btn" onclick="showPage('page-top')">
-    <span class="back-arrow">←</span> 戻る
-  </button>
-
-  <div class="desktop-present-intro" style="margin:0 1.5rem 1.2rem;background:rgba(255,255,255,0.88);border:2px solid #1a0a30;border-radius:20px;box-shadow:4px 4px 0px #1a0a30;padding:1.4rem 1.2rem 1.2rem;text-align:center;">
-    <p class="page-title" style="padding:0 0 0.4rem;">プレゼントを送る</p>
-    <p style="font-size:0.82rem;color:#3a2060;line-height:1.9;margin:0;">
-      けんしへのプレゼントはこちらの住所まで。<br>
-      ひとつひとつ大切に受け取ります。
-    </p>
-  </div>
-
-  <div class="address-card">
-    <p class="address-label">SHIPPING ADDRESS</p>
-    <p class="address-text">
-      〒152-0035<br>
-      東京都目黒区自由が丘2-16-12 RJ3
-    </p>
-    <p class="address-name">宛名：けんし　または　山田けんし</p>
-    <p class="address-ng"><strong>NG：</strong>食べ物・飲み物・生き物はお受け取りできません</p>
-  </div>
-
-  <div class="desktop-gift-card" style="margin:1rem 1.5rem 0;background:rgba(255,255,255,0.92);border:2px solid #1a0a30;border-radius:16px;box-shadow:4px 4px 0px #1a0a30;padding:1.2rem 1.2rem 1rem;">
-    <p style="font-size:0.65rem;font-weight:700;color:#c040e0;letter-spacing:0.08em;margin-bottom:0.6rem;font-family:'DM Mono',monospace;">AMAZON GIFT CARD</p>
-    <p style="font-size:0.85rem;font-weight:700;color:#1a0a30;margin-bottom:0.5rem;">Amazonギフトカードで布教する</p>
-    <p style="font-size:0.75rem;color:#3a2060;line-height:1.9;margin-bottom:0.9rem;">
-      <span style="display:inline-block;background:linear-gradient(135deg,#ffe0f4,#f0e0ff);border:1.5px solid #c040e0;border-radius:8px;padding:0.25rem 0.7rem;font-weight:700;color:#8020c0;margin-bottom:0.4rem;">「〇〇作品買ってくれ」や「〇〇作品代」などメッセージを必ず添えて</span><br>
-      Amazonギフトカード（Eメールタイプ）を送ってください。<br>
-      けんしが購入して読ませていただきます。（動画にもするかも）
-    </p>
-    <p style="font-size:0.72rem;color:rgba(60,20,80,0.6);margin-bottom:0.5rem;font-weight:700;">送り先メールアドレス</p>
-    <div style="display:flex;align-items:center;gap:0.6rem;background:rgba(180,80,240,0.06);border:1.5px solid rgba(180,80,240,0.3);border-radius:10px;padding:0.6rem 0.9rem;">
-      <span style="font-size:0.85rem;font-weight:700;color:#1a0a30;flex:1;letter-spacing:0.02em;" id="gift-email">fusekai.gift@gmail.com</span>
-      <button onclick="copyGiftEmail()" id="copy-btn" style="font-size:0.68rem;font-weight:700;padding:0.3rem 0.75rem;border-radius:999px;border:1.5px solid #c040e0;background:linear-gradient(135deg,#f0e0ff,#ffe0f4);color:#8020c0;cursor:pointer;white-space:nowrap;transition:all 0.15s;">コピー</button>
-    </div>
-    <p style="font-size:0.65rem;color:rgba(80,40,100,0.45);margin-top:0.6rem;line-height:1.7;">※ Amazonでギフトカード購入時の「受取人のメールアドレス」欄に入力してください</p>
-  </div>
-
-  <div class="present-note">
-    いただいたプレゼントは動画・SNSでご報告します。
-  </div>
-  <div style="height: 3rem;"></div>
-</div>
-
-<!-- ── スマホ用フルスクリーン検索オーバーレイ ── -->
-<div class="search-overlay" id="search-overlay">
-  <div class="overlay-bar">
-    <div class="overlay-input-wrap">
-      <span class="overlay-icon">🔍</span>
-      <input class="overlay-input" id="overlay-input" type="text" placeholder="作品名・作者名で検索" autocomplete="off" autocorrect="off" autocapitalize="off">
-      <span class="overlay-clear" id="overlay-clear">✕</span>
-    </div>
-    <span class="overlay-cancel" id="overlay-cancel">キャンセル</span>
-  </div>
-  <div class="overlay-results" id="overlay-results">
-    <p class="overlay-hint">SEARCH — けんし既読作品</p>
-    <div id="overlay-suggestion-list"></div>
-    <div class="overlay-no-results" id="overlay-no-results" style="display:none;">
-      <p class="overlay-no-results-text">けんしはまだ「<strong><span id="overlay-no-query"></span></strong>」を知らないかも！</p>
-      <p class="overlay-no-results-hint">けんしのラジオ・動画で使われるかも ✦</p>
-      <div class="overlay-no-results-btns">
-        <button class="btn btn-talk" id="overlay-btn-talk">語りたい / 布教したい</button>
-      </div>
-      <button class="btn btn-talk" style="margin-top:0.5rem;font-size:0.72rem;" id="overlay-btn-present">プレゼントする</button>
-      <div id="overlay-present-panel" style="display:none;margin-top:0.75rem;text-align:left;">
-        <div style="background:rgba(255,255,255,0.95);border:2px solid #1a0a30;border-radius:14px;box-shadow:3px 3px 0px #1a0a30;padding:1rem 1rem 0.8rem;margin-bottom:0.6rem;">
-          <p style="font-size:0.62rem;font-weight:700;color:#c040e0;letter-spacing:0.08em;margin-bottom:0.5rem;font-family:'DM Mono',monospace;">SHIPPING ADDRESS</p>
-          <p style="font-size:0.82rem;font-weight:700;color:#1a0a30;line-height:1.9;margin-bottom:0.4rem;">〒152-0035<br>東京都目黒区自由が丘2-16-12 RJ3</p>
-          <p style="font-size:0.72rem;color:#3a2060;margin-bottom:0.3rem;">宛名：けんし　または　山田けんし</p>
-          <p style="font-size:0.62rem;color:rgba(60,20,80,0.5);"><strong style="color:#e03090;">NG：</strong>食べ物・飲み物・生き物はお受け取りできません</p>
-        </div>
-        <div style="background:rgba(255,255,255,0.95);border:2px solid #1a0a30;border-radius:14px;box-shadow:3px 3px 0px #1a0a30;padding:1rem 1rem 0.8rem;">
-          <p style="font-size:0.62rem;font-weight:700;color:#c040e0;letter-spacing:0.08em;margin-bottom:0.5rem;font-family:'DM Mono',monospace;">AMAZON GIFT CARD</p>
-          <p style="font-size:0.82rem;font-weight:700;color:#1a0a30;margin-bottom:0.5rem;">Amazonギフトカードで布教する</p>
-          <p style="font-size:0.72rem;color:#3a2060;line-height:1.8;margin-bottom:0.7rem;"><span style="display:inline-block;background:linear-gradient(135deg,#ffe0f4,#f0e0ff);border:1.5px solid #c040e0;border-radius:6px;padding:0.15rem 0.5rem;font-weight:700;color:#8020c0;font-size:0.68rem;">作品名をメッセージに必ず添えて</span><br>Eメールタイプで送ってください。</p>
-          <div style="display:flex;align-items:center;gap:0.5rem;background:rgba(180,80,240,0.06);border:1.5px solid rgba(180,80,240,0.3);border-radius:8px;padding:0.5rem 0.75rem;">
-            <span style="font-size:0.78rem;font-weight:700;color:#1a0a30;flex:1;">fusekai.gift@gmail.com</span>
-            <button onclick="copyGiftEmailOverlay()" id="copy-btn-overlay" style="font-size:0.65rem;font-weight:700;padding:0.25rem 0.65rem;border-radius:999px;border:1.5px solid #c040e0;background:linear-gradient(135deg,#f0e0ff,#ffe0f4);color:#8020c0;cursor:pointer;white-space:nowrap;transition:all 0.15s;">コピー</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+  <button type="button" class="send t-send" disabled>送る</button>
+  <p class="err t-err"></p>
+</template>
 
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfS8nV_egG3PEdttzKOPq88-yOB6_fbjAounh4hJEVlWpHlMVGkQkaSi59VOkkBo8/exec';
 const CSV_URL    = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQlkVklqYpy0eGF2c8jDc8Dns5jRW7iUHs3QQarG3V6vOlkBESrykKtQK13HtWVwIY14XziYjWr-gBC/pub?output=csv';
 
-/* ── CSV読み込み ── */
-let cardData = [];
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const GIFT_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v8h14v-8M12 8v12"/><path d="M12 8C10 4 6.5 4.5 7.5 7.5 8 8 12 8 12 8zM12 8c2-4 5.5-3.5 4.5-.5C16 8 12 8 12 8z"/></svg>';
+const CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
+/* ── 既読リストの読み込み ── */
+let books = [], read = [], later = [];
 
 function parseCSV(text) {
-  const lines = text.trim().split('\n');
   const rows = [];
-  for (let i = 1; i < lines.length; i++) {
-    const cols = [];
-    let cur = '';
-    let inQ = false;
-    for (const ch of lines[i]) {
-      if (ch === '"') { inQ = !inQ; }
-      else if (ch === ',' && !inQ) { cols.push(cur); cur = ''; }
-      else { cur += ch; }
-    }
-    cols.push(cur);
-    if (cols[0] && cols[0].trim()) rows.push(cols);
+  let row = [], cur = '', inQ = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (inQ) {
+      if (ch === '"') { if (text[i + 1] === '"') { cur += '"'; i++; } else inQ = false; }
+      else cur += ch;
+    } else if (ch === '"') inQ = true;
+    else if (ch === ',') { row.push(cur); cur = ''; }
+    else if (ch === '\n') { row.push(cur); rows.push(row); row = []; cur = ''; }
+    else if (ch !== '\r') cur += ch;
   }
-  return rows;
+  if (cur || row.length) { row.push(cur); rows.push(row); }
+  return rows.slice(1);
 }
 
-async function loadCards() {
+async function loadBooks() {
   try {
-    const res  = await fetch(CSV_URL + '&t=' + Date.now());
-    const text = await res.text();
-    const rows = parseCSV(text);
-    cardData = rows.map(r => ({
-      title:   (r[0] || '').trim(),
-      author:  (r[1] || '').trim(),
-      volume:  (r[2] || '').trim(),
-      desc:    (r[3] || '').trim(),
-      imgUrl:  (r[5] || '').trim().replace(/sz=w\d+/, 'sz=w600'),
-      gift:    (r[6] || '').trim(),
-      yomi:    (r[7] || '').trim(),
-      genre:   (r[8] || '').trim(),
-      tone:    (r[9] || '').trim(),
-      seme:    (r[10] || '').trim(),
-      uke:     (r[11] || '').trim(),
-      ero:     (r[12] || '').trim(),
-      ranking: (r[13] || '').trim(),
-    })).filter(c => c.title);
-    document.getElementById('bl-loading').style.display = 'none';
-    buildFeedItems();
-    updateCounts();
-    restoreSearchState();
-  } catch(e) {
-    document.getElementById('bl-loading').textContent = '読み込みに失敗しました';
+    const res = await fetch(CSV_URL + '&t=' + Date.now());
+    const rows = parseCSV(await res.text());
+    books = rows.map(r => ({
+      title:  (r[0] || '').trim(),
+      author: (r[1] || '').trim(),
+      vol:    (r[2] || '').trim(),
+      memo:   (r[3] || '').trim(),
+      img:    (r[5] || '').trim(),
+      gift:   !!(r[6] || '').trim(),
+      yomi:   (r[7] || '').trim(),
+    })).filter(b => b.title);
+    books.forEach(b => { b.later = b.vol.startsWith('積読'); });
+    const shelved = books.filter(b => b.vol);
+    read = shelved.filter(b => !b.later);
+    later = shelved.filter(b => b.later);
+    $('total').textContent = $('n-all').textContent = $('s-all').textContent = shelved.length;
+    $('n-read').textContent = $('s-read').textContent = read.length;
+    $('n-later').textContent = $('s-later').textContent = later.length;
+    if ($('q').value) search($('q').value);
+    renderLib();
+    route(true);
+  } catch (e) {
+    $('groups').innerHTML = '<p class="loading">読み込みに失敗しました。時間をおいて開き直してください</p>';
   }
 }
 
-/* ── 既読本／あとで読む一覧（フィード） ── */
-const KANA_ROWS = {
-  'あ':'あいうえお', 'か':'かきくけこがぎぐげご', 'さ':'さしすせそざじずぜぞ',
-  'た':'たちつてとだぢづでど', 'な':'なにぬねの', 'は':'はひふへほばびぶべぼぱぴぷぺぽ',
-  'ま':'まみむめも', 'や':'やゆよ', 'ら':'らりるれろ', 'わ':'わをん'
-};
-function kanaRow(ch) {
-  for (const k in KANA_ROWS) if (KANA_ROWS[k].includes(ch)) return k;
-  return 'あ';
+/* ── 表紙 ── */
+const imgAt = (url, w) => url.replace(/sz=w\d+/, 'sz=w' + w);
+const volText = b => b.vol.replace(/^積読[\s　:：・,，]*/, '').replace(/〜/g, '-');
+function coverHTML(b, w, showLater) {
+  const img = b.img ? `<img loading="lazy" src="${esc(imgAt(b.img, w))}" alt="">` : `<div class="noimg">${esc(b.title)}</div>`;
+  return `<div class="cover">${img}${showLater && b.later ? '<span class="ltag">これから読む</span>' : ''}${b.gift ? `<span class="badge" title="お嬢からのプレゼント">${GIFT_SVG}</span>` : ''}${volText(b) ? `<span class="vol">${esc(volText(b))}</span>` : ''}</div>`;
 }
-
-let feedItems = { read: [], later: [] };
-function buildFeedItems() {
-  feedItems = { read: [], later: [] };
-  cardData.forEach((c, idx) => {
-    if (!c.volume) return;
-    const row = c.yomi ? kanaRow(c.yomi[0]) : 'あ';
-    const entry = { c, idx, row };
-    if (isTsundoku(c)) feedItems.later.push(entry);
-    else feedItems.read.push(entry);
-  });
-  feedItems.read.sort((a, b) => a.c.yomi.localeCompare(b.c.yomi, 'ja'));
-  feedItems.later.sort((a, b) => a.c.yomi.localeCompare(b.c.yomi, 'ja'));
+function bookHTML(b, showLater) {
+  return `<button class="book" data-i="${books.indexOf(b)}">${coverHTML(b, 400, showLater)}<div class="t">${esc(b.title)}</div><div class="a">${esc(b.author)}</div></button>`;
 }
-
-function updateCounts() {
-  const readCount  = feedItems.read.length;
-  const laterCount = feedItems.later.length;
-  const total = readCount + laterCount;
-  const thresholds = [
-    { min: 150, comment: 'これは腐の仲間入り？か？' },
-    { min: 100, comment: '１００作品超えたぜ！' },
-    { min:   0, comment: 'まだ少ないよね' },
-  ];
-  document.getElementById('total-count').textContent   = total;
-  document.getElementById('count-comment').textContent = thresholds.find(t => total >= t.min).comment;
-  document.getElementById('read-count-label').textContent  = readCount + ' 作品';
-  document.getElementById('later-count-label').textContent = laterCount + ' 作品';
-  if (window.renderDesktopShelf) window.renderDesktopShelf();
-}
-
-const isTsundoku = c => c.volume.startsWith('積読');
-
-function statusBadgeHtml(c) {
-  if (!c.volume) return '';
-  if (isTsundoku(c)) {
-    const vol = c.volume.replace(/^積読[\s　:：・,，]*/, '');
-    return `<span class="badge badge-tsundoku">これから読む${vol ? ' ' + vol : ''}</span>`;
-  }
-  return `<span class="badge badge-read">既読 ${c.volume}</span>`;
-}
-
-function feedBadgeHtml(c) {
-  let html = statusBadgeHtml(c);
-  if (c.gift) html += `<span class="badge badge-gift">お嬢からのプレゼント</span>`;
-  return html;
-}
-
-function feedCardHtml(entry) {
-  const c = entry.c;
-  const img = c.imgUrl ? `<img src="${c.imgUrl}" loading="lazy" alt="">` : '📖';
-  return `<div class="feed-card" role="button" tabindex="0" onclick="feedCardClick(${entry.idx})">
-    <div class="feed-card-img">${img}</div>
-    <div style="flex:1;min-width:0;">
-      <p class="feed-card-title">${c.title}</p>
-      <p class="feed-card-author">${c.author}</p>
-      <div class="feed-card-badges">${feedBadgeHtml(c)}</div>
-      <p class="feed-card-hint">これについて語りたい →</p>
-    </div>
-  </div>`;
-}
-
-function feedCardClick(idx) {
-  const c = cardData[idx];
-  if (c) { showPage('page-top', false); showReadCard(c, true); }
-}
-
-let currentFeedStatus = null;
-function openFeed(status) {
-  currentFeedStatus = status;
-  document.getElementById('feed-title').textContent = status === 'read' ? '既読本' : 'あとで読む';
-  document.getElementById('feed-count').textContent = feedItems[status].length + ' 作品';
-  document.getElementById('feed-search-input').value = '';
-  document.getElementById('feed-search-outer').classList.remove('has-value');
-  hideFeedDropdown();
-  renderFeedList(feedItems[status]);
-  showPage('page-feed');
-}
-
-function hideFeedDropdown() {
-  const dropdown = document.getElementById('feed-search-dropdown');
-  dropdown.style.display = 'none';
-  dropdown.innerHTML = '';
-}
-
-function renderFeedList(entries) {
-  const rowOrder = ['あ','か','さ','た','な','は','ま','や','ら','わ'];
-  const present = rowOrder.filter(r => entries.some(e => e.row === r));
-  document.getElementById('kana-rail').innerHTML =
-    present.map(r => `<button data-row="${r}" onclick="jumpTo('${r}')">${r}</button>`).join('');
-  document.getElementById('feed-list').innerHTML = entries.length
-    ? present.map(r => {
-        const rowItems = entries.filter(e => e.row === r);
-        return `<div class="feed-row-header" id="row-${r}">${r}</div>` + rowItems.map(feedCardHtml).join('');
-      }).join('')
-    : `<p style="padding:2.5rem 0;text-align:center;font-size:0.75rem;color:rgba(80,40,100,0.5);">見つからなかった…</p>`;
-  setupScrollSpy(present);
-}
-
-function filterFeed(query) {
-  const q = query.trim();
-  document.getElementById('feed-search-outer').classList.toggle('has-value', !!q);
-  if (!q) {
-    hideFeedDropdown();
-    renderFeedList(feedItems[currentFeedStatus]);
-    return;
-  }
-  const matches = getFiltered(q).filter(c => c.volume);
-  if (matches.length) {
-    const entries = matches.map(c => ({ c, idx: cardData.indexOf(c), row: c.yomi ? kanaRow(c.yomi[0]) : 'あ' }));
-    const dropdown = document.getElementById('feed-search-dropdown');
-    dropdown.innerHTML = entries.map(e => `
-      <div class="suggestion-item" onclick="feedCardClick(${e.idx})">
-        <span class="suggestion-icon">📚</span>
-        <div class="suggestion-texts">
-          <div class="suggestion-title">${e.c.title}</div>
-          <div class="suggestion-author">${e.c.author}</div>
-        </div>
-      </div>`).join('');
-    dropdown.style.display = 'block';
-    renderFeedList(entries);
-    setTimeout(() => dropdown.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60);
-  } else {
-    hideFeedDropdown();
-    document.getElementById('kana-rail').innerHTML = '';
-    if (railObserver) railObserver.disconnect();
-    document.getElementById('feed-list').innerHTML =
-      `<p style="padding:2.5rem 0;text-align:center;font-size:0.75rem;color:rgba(80,40,100,0.5);">見つからなかった…</p>`;
-  }
-}
-
-document.getElementById('feed-search-clear').addEventListener('click', () => {
-  const input = document.getElementById('feed-search-input');
-  input.value = '';
-  filterFeed('');
-  input.focus();
-});
-
-function feedSearchSubmit(e) {
-  if (e.key !== 'Enter') return;
-  const q = e.target.value.trim();
-  if (!q) return;
-  const matches = getFiltered(q).filter(c => c.volume);
-  if (matches.length) return;
-  feedShowNoResults(q);
-}
-
-/* トップページと同じ「おすすめする／語りたい／プレゼントする」パネルを、
-   ページ遷移せずそのままフィード内に移動させて表示する */
-function feedShowNoResults(q) {
-  hideFeedDropdown();
-  document.getElementById('kana-rail').innerHTML = '';
-  if (railObserver) railObserver.disconnect();
-  const list = document.getElementById('feed-list');
-  list.innerHTML = '';
-  list.appendChild(noResults);
-  list.appendChild(suggestToast);
-  searchInput.value = q;
-  noResultsQuery.textContent = q;
-  noResults.style.display = 'block';
-  suggestToast.style.display = 'none';
-  document.getElementById('no-results-talk').style.display = 'none';
-  document.getElementById('no-results-present').style.display = 'none';
-}
-
-let railObserver = null;
-function setupScrollSpy(rows) {
-  if (railObserver) railObserver.disconnect();
-  const railButtons = {};
-  document.querySelectorAll('#kana-rail button').forEach(b => railButtons[b.dataset.row] = b);
-  if (rows.length) {
-    Object.values(railButtons).forEach(b => b.classList.remove('active'));
-    railButtons[rows[0]].classList.add('active');
-  }
-  railObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        Object.values(railButtons).forEach(b => b.classList.remove('active'));
-        const row = entry.target.id.replace('row-', '');
-        if (railButtons[row]) railButtons[row].classList.add('active');
-      }
-    });
-  }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
-  rows.forEach(r => {
-    const el = document.getElementById('row-' + r);
-    if (el) railObserver.observe(el);
-  });
-}
-
-function jumpTo(row) {
-  const el = document.getElementById('row-' + row);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-/* あいうえお索引：指でなぞって(ドラッグして)ジャンプできるようにする */
-(function() {
-  const rail = document.getElementById('kana-rail');
-  let dragging = false;
-  function pick(clientY) {
-    const buttons = [...rail.querySelectorAll('button')];
-    if (!buttons.length) return;
-    let closest = buttons[0], closestDist = Infinity;
-    buttons.forEach(b => {
-      const r = b.getBoundingClientRect();
-      const mid = (r.top + r.bottom) / 2;
-      const dist = Math.abs(clientY - mid);
-      if (dist < closestDist) { closestDist = dist; closest = b; }
-    });
-    jumpTo(closest.dataset.row);
-  }
-  rail.addEventListener('pointerdown', e => { dragging = true; pick(e.clientY); });
-  rail.addEventListener('pointermove', e => { if (dragging) pick(e.clientY); });
-  window.addEventListener('pointerup', () => { dragging = false; });
-})();
-
-
-function renderCards() {
-  const wrap    = document.getElementById('cards-wrap');
-  const loading = document.getElementById('bl-loading');
-  const label   = document.getElementById('bl-section-label');
-  loading.style.display = 'none';
-  label.style.display   = 'block';
-  wrap.innerHTML = '';
-  cardData.forEach(c => {
-    const imgHtml = c.imgUrl
-      ? `<div class="card-img"><img src="${c.imgUrl}" alt="${c.title}" loading="lazy"></div>`
-      : `<div style="padding:0.6rem 0.75rem 0;font-size:0.62rem;font-weight:700;color:rgba(180,80,240,0.55);line-height:1.7;">画像はこれから更新するね！</div>`;
-    const div = document.createElement('div');
-    div.className = 'card';
-    div.innerHTML = `
-      ${imgHtml}
-      <div class="card-body">
-        <p class="card-title">${c.title}</p>
-        <p class="card-author">${c.author}</p>
-        ${(c.volume || c.gift) ? `<div class="card-badges">${statusBadgeHtml(c)}${c.gift ? `<span class="badge badge-gift">お嬢からのプレゼント</span>` : ''}</div>` : ''}
-        ${c.desc ? `<p class="card-desc">${c.desc}</p>` : ''}
-      </div>`;
-    wrap.appendChild(div);
-  });
-}
-
-/* ── ページ切り替え ── */
-function showPage(id, pushHistory = true) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  if (window.syncDesktopNav) window.syncDesktopNav();
-  window.scrollTo(0, 0);
-  sessionStorage.setItem('currentPage', id);
-  if (pushHistory) {
-    if (id === 'page-top') {
-      history.replaceState({ page: 'page-top' }, '');
-    } else {
-      history.pushState({ page: id }, '');
-    }
-  }
-}
-
-window.addEventListener('popstate', e => {
-  const state = e.state || {};
-  const page = state.page || 'page-top';
-  showPage(page, false);
-  if (page === 'page-top') {
-    if (state.cardTitle) {
-      const c = cardData.find(d => d.title === state.cardTitle);
-      if (c) { showReadCard(c, false); noResults.style.display = 'none'; }
-    } else {
-      resultArea.style.display = 'none';
-      noResults.style.display = 'none';
-    }
-  }
-});
-
-/* ── ページ・フォーム復元 ── */
-(function() {
-  const navType = (performance.getEntriesByType('navigation')[0] || {}).type;
-  if (navType === 'reload' || navType === 'navigate') {
-    sessionStorage.removeItem('lastSearch');
-    sessionStorage.removeItem('lastNoResultsQuery');
-    sessionStorage.removeItem('talkDraft');
-  }
-
-  const savedPage = sessionStorage.getItem('currentPage');
-  if (savedPage && savedPage !== 'page-top') {
-    showPage(savedPage, false);
-  } else {
-    history.replaceState({ page: 'page-top' }, '');
-  }
-
-  // お便りフォーム復元
-  const nameEl = document.getElementById('letter-name');
-  const bodyEl = document.getElementById('letter-body');
-  const useOkEl = document.getElementById('letter-use-ok');
-
-  const savedName  = sessionStorage.getItem('letterName');
-  const savedBody  = sessionStorage.getItem('letterBody');
-  const savedUseOk = sessionStorage.getItem('letterUseOk');
-  const savedCats  = JSON.parse(sessionStorage.getItem('letterCats') || '[]');
-
-  if (savedName)  nameEl.value   = savedName;
-  if (savedBody)  bodyEl.value   = savedBody;
-  if (savedUseOk !== null) useOkEl.checked = savedUseOk === 'true';
-  savedCats.forEach(v => {
-    const el = document.querySelector(`input[name="category"][value="${v}"]`);
-    if (el) el.checked = true;
-  });
-
-  // リアルタイム保存
-  nameEl.addEventListener('input',  () => sessionStorage.setItem('letterName', nameEl.value));
-  bodyEl.addEventListener('input',  () => sessionStorage.setItem('letterBody', bodyEl.value));
-  useOkEl.addEventListener('change', () => sessionStorage.setItem('letterUseOk', useOkEl.checked));
-  document.querySelectorAll('input[name="category"]').forEach(cb => {
-    cb.addEventListener('change', () => {
-      const checked = [...document.querySelectorAll('input[name="category"]:checked')].map(c => c.value);
-      sessionStorage.setItem('letterCats', JSON.stringify(checked));
-    });
-  });
-})();
 
 /* ── 検索 ── */
-const searchInput    = document.getElementById('search-input');
-const searchOuter    = document.getElementById('search-outer');
-const searchClear    = document.getElementById('search-clear');
-const dropdown       = document.getElementById('search-dropdown');
-const resultArea     = document.getElementById('result-area');
-const resultCard     = document.getElementById('result-card');
-const suggestToast   = document.getElementById('suggest-toast');
-const noResults      = document.getElementById('no-results');
-const noResultsQuery = document.getElementById('no-results-query');
-
-const toKana = s => s.replace(/[\u3041-\u3096]/g, c => String.fromCharCode(c.charCodeAt(0) + 0x60));
-
-function getFiltered(q) {
-  const qk = toKana(q);
-  return cardData.filter(c => toKana(c.title).startsWith(qk) || toKana(c.author).startsWith(qk) || (c.yomi && (c.yomi.startsWith(q) || toKana(c.yomi).startsWith(qk))));
-}
-
-/* no-results/toastは既読本・あとで読む一覧の検索でも使い回すため、元の位置に戻す */
-function restoreNoResultsHome() {
-  resultArea.after(noResults);
-  noResults.after(suggestToast);
-}
-
-
-searchInput.addEventListener('input', () => {
-  const q = searchInput.value.trim();
-  searchOuter.classList.toggle('has-value', !!q);
-  suggestToast.style.display = 'none';
-  dropdown.innerHTML = '';
-
-  if (!q) {
-    dropdown.style.display = 'none';
-    resultArea.style.display = 'none';
-    noResults.style.display = 'none';
-    sessionStorage.removeItem('lastSearch');
-    sessionStorage.removeItem('lastNoResultsQuery');
-    return;
-  }
-
-  const filtered = getFiltered(q);
-
-  if (filtered.length > 0) {
-    filtered.forEach(c => {
-      const item = document.createElement('div');
-      item.className = 'suggestion-item';
-      item.innerHTML = `<span class="suggestion-icon">📚</span>
-        <div class="suggestion-texts">
-          <div class="suggestion-title">${c.title}</div>
-          <div class="suggestion-author">${c.author}</div>
-        </div>`;
-      item.addEventListener('click', () => { selectCard(c); dropdown.style.display = 'none'; });
-      dropdown.appendChild(item);
-    });
-    dropdown.style.display = 'block';
-    noResults.style.display = 'none';
-    resultArea.style.display = 'none';
-    setTimeout(() => dropdown.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60);
+const norm = s => (s || '').normalize('NFKC').toLowerCase()
+  .replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60))
+  .replace(/[\s・、。,.!?！？「」『』()（）〜~\-ー:：♡☆★]/g, '');
+const hitHTML = b => `<button class="hit" data-i="${books.indexOf(b)}">${b.img ? `<img src="${esc(imgAt(b.img, 120))}" alt="">` : '<span class="ph"></span>'}<span><b>${esc(b.title)}</b><small>${esc(b.author)}</small></span><span class="pill${b.later ? ' later' : ''}">${b.later ? 'これから読む' : '既読'}</span></button>`;
+function search(q) {
+  $('q').closest('.search').classList.toggle('has', !!q);
+  const n = norm(q);
+  if (!n || !books.length) { $('sugg').classList.remove('on'); $('none').classList.remove('on'); return; }
+  const byTitle = books.filter(b => norm(b.title).includes(n) || norm(b.yomi).includes(n));
+  const byAuthor = books.filter(b => !byTitle.includes(b) && norm(b.author).includes(n));
+  if (byTitle.length + byAuthor.length) {
+    $('sugg').innerHTML =
+      (byTitle.length ? '<div class="head">作品名</div>' + byTitle.slice(0, 8).map(hitHTML).join('') : '') +
+      (byAuthor.length ? '<div class="head">作者名</div>' + byAuthor.slice(0, 8).map(hitHTML).join('') : '');
+    $('sugg').classList.add('on'); $('none').classList.remove('on');
   } else {
-    dropdown.style.display = 'none';
-    resultArea.style.display = 'none';
-    restoreNoResultsHome();
-    noResultsQuery.textContent = q;
-    noResults.style.display = 'block'; hideRandomPick();
-    sessionStorage.setItem('lastNoResultsQuery', q);
-  }
-});
-
-searchInput.addEventListener('compositionend', () => {
-  searchInput.dispatchEvent(new Event('input'));
-});
-
-searchClear.addEventListener('click', () => {
-  searchInput.value = '';
-  searchInput.dispatchEvent(new Event('input'));
-  searchInput.focus();
-});
-
-searchInput.addEventListener('keydown', e => {
-  if (e.key !== 'Enter') return;
-  const q = searchInput.value.trim();
-  if (!q) return;
-  dropdown.style.display = 'none';
-  const filtered = getFiltered(q);
-  if (filtered.length > 0) {
-    noResults.style.display = 'none';
-    showReadCard(filtered[0]);
-  } else {
-    resultArea.style.display = 'none';
-    restoreNoResultsHome();
-    noResultsQuery.textContent = q;
-    noResults.style.display = 'block'; hideRandomPick();
-  }
-});
-
-/* ── スマホ用フルスクリーン検索オーバーレイ ── */
-(function() {
-  const trigger       = document.getElementById('search-trigger');
-  const overlay       = document.getElementById('search-overlay');
-  const overlayInput  = document.getElementById('overlay-input');
-  const overlayClear  = document.getElementById('overlay-clear');
-  const overlayCancel = document.getElementById('overlay-cancel');
-  const suggestList   = document.getElementById('overlay-suggestion-list');
-  const overlayNoRes  = document.getElementById('overlay-no-results');
-  const overlayNoQ    = document.getElementById('overlay-no-query');
-  const overlayBtnTalk    = document.getElementById('overlay-btn-talk');
-
-  function openOverlay() {
-    overlay.classList.add('open');
-  }
-
-  function closeOverlay() {
-    overlayInput.blur();
-    overlay.classList.remove('open');
-    overlayInput.value = '';
-    overlayClear.style.display = 'none';
-    suggestList.innerHTML = '';
-    overlayNoRes.style.display = 'none';
-  }
-
-  overlayInput.addEventListener('focus', openOverlay);
-  overlayCancel.addEventListener('click', closeOverlay);
-
-  overlayClear.addEventListener('click', () => {
-    overlayInput.value = '';
-    overlayClear.style.display = 'none';
-    suggestList.innerHTML = '';
-    overlayNoRes.style.display = 'none';
-    overlayInput.focus();
-  });
-
-  function handleOverlayInput() {
-    const q = overlayInput.value.trim();
-    overlayClear.style.display = q ? 'block' : 'none';
-    suggestList.innerHTML = '';
-    overlayNoRes.style.display = 'none';
-    if (!q) return;
-
-    const filtered = getFiltered(q);
-    if (filtered.length > 0) {
-      filtered.forEach(c => {
-        const item = document.createElement('div');
-        item.className = 'suggestion-item';
-        item.innerHTML = `<span class="suggestion-icon">📚</span>
-          <div class="suggestion-texts">
-            <div class="suggestion-title">${c.title}</div>
-            <div class="suggestion-author">${c.author}</div>
-          </div>`;
-        item.addEventListener('click', () => {
-          closeOverlay();
-          showReadCard(c);
-          resultArea.style.display = 'block';
-          noResults.style.display = 'none';
-          setTimeout(() => resultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
-        });
-        suggestList.appendChild(item);
-      });
-    } else {
-      overlayNoQ.textContent = q;
-      overlayNoRes.style.display = 'block';
-    }
-  }
-
-  overlayInput.addEventListener('input', handleOverlayInput);
-  overlayInput.addEventListener('compositionend', handleOverlayInput);
-  overlayBtnTalk.addEventListener('click', () => {
-    const q = overlayInput.value.trim();
-    closeOverlay();
-    resultArea.style.display = 'none';
-    restoreNoResultsHome();
-    noResultsQuery.textContent = q;
-    noResults.style.display = 'block'; hideRandomPick();
-    sessionStorage.setItem('lastNoResultsQuery', q);
-    const talkArea = document.getElementById('no-results-talk');
-    talkArea.style.display = 'block';
-    setTimeout(() => talkArea.querySelector('textarea').focus(), 100);
-  });
-
-  document.getElementById('overlay-btn-present').addEventListener('click', () => {
-    const panel = document.getElementById('overlay-present-panel');
-    panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
-  });
-})();
-
-function hideRandomPick() {}
-
-function showReadCard(c, push = true) {
-  hideRandomPick();
-  restoreNoResultsHome();
-  resultCard.style.display = 'block';
-  suggestToast.style.display = 'none';
-  const badgeHtml = [
-    statusBadgeHtml(c),
-    c.gift ? `<span class="badge badge-gift">お嬢からのプレゼント</span>` : '',
-  ].join('');
-  const imgHtml   = c.imgUrl
-    ? `<div class="card-img"><img src="${c.imgUrl}" alt="${c.title}" loading="lazy"></div>`
-    : `<div style="padding:0.6rem 1rem 0;font-size:0.65rem;font-weight:700;color:rgba(180,80,240,0.55);line-height:1.7;">画像はこれから更新するね！</div>`;
-  const titleEsc  = c.title.replace(/'/g, "\\'");
-  const authorEsc = c.author.replace(/'/g, "\\'");
-  resultCard.innerHTML = `
-    <div class="card">
-      ${imgHtml}
-      <div class="card-body">
-        <p class="card-title">${c.title}</p>
-        <p class="card-author">${c.author}</p>
-        ${badgeHtml ? `<div class="card-read-status">${badgeHtml}</div>` : ''}
-        ${c.desc ? `<p class="card-desc">${c.desc}</p>` : ''}
-        <p class="card-hint">けんしのラジオ・動画で使われるかも ✦</p>
-        <p style="font-size:0.8rem;color:rgba(80,40,100,0.65);margin-bottom:0.4rem;letter-spacing:0.03em;font-weight:700;">この作品について</p>
-        <div class="card-actions">
-          <button class="btn btn-talk" style="font-size:0.85rem;padding:0.5rem 1.3rem;border-width:2px;width:100%;display:block;" onclick="toggleTalkInline('${titleEsc}','${authorEsc}')">語りたい / 布教したい</button>
-        </div>
-        <div class="talk-inline" id="talk-inline">
-          <input id="talk-inline-name" type="text" placeholder="ラジオネーム（任意）" style="width:100%;border:2px solid #1a0a30;border-radius:10px;padding:0.5rem 0.75rem;font-size:16px;font-family:'Noto Sans JP',sans-serif;margin-bottom:0.5rem;box-shadow:2px 2px 0px #1a0a30;outline:none;">
-          <textarea id="talk-inline-textarea" placeholder="どんなところが好き？けんしに布教してみよう…"></textarea>
-          <label class="talk-inline-check">
-            <input type="checkbox" id="talk-inline-use-ok" checked>
-            ラジオ・動画での使用OK
-          </label>
-          <div class="letter-confirm-box">
-            <p class="letter-confirm-title">📋 送信前にご確認ください</p>
-            <ul class="letter-confirm-list">
-              <li>送信内容はラジオ・動画で参考にさせていただく場合があります</li>
-              <li>個人が特定される情報は含めないでください</li>
-              <li>直接的すぎる性表現は採用できない場合があります（けんしは笑いながら読みますが…）</li>
-            </ul>
-            <label class="form-check" style="margin:0.6rem 0 0;">
-              <input type="checkbox" id="talk-inline-confirm-check">
-              上記を確認して送信する
-            </label>
-          </div>
-          <button class="talk-inline-send" onclick="sendTalkInline('${titleEsc}','${authorEsc}')">送る ✦</button>
-        </div>
-      </div>
-    </div>`;
-  resultArea.style.display = 'block';
-  if (push) history.pushState({ page: 'page-top', cardTitle: c.title }, '');
-  setTimeout(() => resultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 300);
-  saveSearchState(c.title);
-}
-
-function selectCard(c) {
-  searchInput.value = c.title;
-  showReadCard(c);
-}
-
-function saveSearchState(title) {
-  sessionStorage.setItem('lastSearch', title);
-}
-
-function restoreSearchState() {
-  const saved = sessionStorage.getItem('lastSearch');
-  if (saved && cardData.length) {
-    const c = cardData.find(d => d.title === saved);
-    if (c) { searchInput.value = c.title; showReadCard(c); return; }
-  }
-  const savedQ = sessionStorage.getItem('lastNoResultsQuery');
-  if (savedQ) {
-    restoreNoResultsHome();
-    noResultsQuery.textContent = savedQ;
-    noResults.style.display = 'block'; hideRandomPick();
-    const savedTalk = sessionStorage.getItem('talkDraft');
-    if (savedTalk) {
-      document.getElementById('talk-textarea').value = savedTalk;
-      document.getElementById('no-results-talk').style.display = 'block';
-    }
+    if ($('none-q').textContent !== '「' + q + '」') resetTalk($('none'));
+    $('none-q').textContent = '「' + q + '」';
+    $('none').classList.add('on'); $('sugg').classList.remove('on');
   }
 }
+$('q').addEventListener('input', e => search(e.target.value));
+$('q').addEventListener('keydown', e => { if (e.key === 'Enter') e.target.blur(); });
+$('q-clear').addEventListener('click', e => { e.preventDefault(); $('q').value = ''; search(''); $('q').focus(); });
 
-function toggleTalkInline(title, author) {
-  const area   = document.getElementById('talk-inline');
-  const isOpen = area.style.display === 'block';
-  area.style.display = isOpen ? 'none' : 'block';
-  if (!isOpen) {
-    const ta = area.querySelector('textarea');
-    if (!ta._autoResizeAttached) {
-      ta.addEventListener('input', function() {
-        this.style.height = 'auto';
-        this.style.height = this.scrollHeight + 'px';
-      });
-      ta._autoResizeAttached = true;
-    }
-    ta.focus();
+/* ── 本棚 ── */
+const ROWS = [['あ','あいうえおぁぃぅぇぉゔ'],['か','かきくけこがぎぐげご'],['さ','さしすせそざじずぜぞ'],['た','たちつてとだぢづでどっ'],['な','なにぬねの'],['は','はひふへほばびぶべぼぱぴぷぺぽ'],['ま','まみむめも'],['や','やゆよゃゅょ'],['ら','らりるれろ'],['わ','わをん']];
+const rowOf = b => { const c = norm(b.yomi || b.title)[0] || ''; const r = ROWS.find(([, s]) => s.includes(c)); return r ? r[0] : '英'; };
+let cat = 'all';
+function renderLib() {
+  if (!books.length) return;
+  const list = (cat === 'all' ? read.concat(later) : cat === 'read' ? read : later).slice()
+    .sort((a, b) => norm(a.yomi || a.title).localeCompare(norm(b.yomi || b.title), 'ja'));
+  const groups = [...ROWS.map(r => r[0]), '英'].map(k => [k, list.filter(b => rowOf(b) === k)]).filter(([, l]) => l.length);
+  $('kana').innerHTML = groups.map(([k], i) => `<button class="${i ? '' : 'on'}" data-k="${k}">${k}</button>`).join('');
+  $('groups').innerHTML = groups.map(([k, l]) => `<section class="group" id="g-${k}"><h3>${k === '英' ? '英数字' : k + '行'} <small>${l.length}冊</small></h3><div class="grid">${l.map(b => bookHTML(b, cat === 'all')).join('')}</div></section>`).join('');
+  document.querySelectorAll('.seg button').forEach(b => b.classList.toggle('on', b.dataset.cat === cat));
+}
+let spyLock = 0;
+window.addEventListener('scroll', () => {
+  if (!$('p-lib').classList.contains('on') || Date.now() < spyLock) return;
+  let cur = null;
+  document.querySelectorAll('.group').forEach(g => { if (g.getBoundingClientRect().top < 140) cur = g.id.slice(2); });
+  const btns = document.querySelectorAll('.kana button');
+  btns.forEach((x, i) => x.classList.toggle('on', cur ? x.dataset.k === cur : i === 0));
+  const on = document.querySelector('.kana button.on');
+  if (on) on.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+}, { passive: true });
+
+/* ── 作品ページ ── */
+let current = null;
+function renderWork(b) {
+  current = b;
+  $('w-cover').innerHTML = coverHTML(b, 600, false);
+  $('w-label').textContent = b.later ? 'これから読む' : '既読';
+  $('w-label').className = 'label' + (b.later ? ' later' : '');
+  $('w-title').textContent = b.title;
+  $('w-author').textContent = b.author + (volText(b) ? '　' + b.vol.replace(/^積読[\s　:：・,，]*/, '') : '');
+  $('w-memo').textContent = b.memo;
+  $('w-memo').style.display = b.memo ? '' : 'none';
+  const box = document.querySelector('#p-work .work-info');
+  resetTalk(box);
+  const same = b.author ? books.filter(x => x !== b && x.vol && x.author === b.author) : [];
+  $('w-same').innerHTML = same.length ? same.map(x => bookHTML(x, false)).join('') : '<p class="only">本棚にはこの1冊だけ</p>';
+}
+
+/* ── 語りたい・布教したい ── */
+function resetTalk(box) {
+  const t = box.querySelector('.talk'), th = box.querySelector('.thanks');
+  t.classList.remove('on'); t.innerHTML = ''; th.classList.remove('on'); th.innerHTML = '';
+}
+function openTalk(box, kind) {
+  const t = box.querySelector('.talk');
+  box.querySelector('.thanks').classList.remove('on');
+  if (!t.innerHTML) {
+    t.appendChild($('talk-tpl').content.cloneNode(true));
+    t.querySelector('.t-ok').addEventListener('change', e => { t.querySelector('.t-send').disabled = !e.target.checked; });
+    t.querySelector('.t-send').addEventListener('click', () => sendTalk(box));
   }
+  t.querySelector('h3').textContent = kind === '語りたい' ? 'この作品について語る' : 'けんしに布教する';
+  t.querySelector('.t-body').placeholder = kind === '語りたい' ? 'どこが好き？どのシーンが刺さった？' : 'どんなところが好き？けんしに布教してみよう';
+  t.classList.add('on');
+  t.querySelector('.t-body').focus();
 }
-
-function sendTalkInline(title, author) {
-  const name  = document.getElementById('talk-inline-name').value.trim();
-  const body  = document.getElementById('talk-inline-textarea').value.trim();
-  const useOk = document.getElementById('talk-inline-use-ok').checked;
-  if (!body) { alert('内容を入力してください'); return; }
-  if (!document.getElementById('talk-inline-confirm-check').checked) { alert('送信前の確認チェックを入れてください'); return; }
-  postToScript({ type: 'talk', title, author, radioName: name, body, target: 'この作品', radioOk: useOk ? 'yes' : 'no' });
-  document.getElementById('talk-inline-name').value = '';
-  document.getElementById('talk-inline-textarea').value = '';
-  document.getElementById('talk-inline-confirm-check').checked = false;
-  resultCard.style.display = 'none';
-  suggestToast.innerHTML = '<p class="toast-label">正常に届きました</p><p class="toast-main">お便りありがとう！</p>';
-  suggestToast.style.display = 'block';
-}
-
-/* ── 未読おすすめ・語りたい ── */
-function toggleTalk() {
-  const area   = document.getElementById('no-results-talk');
-  const isOpen = area.style.display === 'block';
-  area.style.display = isOpen ? 'none' : 'block';
-  if (!isOpen) area.querySelector('textarea').focus();
-}
-
-function sendTalk() {
-  const q     = noResultsQuery.textContent || searchInput.value.trim();
-  const name  = document.getElementById('talk-name').value.trim();
-  const body  = document.getElementById('talk-textarea').value.trim();
-  const useOk = document.getElementById('use-ok-check').checked;
-  if (!body) { alert('内容を入力してください'); return; }
-  if (!document.getElementById('talk-confirm-check').checked) { alert('送信前の確認チェックを入れてください'); return; }
-  postToScript({ type: 'talk', title: q, author: '', radioName: name, body, target: '未読作品', radioOk: useOk ? 'yes' : 'no' });
-  noResults.style.display = 'none';
-  suggestToast.innerHTML = '<p class="toast-label">正常に届きました</p><p class="toast-main">お便りありがとう！</p>';
-  suggestToast.style.display = 'block';
-  document.getElementById('talk-name').value = '';
-  document.getElementById('talk-textarea').value = '';
-  document.getElementById('talk-confirm-check').checked = false;
-  sessionStorage.removeItem('talkDraft');
-  sessionStorage.removeItem('lastNoResultsQuery');
-}
-
-/* ── お便り送信 ── */
-function sendLetter() {
-  const name  = document.getElementById('letter-name').value.trim();
-  const body  = document.getElementById('letter-body').value.trim();
-  const useOk = document.getElementById('letter-use-ok').checked;
-  const categories = [...document.querySelectorAll('input[name="category"]:checked')].map(c => c.value).join('・');
-  if (!body) { alert('お便りの内容を入力してください'); return; }
-  if (!document.getElementById('letter-confirm-check').checked) { alert('送信前の確認チェックを入れてください'); return; }
-  const btn = document.getElementById('letter-submit-btn');
-  btn.disabled    = true;
-  btn.textContent = '送信中…';
-  postToScript({ type: 'letter', radioName: name, body, radioOk: useOk ? 'yes' : 'no', categories }, () => {
-    document.getElementById('letter-form-wrap').style.display = 'none';
-    document.getElementById('sent-view').style.display        = 'block';
-    ['letterName','letterBody','letterUseOk','letterCats'].forEach(k => sessionStorage.removeItem(k));
+function sendTalk(box) {
+  const t = box.querySelector('.talk');
+  const body = t.querySelector('.t-body').value.trim();
+  const err = t.querySelector('.t-err');
+  if (!body) { err.textContent = '内容を書いてください'; err.classList.add('on'); return; }
+  err.classList.remove('on');
+  const target = t.dataset.target;
+  const title = target === 'この作品' ? current.title : $('q').value.trim();
+  const author = target === 'この作品' ? current.author : '';
+  const btn = t.querySelector('.t-send');
+  btn.disabled = true; btn.textContent = '送信中…';
+  postToScript({ type: 'talk', title, author, radioName: t.querySelector('.t-name').value.trim(), body, target, radioOk: t.querySelector('.t-use').checked ? 'yes' : 'no' }, () => {
+    t.classList.remove('on'); t.innerHTML = '';
+    const th = box.querySelector('.thanks');
+    th.innerHTML = `<div class="ring">${CHECK_SVG}</div><h3 class="round">ありがとう！</h3><p>ちゃんと届きました。<br>ラジオで読まれるかも、お楽しみに。</p>`;
+    th.classList.add('on');
   });
 }
+$('none-talk').addEventListener('click', () => openTalk($('none'), '布教したい'));
+document.querySelectorAll('[data-talk]').forEach(b => b.addEventListener('click', () => openTalk(document.querySelector('#p-work .work-info'), b.dataset.talk)));
 
-/* ── Apps Script POST ── */
+/* ── お便り ── */
+document.querySelectorAll('#l-cats .chip').forEach(c => c.addEventListener('click', () => c.classList.toggle('on')));
+$('l-ok').addEventListener('change', e => { $('l-send').disabled = !e.target.checked; });
+$('l-send').addEventListener('click', () => {
+  const body = $('l-body').value.trim();
+  if (!body) { $('l-err').textContent = 'お便りの内容を書いてください'; $('l-err').classList.add('on'); return; }
+  $('l-err').classList.remove('on');
+  const categories = [...document.querySelectorAll('#l-cats .chip.on')].map(c => c.textContent).join('・');
+  $('l-send').disabled = true; $('l-send').textContent = '送信中…';
+  postToScript({ type: 'letter', radioName: $('l-name').value.trim(), body, radioOk: $('l-use').checked ? 'yes' : 'no', categories }, () => {
+    $('l-form').style.display = 'none';
+    $('l-done').classList.add('on');
+    window.scrollTo(0, 0);
+  });
+});
+function resetLetter() {
+  if (!$('l-done').classList.contains('on')) return;
+  $('l-form').reset();
+  document.querySelectorAll('#l-cats .chip').forEach(c => c.classList.remove('on'));
+  $('l-send').disabled = true; $('l-send').textContent = 'お便りを送る';
+  $('l-form').style.display = ''; $('l-done').classList.remove('on');
+}
+
+/* ── 送信（Apps Script） ── */
 function postToScript(data, cb) {
   fetch(SCRIPT_URL, {
     method: 'POST',
     mode: 'no-cors',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: 'payload=' + encodeURIComponent(JSON.stringify(data)),
-  }).then(() => { if (cb) cb(); }).catch(() => { if (cb) cb(); });
+  }).then(() => cb && cb()).catch(() => cb && cb());
 }
 
-/* ── デコ要素 ── */
-const starDefs = [
-  { top:'6%',  left:'72%', sz:'1.4rem', c:'#ff50a0', d:'3s',   delay:'0s'   },
-  { top:'14%', left:'18%', sz:'1rem',   c:'#00c8f0', d:'2.8s', delay:'0.6s' },
-  { top:'28%', left:'88%', sz:'1.6rem', c:'#ff50a0', d:'3.5s', delay:'1.2s' },
-  { top:'20%', left:'42%', sz:'0.8rem', c:'#c040e0', d:'4s',   delay:'0.3s' },
-  { top:'45%', left:'8%',  sz:'1.2rem', c:'#00c8f0', d:'3.2s', delay:'1.8s' },
-  { top:'55%', left:'80%', sz:'0.9rem', c:'#ff50a0', d:'2.6s', delay:'0.9s' },
-  { top:'70%', left:'25%', sz:'1.1rem', c:'#c040e0', d:'3.8s', delay:'2s'   },
-  { top:'80%', left:'68%', sz:'1.3rem', c:'#00c8f0', d:'3s',   delay:'1.5s' },
-];
-const starsWrap = document.getElementById('deco-stars');
-starDefs.forEach(s => {
-  const el = document.createElement('span');
-  el.className  = 'deco-star';
-  el.textContent = '✦';
-  el.style.cssText = `top:${s.top};left:${s.left};--sz:${s.sz};--c:${s.c};--d:${s.d};--delay:${s.delay};`;
-  starsWrap.appendChild(el);
-});
-
-const shapeDefs = [
-  { top:'8%',  left:'82%', char:'♥', sz:'1.4rem', c:'#ff50a0', d:'3.2s', delay:'0.2s', op:0.75, r0:'-5deg', r1:'5deg'  },
-  { top:'32%', left:'5%',  char:'♥', sz:'1rem',   c:'#ff80c0', d:'2.8s', delay:'1.4s', op:0.6,  r0:'0deg',  r1:'8deg'  },
-  { top:'60%', left:'88%', char:'♥', sz:'1.6rem', c:'#ff50a0', d:'3.8s', delay:'0.8s', op:0.7,  r0:'3deg',  r1:'-6deg' },
-  { top:'78%', left:'12%', char:'♥', sz:'1.1rem', c:'#e030a0', d:'3s',   delay:'2s',   op:0.65, r0:'-3deg', r1:'5deg'  },
-  { top:'5%',  left:'30%', char:'△', sz:'1.3rem', c:'#00c8f0', d:'4s',   delay:'0.5s', op:0.6,  r0:'0deg',  r1:'12deg' },
-  { top:'42%', left:'78%', char:'△', sz:'1rem',   c:'#c040e0', d:'3.4s', delay:'1.8s', op:0.55, r0:'-8deg', r1:'4deg'  },
-  { top:'72%', left:'55%', char:'▽', sz:'1.2rem', c:'#00c8f0', d:'2.9s', delay:'0.9s', op:0.5,  r0:'5deg',  r1:'-5deg' },
-  { top:'18%', left:'65%', char:'◻', sz:'1rem',   c:'#c040e0', d:'3.6s', delay:'1.1s', op:0.55, r0:'10deg', r1:'25deg' },
-  { top:'55%', left:'10%', char:'◻', sz:'1.3rem', c:'#00c8f0', d:'3.2s', delay:'2.3s', op:0.5,  r0:'-10deg',r1:'5deg'  },
-  { top:'85%', left:'75%', char:'◼', sz:'0.8rem', c:'#ff50a0', d:'2.7s', delay:'0.4s', op:0.6,  r0:'0deg',  r1:'20deg' },
-  { top:'25%', left:'92%', char:'✚', sz:'0.9rem', c:'#ff50a0', d:'3.1s', delay:'1.6s', op:0.65, r0:'0deg',  r1:'15deg' },
-  { top:'48%', left:'3%',  char:'✚', sz:'1rem',   c:'#c040e0', d:'3.7s', delay:'0.7s', op:0.6,  r0:'-5deg', r1:'10deg' },
-];
-const shapesWrap = document.getElementById('deco-shapes');
-shapeDefs.forEach(s => {
-  const el = document.createElement('span');
-  el.className   = 'deco-shape';
-  el.textContent = s.char;
-  el.style.cssText = `top:${s.top};left:${s.left};--sz:${s.sz};--c:${s.c};--d:${s.d};--delay:${s.delay};--op:${s.op};--r0:${s.r0};--r1:${s.r1};`;
-  shapesWrap.appendChild(el);
-});
-
-/* ── スマホ・漫画・ヘッドホン・波線 ── */
-(function() {
-  const wrap = document.getElementById('deco-icons');
-  const ns   = 'http://www.w3.org/2000/svg';
-
-  function makeSvg(w, h, viewBox, op, d, delay, top, left, r) {
-    const svg = document.createElementNS(ns, 'svg');
-    svg.setAttribute('width', w); svg.setAttribute('height', h);
-    svg.setAttribute('viewBox', viewBox);
-    svg.style.cssText = `position:absolute;top:${top};left:${left};opacity:${op};animation:deco-pop ${d} ease-in-out infinite;animation-delay:${delay};transform:rotate(${r});pointer-events:none;`;
-    return svg;
+/* ── プレゼント ── */
+document.querySelectorAll('.g-copy').forEach(b => b.addEventListener('click', async () => {
+  try { await navigator.clipboard.writeText(b.dataset.copy); } catch (e) {
+    const ta = document.createElement('textarea'); ta.value = b.dataset.copy; document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); } catch (e2) {}
+    ta.remove();
   }
+  const t0 = b.textContent; b.textContent = 'コピーしました'; b.classList.add('done');
+  setTimeout(() => { b.textContent = t0; b.classList.remove('done'); }, 1600);
+}));
 
-  function makePhone(top, left, sz, op, d, delay, r) {
-    const svg = makeSvg(sz, sz*1.7, '0 0 40 68', op, d, delay, top, left, r);
-    svg.innerHTML = `
-      <rect x="2" y="2" width="36" height="64" rx="7" stroke="#e040a0" stroke-width="3" fill="rgba(255,112,184,0.12)"/>
-      <rect x="6" y="10" width="28" height="40" rx="3" fill="rgba(255,112,184,0.2)"/>
-      <circle cx="20" cy="58" r="4" stroke="#e040a0" stroke-width="2" fill="none"/>`;
-    wrap.appendChild(svg);
-  }
-
-  function makeBook(top, left, sz, op, d, delay, r) {
-    const svg = makeSvg(sz*0.85, sz, '0 0 52 64', op, d, delay, top, left, r);
-    svg.innerHTML = `
-      <rect x="4" y="2" width="44" height="60" rx="4" stroke="#a060e0" stroke-width="3" fill="rgba(160,96,224,0.12)"/>
-      <line x1="13" y1="2" x2="13" y2="62" stroke="#a060e0" stroke-width="2.5"/>
-      <line x1="20" y1="18" x2="42" y2="18" stroke="rgba(160,96,224,0.5)" stroke-width="2" stroke-linecap="round"/>
-      <line x1="20" y1="26" x2="38" y2="26" stroke="rgba(160,96,224,0.5)" stroke-width="2" stroke-linecap="round"/>`;
-    wrap.appendChild(svg);
-  }
-
-  function makeHeadphone(top, left, sz, op, d, delay, r) {
-    const svg = makeSvg(sz, sz*0.85, '0 0 64 54', op, d, delay, top, left, r);
-    svg.innerHTML = `
-      <path d="M8,36 C8,14 56,14 56,36" stroke="#60b8ff" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-      <rect x="2" y="32" width="14" height="18" rx="6" stroke="#60b8ff" stroke-width="3" fill="rgba(96,184,255,0.18)"/>
-      <rect x="48" y="32" width="14" height="18" rx="6" stroke="#60b8ff" stroke-width="3" fill="rgba(96,184,255,0.18)"/>`;
-    wrap.appendChild(svg);
-  }
-
-  function makeWave(top, left, w, color, op, d, delay, r) {
-    const svg = makeSvg(w, 24, `0 0 ${w} 24`, op, d, delay, top, left, r);
-    const step = w / 4;
-    svg.innerHTML = `<path d="M0,12 C${step*.5},2 ${step*1.5},22 ${step*2},12 C${step*2.5},2 ${step*3.5},22 ${w},12" stroke="${color}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
-    wrap.appendChild(svg);
-  }
-
-  makePhone('8%',  '78%', 36, 0.18, '8s',   '0s',   '-12deg');
-  makePhone('60%', '4%',  28, 0.14, '9.5s', '2s',   '8deg' );
-  makePhone('82%', '82%', 32, 0.16, '7s',   '1s',   '15deg');
-
-  makeBook('22%', '5%',  44, 0.16, '7.5s', '0.5s', '10deg' );
-  makeBook('45%', '80%', 36, 0.14, '9s',   '1.5s', '-15deg');
-  makeBook('78%', '30%', 40, 0.18, '8.5s', '3s',   '5deg'  );
-
-  makeHeadphone('15%', '50%', 48, 0.15, '10s',  '1s',   '-8deg');
-  makeHeadphone('50%', '2%',  40, 0.14, '8s',   '2.5s', '5deg' );
-  makeHeadphone('75%', '60%', 44, 0.16, '9s',   '0.3s', '12deg');
-
-  makeWave('18%', '2%',  90,  '#ff70b8', 0.2,  '7s',   '1s',   '-15deg');
-  makeWave('35%', '70%', 70,  '#a060e0', 0.18, '8.5s', '2.5s', '10deg' );
-  makeWave('55%', '5%',  110, '#60b8ff', 0.15, '6s',   '0.5s', '5deg'  );
-  makeWave('72%', '65%', 80,  '#ff50a0', 0.18, '9s',   '1.8s', '-8deg' );
-  makeWave('88%', '20%', 95,  '#c040e0', 0.14, '7.5s', '0s',   '12deg' );
-})();
-
-function togglePresentPanel() {
-  const panel = document.getElementById('no-results-present');
-  panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+/* ── ページ切り替え（URLの#で管理。スマホの戻るにも対応） ── */
+const scrollMemo = {};
+function show(p) {
+  const prev = document.body.dataset.page;
+  if (prev) scrollMemo[prev] = window.scrollY;
+  document.querySelectorAll('.page').forEach(el => el.classList.toggle('on', el.id === 'p-' + p));
+  document.body.dataset.page = p;
+  document.querySelectorAll('.bar nav [data-go], .tabbar [data-go]').forEach(el => el.classList.toggle('on', el.dataset.go === p || (p === 'work' && el.dataset.go === 'lib')));
 }
-
-function copyGiftEmailOverlay() {
-  navigator.clipboard.writeText('fusekai.gift@gmail.com').then(() => {
-    const btn = document.getElementById('copy-btn-overlay');
-    btn.textContent = 'コピーした！';
-    btn.style.background = 'linear-gradient(135deg,#c040e0,#ff50a0)';
-    btn.style.color = '#fff';
-    setTimeout(() => {
-      btn.textContent = 'コピー';
-      btn.style.background = 'linear-gradient(135deg,#f0e0ff,#ffe0f4)';
-      btn.style.color = '#8020c0';
-    }, 2000);
-  });
+function route(keepScroll) {
+  const h = decodeURIComponent(location.hash.slice(1));
+  const [p, arg] = h.split('/');
+  if (p === 'lib') {
+    const c = ['all', 'read', 'later'].includes(arg) ? arg : 'all';
+    if (c !== cat || !$('groups').querySelector('.group')) { cat = c; renderLib(); }
+    show('lib');
+  } else if (p === 'work' && arg) {
+    if (!books.length) return;
+    const b = books.find(x => x.title === arg);
+    if (!b) { show('top'); return; }
+    if (current !== b) renderWork(b);
+    show('work');
+  } else if (p === 'letter') { resetLetter(); show('letter'); }
+  else if (p === 'gift') show('gift');
+  else show('top');
+  const key = document.body.dataset.page;
+  window.scrollTo(0, keepScroll && scrollMemo[key] != null ? scrollMemo[key] : 0);
 }
-
-function copyGiftEmailInline() {
-  navigator.clipboard.writeText('fusekai.gift@gmail.com').then(() => {
-    const btn = document.getElementById('copy-btn-inline');
-    btn.textContent = 'コピーした！';
-    btn.style.background = 'linear-gradient(135deg,#c040e0,#ff50a0)';
-    btn.style.color = '#fff';
-    setTimeout(() => {
-      btn.textContent = 'コピー';
-      btn.style.background = 'linear-gradient(135deg,#f0e0ff,#ffe0f4)';
-      btn.style.color = '#8020c0';
-    }, 2000);
-  });
+let navCount = 0;
+function go(hash) {
+  navCount++;
+  if (location.hash === hash || (!location.hash && hash === '#')) { route(false); return; }
+  if (hash === '#') history.pushState(null, '', location.pathname + location.search);
+  else history.pushState(null, '', hash);
+  route(false);
 }
+window.addEventListener('popstate', () => { navCount = Math.max(0, navCount - 1); route(true); });
 
-function copyGiftEmail() {
-  navigator.clipboard.writeText('fusekai.gift@gmail.com').then(() => {
-    const btn = document.getElementById('copy-btn');
-    btn.textContent = 'コピーした！';
-    btn.style.background = 'linear-gradient(135deg,#c040e0,#ff50a0)';
-    btn.style.color = '#fff';
-    btn.style.borderColor = '#c040e0';
-    setTimeout(() => {
-      btn.textContent = 'コピー';
-      btn.style.background = 'linear-gradient(135deg,#f0e0ff,#ffe0f4)';
-      btn.style.color = '#8020c0';
-    }, 2000);
-  });
-}
-
-document.getElementById('talk-textarea').addEventListener('input', function() {
-  sessionStorage.setItem('talkDraft', this.value);
-  this.style.height = 'auto';
-  this.style.height = this.scrollHeight + 'px';
-});
-
-document.getElementById('letter-body').addEventListener('input', function() {
-  this.style.height = 'auto';
-  this.style.height = this.scrollHeight + 'px';
-});
-
-loadCards();
-
-/* ── iOS自動ズーム防止 ── */
-const viewportMeta = document.querySelector('meta[name=viewport]');
-document.addEventListener('focusin', e => {
-  if (e.target.matches('input:not([type="checkbox"]), textarea')) {
-    viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0');
+document.addEventListener('click', e => {
+  const book = e.target.closest('[data-i]');
+  if (book) { go('#work/' + encodeURIComponent(books[+book.dataset.i].title)); return; }
+  const g = e.target.closest('[data-go]');
+  if (g) {
+    e.preventDefault();
+    const p = g.dataset.go;
+    go(p === 'top' ? '#' : p === 'lib' ? '#lib/' + (g.dataset.cat || 'all') : '#' + p);
+    return;
+  }
+  const seg = e.target.closest('.seg button');
+  if (seg) { history.replaceState(null, '', '#lib/' + seg.dataset.cat); cat = seg.dataset.cat; renderLib(); window.scrollTo(0, 0); return; }
+  const k = e.target.closest('.kana button');
+  if (k) {
+    document.querySelectorAll('.kana button').forEach(x => x.classList.toggle('on', x === k));
+    spyLock = Date.now() + 800;
+    $('g-' + k.dataset.k).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+  if (e.target.closest('[data-back]')) {
+    if (navCount > 0) history.back(); else go('#lib/all');
   }
 });
-document.addEventListener('focusout', e => {
-  if (e.target.matches('input:not([type="checkbox"]), textarea')) {
-    viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0');
-  }
-});
+
+route(false);
+loadBooks();
 </script>
 </body>
 </html>
