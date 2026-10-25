@@ -607,17 +607,30 @@ function renderLib() {
   $('groups').innerHTML = groups.map(([k, l]) => `<section class="group" id="g-${k}"><h3>${k === '英' ? '英数字' : k + '行'} <small>${l.length}冊</small></h3><div class="grid">${l.map(b => bookHTML(b, cat === 'all')).join('')}</div></section>`).join('');
   watchImgs($('groups'));
   document.querySelectorAll('.seg button').forEach(b => b.classList.toggle('on', b.dataset.cat === cat));
+  spyLast = null;
 }
 let spyLock = 0;
 window.addEventListener('scroll', () => {
   if (!$('p-lib').classList.contains('on') || Date.now() < spyLock) return;
   let cur = null;
-  document.querySelectorAll('.group').forEach(g => { if (g.getBoundingClientRect().top < 140) cur = g.id.slice(2); });
+  const groupEls = document.querySelectorAll('.group');
+  groupEls.forEach(g => { if (g.getBoundingClientRect().top < 140) cur = g.id.slice(2); });
+  // いちばん下まで来たら、最後の行（わ・英数字など短い行）を選ぶ
+  if (groupEls.length && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) cur = groupEls[groupEls.length - 1].id.slice(2);
   const btns = document.querySelectorAll('.kana button');
   btns.forEach((x, i) => x.classList.toggle('on', cur ? x.dataset.k === cur : i === 0));
   const on = document.querySelector('.kana button.on');
-  if (on) on.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  // 行が変わったときだけ、あかさたなの帯を横にずらす（scrollIntoViewはiPhoneでページごと動いてガタつくため使わない）
+  if (on && on.dataset.k !== spyLast) {
+    spyLast = on.dataset.k;
+    const bar = $('kana');
+    const left = on.getBoundingClientRect().left - bar.getBoundingClientRect().left + bar.scrollLeft;
+    if (left < bar.scrollLeft || left + on.offsetWidth > bar.scrollLeft + bar.clientWidth) {
+      bar.scrollLeft = Math.max(0, left - (bar.clientWidth - on.offsetWidth) / 2);
+    }
+  }
 }, { passive: true });
+let spyLast = null;
 
 /* ── 作品ページ ── */
 let current = null;
