@@ -157,15 +157,23 @@ body[data-page="top"] .bar .home-link { visibility: hidden; }
 .seg button { padding: 8px 14px; border-radius: 999px; font-weight: 900; font-size: 14px; white-space: nowrap; }
 .seg button small { font-size: 11px; font-weight: 700; opacity: .7; }
 .seg button.on { background: var(--ink); color: #fff; }
-.kana {
+.lib-sticky {
   position: sticky; top: 55px; z-index: 10;
-  display: flex; gap: 4px; margin: 12px -16px 0; padding: 10px 12px;
+  margin: 12px -16px 0; padding: 10px 12px;
   background: rgba(246,239,255,.92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
 }
+.lib-search { padding: 7px 10px 7px 14px; box-shadow: 0 3px 0 var(--ink); }
+.lib-search input { font-size: 16px; }
+.lib-search .clear { width: 24px; height: 24px; }
+.kana { display: flex; gap: 4px; margin-top: 10px; }
+.searching .kana { display: none; }
+.lib-none { padding: 30px 0; text-align: center; font-size: 14px; line-height: 1.8; color: var(--ink-soft); }
+.lib-none b { color: var(--ink); }
+.lib-none button { margin-top: 12px; padding: 11px 20px; border-radius: 999px; border: 2px solid var(--ink); background: #fff; font-weight: 900; box-shadow: 0 3px 0 var(--ink); }
 /* あかさたなは横に動かさず、画面の幅に全部おさめる */
 .kana button { flex: 1 1 0; min-width: 0; max-width: 48px; height: 36px; padding: 0; border-radius: 999px; background: #fff; border: 1px solid var(--line); font-weight: 900; font-size: 14px; }
 .kana button.on { background: var(--pink); border-color: var(--pink); color: #fff; }
-.group { scroll-margin-top: 120px; }
+.group { scroll-margin-top: 170px; }
 .group h3 { margin: 20px 0 10px; font-size: 15px; font-weight: 900; display: flex; align-items: center; gap: 8px; }
 .group h3 small { color: var(--ink-soft); font-weight: 700; }
 .group h3::after { content: ''; flex: 1; height: 1px; background: var(--line); }
@@ -266,6 +274,16 @@ body[data-page="top"] .bar .home-link { visibility: hidden; }
 
 /* ===== スマホの下のタブ ===== */
 body.typing .tabbar, body.kb .tabbar { display: none; }
+/* 本棚を見ているときだけ、下のタブの上に「本棚を探す」ボタンを浮かべる（押すと上の検索欄に入力） */
+.fab-search {
+  display: none; position: fixed; right: 16px; bottom: calc(78px + env(safe-area-inset-bottom)); z-index: 29;
+  align-items: center; gap: 6px; padding: 12px 18px 12px 14px; border-radius: 999px;
+  background: var(--ink); color: #fff; font-size: 14px; font-weight: 900;
+  box-shadow: 0 6px 16px rgba(26,10,48,.3);
+}
+.fab-search svg { width: 20px; height: 20px; }
+body[data-page="lib"] .fab-search { display: flex; }
+body.typing .fab-search, body.kb .fab-search { display: none !important; }
 .chips.use .chip { flex: 1 1 0; text-align: center; }
 .talk { scroll-margin-top: 70px; }
 .tabbar {
@@ -282,13 +300,15 @@ body.typing .tabbar, body.kb .tabbar { display: none; }
 @media (min-width: 960px) {
   body { padding-bottom: 0; }
   .tabbar { display: none; }
+  body[data-page="lib"] .fab-search { display: none; }
   .bar { padding: 12px 32px; }
   .bar .home-link img { height: 40px; }
   .bar nav { display: flex; }
   .wrap { padding: 0 32px; }
   .home { min-height: calc(100vh - 65px); min-height: calc(100svh - 65px); }
   .finder { padding-top: 64px; }
-  .kana { top: 65px; margin: 14px 0 0; padding: 10px 0; }
+  .lib-sticky { top: 65px; margin: 14px 0 0; padding: 10px 0; }
+  .lib-search { max-width: 420px; }
   .grid { grid-template-columns: repeat(6, 1fr); gap: 22px 18px; }
   .work-main { display: grid; grid-template-columns: 320px 1fr; gap: 40px; align-items: start; }
   .work-cover { width: 100%; max-width: none; margin: 0; position: sticky; top: 90px; }
@@ -360,7 +380,10 @@ body.typing .tabbar, body.kb .tabbar { display: none; }
         <button data-cat="later">これから読む <small id="s-later"></small></button>
       </div>
     </div>
-    <div class="kana" id="kana"></div>
+    <div class="lib-sticky">
+      <label class="search lib-search"><svg class="sicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/></svg><input id="lq" type="search" enterkeyhint="search" placeholder="本棚の中を探す" autocomplete="off" autocorrect="off" autocapitalize="off"><button type="button" class="clear" id="lq-clear" aria-label="消す">×</button></label>
+      <div class="kana" id="kana"></div>
+    </div>
     <div id="groups"><p class="loading">本棚を読み込み中…</p></div>
   </div>
 </main>
@@ -470,6 +493,7 @@ body.typing .tabbar, body.kb .tabbar { display: none; }
   </div>
 </main>
 
+<button type="button" class="fab-search" id="fab-search" aria-label="本棚の中を探す"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/></svg>本棚を探す</button>
 <nav class="tabbar">
   <button data-go="top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>トップ</button>
   <button data-go="lib" data-cat="all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h4v16H4zM10 4h4v16h-4zM16.5 5l3.5 1-3.5 14-3.5-1z"/></svg>本棚</button>
@@ -616,14 +640,34 @@ const rowOf = b => { const c = norm(b.yomi || b.title)[0] || ''; const r = ROWS.
 let cat = 'all';
 function renderLib() {
   if (!books.length) return;
-  const list = (cat === 'all' ? read.concat(later) : cat === 'read' ? read : later).slice()
+  const lq = norm($('lq').value);
+  $('lq').closest('.search').classList.toggle('has', !!$('lq').value);
+  $('p-lib').classList.toggle('searching', !!lq);
+  const list = (cat === 'all' ? read.concat(later) : cat === 'read' ? read : later)
+    .filter(b => !lq || norm(b.title).includes(lq) || norm(b.yomi).includes(lq) || norm(b.author).includes(lq))
     .sort((a, b) => norm(a.yomi || a.title).localeCompare(norm(b.yomi || b.title), 'ja'));
+  if (lq) {
+    $('groups').innerHTML = list.length
+      ? `<section class="group"><h3>見つかった作品 <small>${list.length}作品</small></h3><div class="grid">${list.map(b => bookHTML(b, cat === 'all')).join('')}</div></section>`
+      : `<div class="lib-none"><b>「${esc($('lq').value)}」</b>は${cat === 'all' ? '本棚に' : cat === 'read' ? '既読に' : 'これから読むに'}ありませんでした<br>${cat === 'all' ? '' : '<button type="button" data-cat-all>すべての中で探す</button><br>'}<button type="button" data-fukyou>けんしに布教する</button></div>`;
+    watchImgs($('groups'));
+    document.querySelectorAll('.seg button').forEach(b => b.classList.toggle('on', b.dataset.cat === cat));
+    return;
+  }
   const groups = [...ROWS.map(r => r[0]), '英'].map(k => [k, list.filter(b => rowOf(b) === k)]).filter(([, l]) => l.length);
   $('kana').innerHTML = groups.map(([k], i) => `<button class="${i ? '' : 'on'}" data-k="${k}">${k}</button>`).join('');
   $('groups').innerHTML = groups.map(([k, l]) => `<section class="group" id="g-${k}"><h3>${k === '英' ? '英数字' : k + '行'} <small>${l.length}作品</small></h3><div class="grid">${l.map(b => bookHTML(b, cat === 'all')).join('')}</div></section>`).join('');
   watchImgs($('groups'));
   document.querySelectorAll('.seg button').forEach(b => b.classList.toggle('on', b.dataset.cat === cat));
 }
+$('lq').addEventListener('input', () => { renderLib(); window.scrollTo(0, 0); });
+$('fab-search').addEventListener('click', () => { $('lq').focus(); });
+$('lq').addEventListener('keydown', e => { if (e.key === 'Enter') e.target.blur(); });
+$('lq-clear').addEventListener('click', e => { e.preventDefault(); $('lq').value = ''; renderLib(); });
+document.addEventListener('click', e => {
+  if (e.target.closest('[data-cat-all]')) { history.replaceState(null, '', '#lib/all'); cat = 'all'; renderLib(); }
+  if (e.target.closest('[data-fukyou]')) { $('q').value = $('lq').value; go('#'); search($('q').value); }
+});
 let spyLock = 0;
 window.addEventListener('scroll', () => {
   if (!$('p-lib').classList.contains('on') || Date.now() < spyLock) return;
@@ -801,6 +845,7 @@ document.addEventListener('click', e => {
   if (g) {
     e.preventDefault();
     const p = g.dataset.go;
+    if (p === 'lib' && $('lq').value) { $('lq').value = ''; cat = g.dataset.cat || 'all'; renderLib(); }
     go(p === 'top' ? '#' : p === 'lib' ? '#lib/' + (g.dataset.cat || 'all') : '#' + p);
     return;
   }
