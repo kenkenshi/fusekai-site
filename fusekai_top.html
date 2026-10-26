@@ -265,6 +265,9 @@ body[data-page="top"] .bar .home-link { visibility: hidden; }
 .g-foot { margin-top: 18px; text-align: center; font-size: 12.5px; color: var(--ink-soft); }
 
 /* ===== スマホの下のタブ ===== */
+body.typing .tabbar { display: none; }
+.chips.use .chip { flex: 1 1 0; text-align: center; }
+.talk { scroll-margin-top: 70px; }
 .tabbar {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
   display: grid; grid-template-columns: repeat(4, 1fr);
@@ -412,7 +415,7 @@ body[data-page="top"] .bar .home-link { visibility: hidden; }
         <label for="l-body">お便りの内容</label>
         <textarea id="l-body" rows="6" maxlength="5000" placeholder="けんしへのメッセージ、おすすめ作品、感想など自由に書いてください"></textarea>
       </div>
-      <label class="tg"><input type="checkbox" id="l-use" checked><span></span>ラジオ・動画で使ってOK</label>
+      <div class="f use-q"><label>ラジオ・動画で使っていい？</label><div class="chips use l-use"><button type="button" class="chip on" data-use="yes">使ってOK</button><button type="button" class="chip" data-use="no">使わないでほしい</button></div></div>
       <div class="note">
         <b>送る前に確認してね</b>
         <ul>
@@ -478,7 +481,7 @@ body[data-page="top"] .bar .home-link { visibility: hidden; }
   <h3 class="round"></h3>
   <div class="f"><label>ラジオネーム<small>なくてもOK</small></label><input class="t-name" maxlength="50" placeholder="腐女子Aさん、匿名希望 など"></div>
   <div class="f"><label>内容</label><textarea class="t-body" rows="5" maxlength="5000" placeholder="どんなところが好き？けんしに布教してみよう"></textarea></div>
-  <label class="tg"><input type="checkbox" class="t-use" checked><span></span>ラジオ・動画で使ってOK</label>
+  <div class="f use-q"><label>ラジオ・動画で使っていい？</label><div class="chips use t-use"><button type="button" class="chip on" data-use="yes">使ってOK</button><button type="button" class="chip" data-use="no">使わないでほしい</button></div></div>
   <div class="note">
     <b>送る前に確認してね</b>
     <ul>
@@ -670,7 +673,7 @@ function openTalk(box, kind) {
   t.querySelector('.t-body').placeholder = kind === '布教したい' ? 'どんなところが好き？けんしに布教してみよう'
     : later ? 'けんしはまだ読んでいません。どこが好き？読む前に熱を伝えて！' : 'どこが好き？どのシーンが刺さった？';
   t.classList.add('on');
-  t.querySelector('.t-body').focus();
+  t.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 function sendTalk(box) {
   const t = box.querySelector('.talk');
@@ -683,7 +686,7 @@ function sendTalk(box) {
   const author = target === 'この作品' ? current.author : '';
   const btn = t.querySelector('.t-send');
   btn.disabled = true; btn.textContent = '送信中…';
-  postToScript({ type: 'talk', title, author, radioName: t.querySelector('.t-name').value.trim(), body, target, radioOk: t.querySelector('.t-use').checked ? 'yes' : 'no' }, () => {
+  postToScript({ type: 'talk', title, author, radioName: t.querySelector('.t-name').value.trim(), body, target, radioOk: t.querySelector('.t-use .chip.on').dataset.use }, () => {
     t.classList.remove('on'); t.innerHTML = '';
     const th = box.querySelector('.thanks');
     th.innerHTML = `<div class="ring">${CHECK_SVG}</div><h3 class="round">ありがとう！</h3><p>ちゃんと届きました。<br>ラジオで読まれるかも、お楽しみに。</p>`;
@@ -702,7 +705,7 @@ $('l-send').addEventListener('click', () => {
   $('l-err').classList.remove('on');
   const categories = [...document.querySelectorAll('#l-cats .chip.on')].map(c => c.textContent).join('・');
   $('l-send').disabled = true; $('l-send').textContent = '送信中…';
-  postToScript({ type: 'letter', radioName: $('l-name').value.trim(), body, radioOk: $('l-use').checked ? 'yes' : 'no', categories }, () => {
+  postToScript({ type: 'letter', radioName: $('l-name').value.trim(), body, radioOk: document.querySelector('.l-use .chip.on').dataset.use, categories }, () => {
     $('l-form').style.display = 'none';
     $('l-done').classList.add('on');
     window.scrollTo(0, 0);
@@ -712,9 +715,22 @@ function resetLetter() {
   if (!$('l-done').classList.contains('on')) return;
   $('l-form').reset();
   document.querySelectorAll('#l-cats .chip').forEach(c => c.classList.remove('on'));
+  document.querySelectorAll('.l-use .chip').forEach(c => c.classList.toggle('on', c.dataset.use === 'yes'));
   $('l-send').disabled = true; $('l-send').textContent = 'お便りを送る';
   $('l-form').style.display = ''; $('l-done').classList.remove('on');
 }
+
+/* ── ラジオ・動画で使っていい？（どちらか1つを選ぶ） ── */
+document.addEventListener('click', e => {
+  const c = e.target.closest('.use .chip');
+  if (!c) return;
+  c.parentElement.querySelectorAll('.chip').forEach(x => x.classList.toggle('on', x === c));
+});
+
+/* ── 文字を打っている間は下のタブを隠す（iPhoneでキーボードの上に乗って入力欄を隠すため） ── */
+const isField = el => el && (el.tagName === 'TEXTAREA' || (el.tagName === 'INPUT' && el.type !== 'checkbox'));
+document.addEventListener('focusin', e => { if (isField(e.target)) document.body.classList.add('typing'); });
+document.addEventListener('focusout', () => setTimeout(() => { if (!isField(document.activeElement)) document.body.classList.remove('typing'); }, 100));
 
 /* ── 送信（Apps Script） ── */
 function postToScript(data, cb) {
