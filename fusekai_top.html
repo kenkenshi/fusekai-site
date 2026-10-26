@@ -166,8 +166,8 @@ input[type=search]::-webkit-search-cancel-button { -webkit-appearance: none; dis
 .lib-search { padding: 7px 10px 7px 14px; box-shadow: 0 3px 0 var(--ink); }
 .lib-search input { font-size: 16px; }
 .lib-search .clear { width: 24px; height: 24px; }
-.kana { display: flex; gap: 4px; margin-top: 10px; }
-.searching .kana { display: none; }
+.kana { display: flex; gap: 4px; }
+.searching .kana, .searching .lib-sticky { display: none; }
 .lib-none { padding: 30px 0; text-align: center; font-size: 14px; line-height: 1.8; color: var(--ink-soft); }
 .lib-none b { color: var(--ink); }
 .lib-none button { margin-top: 12px; padding: 11px 20px; border-radius: 999px; border: 2px solid var(--ink); background: #fff; font-weight: 900; box-shadow: 0 3px 0 var(--ink); }
@@ -275,16 +275,15 @@ input[type=search]::-webkit-search-cancel-button { -webkit-appearance: none; dis
 
 /* ===== スマホの下のタブ ===== */
 body.typing .tabbar, body.kb .tabbar { display: none; }
-/* 本棚を見ているときだけ、下のタブの上に「本棚を探す」ボタンを浮かべる（押すと上の検索欄に入力） */
-.fab-search {
-  display: none; position: fixed; right: 16px; bottom: calc(78px + env(safe-area-inset-bottom)); z-index: 29;
-  align-items: center; gap: 6px; padding: 12px 18px 12px 14px; border-radius: 999px;
-  background: var(--ink); color: #fff; font-size: 14px; font-weight: 900;
-  box-shadow: 0 6px 16px rgba(26,10,48,.3);
+/* 本棚の検索欄は、チャットの入力欄のように画面の下（下のタブの上）に置く */
+.lib-dock {
+  display: none; position: fixed; left: 0; right: 0; bottom: calc(62px + env(safe-area-inset-bottom)); z-index: 29;
+  padding: 8px 12px; pointer-events: none;
 }
-.fab-search svg { width: 20px; height: 20px; }
-body[data-page="lib"] .fab-search { display: flex; }
-body.typing .fab-search, body.kb .fab-search { display: none !important; }
+.lib-dock .search { pointer-events: auto; }
+body[data-page="lib"] .lib-dock { display: block; }
+body[data-page="lib"] { padding-bottom: calc(130px + env(safe-area-inset-bottom)); }
+body.typing .lib-dock, body.kb .lib-dock { bottom: var(--kb, 0px); padding-bottom: 8px; }
 .chips.use .chip { flex: 1 1 0; text-align: center; }
 .talk { scroll-margin-top: 70px; }
 .tabbar {
@@ -301,7 +300,6 @@ body.typing .fab-search, body.kb .fab-search { display: none !important; }
 @media (min-width: 960px) {
   body { padding-bottom: 0; }
   .tabbar { display: none; }
-  body[data-page="lib"] .fab-search { display: none; }
   .bar { padding: 12px 32px; }
   .bar .home-link img { height: 40px; }
   .bar nav { display: flex; }
@@ -309,7 +307,8 @@ body.typing .fab-search, body.kb .fab-search { display: none !important; }
   .home { min-height: calc(100vh - 65px); min-height: calc(100svh - 65px); }
   .finder { padding-top: 64px; }
   .lib-sticky { top: 65px; margin: 14px 0 0; padding: 10px 0; }
-  .lib-search { max-width: 420px; }
+  body[data-page="lib"] .lib-dock { bottom: 20px; left: 50%; right: auto; width: 480px; transform: translateX(-50%); padding: 0; background: none; border: 0; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  body[data-page="lib"] { padding-bottom: 90px; }
   .grid { grid-template-columns: repeat(6, 1fr); gap: 22px 18px; }
   .work-main { display: grid; grid-template-columns: 320px 1fr; gap: 40px; align-items: start; }
   .work-cover { width: 100%; max-width: none; margin: 0; position: sticky; top: 90px; }
@@ -382,7 +381,6 @@ body.typing .fab-search, body.kb .fab-search { display: none !important; }
       </div>
     </div>
     <div class="lib-sticky">
-      <label class="search lib-search"><svg class="sicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/></svg><input id="lq" type="search" enterkeyhint="search" placeholder="本棚の中を探す" autocomplete="off" autocorrect="off" autocapitalize="off"><button type="button" class="clear" id="lq-clear" aria-label="消す">×</button></label>
       <div class="kana" id="kana"></div>
     </div>
     <div id="groups"><p class="loading">本棚を読み込み中…</p></div>
@@ -494,7 +492,7 @@ body.typing .fab-search, body.kb .fab-search { display: none !important; }
   </div>
 </main>
 
-<button type="button" class="fab-search" id="fab-search" aria-label="本棚の中を探す"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/></svg>本棚を探す</button>
+<div class="lib-dock" id="lib-dock"><label class="search lib-search"><svg class="sicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/></svg><input id="lq" type="search" enterkeyhint="search" placeholder="本棚の中を探す" autocomplete="off" autocorrect="off" autocapitalize="off"><button type="button" class="clear" id="lq-clear" aria-label="消す">×</button></label></div>
 <nav class="tabbar">
   <button data-go="top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>トップ</button>
   <button data-go="lib" data-cat="all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h4v16H4zM10 4h4v16h-4zM16.5 5l3.5 1-3.5 14-3.5-1z"/></svg>本棚</button>
@@ -662,7 +660,6 @@ function renderLib() {
   document.querySelectorAll('.seg button').forEach(b => b.classList.toggle('on', b.dataset.cat === cat));
 }
 $('lq').addEventListener('input', () => { renderLib(); window.scrollTo(0, 0); });
-$('fab-search').addEventListener('click', () => { $('lq').focus(); });
 $('lq').addEventListener('keydown', e => { if (e.key === 'Enter') e.target.blur(); });
 $('lq-clear').addEventListener('click', e => { e.preventDefault(); $('lq').value = ''; renderLib(); });
 document.addEventListener('click', e => {
@@ -776,8 +773,13 @@ const isField = el => el && (el.tagName === 'TEXTAREA' || (el.tagName === 'INPUT
 document.addEventListener('focusin', e => { if (isField(e.target)) document.body.classList.add('typing'); });
 document.addEventListener('focusout', () => setTimeout(() => { if (!isField(document.activeElement)) document.body.classList.remove('typing'); }, 100));
 if (window.visualViewport) {
-  const kb = () => document.body.classList.toggle('kb', window.innerHeight - window.visualViewport.height > 120);
+  const kb = () => {
+    const h = window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop;
+    document.body.classList.toggle('kb', h > 120);
+    document.documentElement.style.setProperty('--kb', Math.max(0, h) + 'px');
+  };
   window.visualViewport.addEventListener('resize', kb);
+  window.visualViewport.addEventListener('scroll', kb);
 }
 
 /* ── 送信（Apps Script） ── */
