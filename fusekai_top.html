@@ -265,7 +265,7 @@ body[data-page="top"] .bar .home-link { visibility: hidden; }
 .g-foot { margin-top: 18px; text-align: center; font-size: 12.5px; color: var(--ink-soft); }
 
 /* ===== スマホの下のタブ ===== */
-body.typing .tabbar { display: none; }
+body.typing .tabbar, body.kb .tabbar { display: none; }
 .chips.use .chip { flex: 1 1 0; text-align: center; }
 .talk { scroll-margin-top: 70px; }
 .tabbar {
@@ -673,7 +673,6 @@ function openTalk(box, kind) {
   t.querySelector('.t-body').placeholder = kind === '布教したい' ? 'どんなところが好き？けんしに布教してみよう'
     : later ? 'けんしはまだ読んでいません。どこが好き？読む前に熱を伝えて！' : 'どこが好き？どのシーンが刺さった？';
   t.classList.add('on');
-  t.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 function sendTalk(box) {
   const t = box.querySelector('.talk');
@@ -731,6 +730,10 @@ document.addEventListener('click', e => {
 const isField = el => el && (el.tagName === 'TEXTAREA' || (el.tagName === 'INPUT' && el.type !== 'checkbox'));
 document.addEventListener('focusin', e => { if (isField(e.target)) document.body.classList.add('typing'); });
 document.addEventListener('focusout', () => setTimeout(() => { if (!isField(document.activeElement)) document.body.classList.remove('typing'); }, 100));
+if (window.visualViewport) {
+  const kb = () => document.body.classList.toggle('kb', window.innerHeight - window.visualViewport.height > 120);
+  window.visualViewport.addEventListener('resize', kb);
+}
 
 /* ── 送信（Apps Script） ── */
 function postToScript(data, cb) {
