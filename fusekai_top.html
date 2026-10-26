@@ -180,6 +180,9 @@ body[data-page="top"] .bar .home-link { visibility: hidden; }
 .acts { margin-top: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .acts button { padding: 14px 0; border-radius: 14px; font-weight: 900; border: 2px solid var(--ink); box-shadow: 0 4px 0 var(--ink); background: #fff; }
 .acts button.main { background: var(--ink); color: #fff; }
+.acts.one { grid-template-columns: 1fr; }
+.radio-note { margin-top: 10px; text-align: center; font-size: 12.5px; font-weight: 700; color: var(--ink-soft); }
+.radio-note em { font-style: normal; color: var(--pink); }
 .same { margin-top: 26px; }
 .same h2 { font-size: 16px; font-weight: 900; margin-bottom: 10px; }
 .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 10px; padding: 4px 0 16px; }
@@ -298,7 +301,7 @@ body[data-page="top"] .bar .home-link { visibility: hidden; }
     <button data-go="letter">お便り</button>
     <button data-go="gift">プレゼント</button>
   </nav>
-  <button class="count" data-go="lib" data-cat="all">漫画 <b id="total">-</b> 冊 <i>›</i></button>
+  <button class="count" data-go="lib" data-cat="all">漫画 <b id="total">-</b> 作品 <i>›</i></button>
 </header>
 
 <!-- トップ -->
@@ -306,21 +309,21 @@ body[data-page="top"] .bar .home-link { visibility: hidden; }
   <div class="wrap home">
     <section class="finder">
       <img class="hero-logo" src="logo.png" alt="けんしの腐世界生活">
-      <p class="lead">布教の前に、<em>けんしの本棚をチェック！</em><small>作品名・作者名で <span id="n-all">-</span> 冊から探せます</small></p>
+      <p class="lead">布教の前に、<em>けんしの本棚をチェック！</em><small>作品名・作者名で <span id="n-all">-</span> 作品から探せます</small></p>
       <div class="search-box">
         <label class="search"><svg class="sicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/></svg><input id="q" type="search" enterkeyhint="search" placeholder="作品名・作者名を入れてみて" autocomplete="off" autocorrect="off" autocapitalize="off"><button type="button" class="clear" id="q-clear" aria-label="消す">×</button></label>
         <div class="sugg" id="sugg"></div>
         <div class="none" id="none">
           <p>けんしはまだ<br><em id="none-q"></em>を知らないかも！</p>
-          <small>ぜひ教えてください。動画で読むかもしれません</small>
+          <small>ぜひ教えてください。YouTubeの実写ラジオで読むかも！</small>
           <div class="acts"><button type="button" class="main" id="none-talk">布教したい</button><button type="button" data-go="gift">プレゼントする</button></div>
           <div class="talk" data-target="未読作品"></div>
           <div class="thanks"></div>
         </div>
       </div>
       <div class="menu">
-        <button class="m read" data-go="lib" data-cat="read"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5C4.5 4 7.5 4 12 6c4.5-2 7.5-2 10-.5V19c-2.5-1.5-5.5-1.5-10 .5-4.5-2-7.5-2-10-.5z"/><path d="M12 6v13.5"/></svg></i><b>既読</b><span><em id="n-read">-</em>冊</span></button>
-        <button class="m later" data-go="lib" data-cat="later"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg></i><b>これから読む</b><span><em id="n-later">-</em>冊</span></button>
+        <button class="m read" data-go="lib" data-cat="read"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5C4.5 4 7.5 4 12 6c4.5-2 7.5-2 10-.5V19c-2.5-1.5-5.5-1.5-10 .5-4.5-2-7.5-2-10-.5z"/><path d="M12 6v13.5"/></svg></i><b>既読</b><span><em id="n-read">-</em>作品</span></button>
+        <button class="m later" data-go="lib" data-cat="later"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg></i><b>これから読む</b><span><em id="n-later">-</em>作品</span></button>
         <button class="m letter" data-go="letter"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg></i><b>お便りを書く</b><span>ラジオで読むかも</span></button>
         <button class="m gift" data-go="gift"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v8h14v-8M12 8v12"/><path d="M12 8C10 4 6.5 4.5 7.5 7.5 8 8 12 8 12 8zM12 8c2-4 5.5-3.5 4.5-.5C16 8 12 8 12 8z"/></svg></i><b>プレゼント</b><span>本やギフト券を送る</span></button>
       </div>
@@ -363,7 +366,8 @@ body[data-page="top"] .bar .home-link { visibility: hidden; }
         <h1 id="w-title"></h1>
         <div class="au" id="w-author"></div>
         <div class="memo" id="w-memo"></div>
-        <div class="acts"><button type="button" class="main" data-talk="語りたい">語りたい</button><button type="button" data-talk="布教したい">布教したい</button></div>
+        <div class="acts one"><button type="button" class="main" data-talk="語る" id="w-talk">この作品について語る</button></div>
+        <p class="radio-note">届いた声は、<em>YouTubeの実写ラジオ</em>で読むかも！</p>
         <div class="talk" data-target="この作品"></div>
         <div class="thanks"></div>
         <section class="same">
@@ -606,7 +610,7 @@ function renderLib() {
     .sort((a, b) => norm(a.yomi || a.title).localeCompare(norm(b.yomi || b.title), 'ja'));
   const groups = [...ROWS.map(r => r[0]), '英'].map(k => [k, list.filter(b => rowOf(b) === k)]).filter(([, l]) => l.length);
   $('kana').innerHTML = groups.map(([k], i) => `<button class="${i ? '' : 'on'}" data-k="${k}">${k}</button>`).join('');
-  $('groups').innerHTML = groups.map(([k, l]) => `<section class="group" id="g-${k}"><h3>${k === '英' ? '英数字' : k + '行'} <small>${l.length}冊</small></h3><div class="grid">${l.map(b => bookHTML(b, cat === 'all')).join('')}</div></section>`).join('');
+  $('groups').innerHTML = groups.map(([k, l]) => `<section class="group" id="g-${k}"><h3>${k === '英' ? '英数字' : k + '行'} <small>${l.length}作品</small></h3><div class="grid">${l.map(b => bookHTML(b, cat === 'all')).join('')}</div></section>`).join('');
   watchImgs($('groups'));
   document.querySelectorAll('.seg button').forEach(b => b.classList.toggle('on', b.dataset.cat === cat));
 }
@@ -637,7 +641,7 @@ function renderWork(b) {
   const box = document.querySelector('#p-work .work-info');
   resetTalk(box);
   const same = b.author ? books.filter(x => x !== b && x.vol && x.author === b.author) : [];
-  $('w-same').innerHTML = same.length ? same.map(x => bookHTML(x, false)).join('') : '<p class="only">本棚にはこの1冊だけ</p>';
+  $('w-same').innerHTML = same.length ? same.map(x => bookHTML(x, false)).join('') : '<p class="only">本棚にはこの1作品だけ</p>';
   watchImgs($('w-same'));
 }
 
@@ -654,8 +658,10 @@ function openTalk(box, kind) {
     t.querySelector('.t-ok').addEventListener('change', e => { t.querySelector('.t-send').disabled = !e.target.checked; });
     t.querySelector('.t-send').addEventListener('click', () => sendTalk(box));
   }
-  t.querySelector('h3').textContent = kind === '語りたい' ? 'この作品について語る' : 'けんしに布教する';
-  t.querySelector('.t-body').placeholder = kind === '語りたい' ? 'どこが好き？どのシーンが刺さった？' : 'どんなところが好き？けんしに布教してみよう';
+  const later = kind === '語る' && current && current.later;
+  t.querySelector('h3').textContent = kind === '布教したい' ? 'けんしに布教する' : 'この作品について語る';
+  t.querySelector('.t-body').placeholder = kind === '布教したい' ? 'どんなところが好き？けんしに布教してみよう'
+    : later ? 'けんしはまだ読んでいません。どこが好き？読む前に熱を伝えて！' : 'どこが好き？どのシーンが刺さった？';
   t.classList.add('on');
   t.querySelector('.t-body').focus();
 }
