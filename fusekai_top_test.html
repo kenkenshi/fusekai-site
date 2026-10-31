@@ -700,6 +700,7 @@ const hitHTML = b => `<button class="hit" data-i="${books.indexOf(b)}">${b.img ?
 function search(q) {
   $('q').closest('.search').classList.toggle('has', !!q);
   const n = norm(q);
+  searchMemo.set('q', q);
   rsvShowStatus(null);
   if (!n || !books.length) { $('sugg').classList.remove('on'); $('none').classList.remove('on'); return; }
   const byTitle = books.filter(b => norm(b.title).includes(n) || norm(b.yomi).includes(n));
@@ -714,6 +715,7 @@ function search(q) {
     $('none-q').textContent = '「' + q + '」';
     $('none').classList.add('on'); $('sugg').classList.remove('on');
     rsvSearch(q);
+    talkRestore($('none'));
   }
 }
 $('q').addEventListener('input', e => search(e.target.value));
@@ -726,6 +728,7 @@ const rowOf = b => { const c = norm(b.yomi || b.title)[0] || ''; const r = ROWS.
 let cat = 'all';
 function renderLib() {
   if (!books.length) return;
+  searchMemo.set('lq', $('lq').value);
   const lq = norm($('lq').value);
   $('lq').closest('.search').classList.toggle('has', !!$('lq').value);
   $('p-lib').classList.toggle('searching', !!lq);
@@ -779,12 +782,43 @@ function renderWork(b) {
   $('w-memo').style.display = b.memo ? '' : 'none';
   const box = document.querySelector('#p-work .work-info');
   resetTalk(box);
+  talkRestore(box);
   const same = b.author ? books.filter(x => x !== b && x.vol && x.author === b.author) : [];
   $('w-same').innerHTML = same.length ? same.map(x => bookHTML(x, false)).join('') : '<p class="only">本棚にはこの1作品だけ</p>';
   watchImgs($('w-same'));
 }
 
+/* ── 下書き（再読み込みしても打った文字を残す。送信したら消す） ── */
+const DRAFT_DAYS = 7;
+const draft = {
+  get(k) { try { const o = JSON.parse(localStorage.getItem('draft:' + k)); return o && Date.now() - o.at < DRAFT_DAYS * 86400000 ? o.v : null; } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem('draft:' + k, JSON.stringify({ at: Date.now(), v })); } catch (e) {} },
+  del(k) { try { localStorage.removeItem('draft:' + k); } catch (e) {} },
+};
+// 検索の文字は、開き直したときまで残ると邪魔なのでタブを閉じるまでにする
+const searchMemo = {
+  get(k) { try { return sessionStorage.getItem('search:' + k) || ''; } catch (e) { return ''; } },
+  set(k, v) { try { sessionStorage.setItem('search:' + k, v); } catch (e) {} },
+};
+
 /* ── 語りたい・布教したい ── */
+const talkKey = box => box.querySelector('.talk').dataset.target === 'この作品' ? 'talk:work:' + current.title : 'talk:none:' + norm($('q').value);
+function talkSave(box) {
+  const t = box.querySelector('.talk');
+  const name = t.querySelector('.t-name').value, body = t.querySelector('.t-body').value;
+  if (name.trim() || body.trim()) draft.set(talkKey(box), { kind: t.dataset.kind, name, body, use: t.querySelector('.t-use .chip.on').dataset.use });
+  else draft.del(talkKey(box));
+}
+function talkRestore(box) {
+  const t = box.querySelector('.talk');
+  if (t.innerHTML) return;
+  const d = draft.get(talkKey(box));
+  if (!d) return;
+  openTalk(box, d.kind);
+  t.querySelector('.t-name').value = d.name;
+  t.querySelector('.t-body').value = d.body;
+  t.querySelectorAll('.t-use .chip').forEach(c => c.classList.toggle('on', c.dataset.use === d.use));
+}
 function resetTalk(box) {
   const t = box.querySelector('.talk'), th = box.querySelector('.thanks');
   t.classList.remove('on'); t.innerHTML = ''; th.classList.remove('on'); th.innerHTML = '';
@@ -796,7 +830,10 @@ function openTalk(box, kind) {
     t.appendChild($('talk-tpl').content.cloneNode(true));
     t.querySelector('.t-ok').addEventListener('change', e => { t.querySelector('.t-send').disabled = !e.target.checked; });
     t.querySelector('.t-send').addEventListener('click', () => sendTalk(box));
+    t.addEventListener('input', () => talkSave(box));
+    t.querySelector('.t-use').addEventListener('click', () => setTimeout(() => talkSave(box)));
   }
+  t.dataset.kind = kind;
   const later = kind === '語る' && current && current.later;
   t.querySelector('h3').textContent = kind === '布教したい' ? 'けんしに布教する' : 'この作品について語る';
   t.querySelector('.t-body').placeholder = kind === '布教したい' ? 'どんなところが好き？けんしに布教してみよう'
@@ -813,8 +850,10 @@ function sendTalk(box) {
   const title = target === 'この作品' ? current.title : $('q').value.trim();
   const author = target === 'この作品' ? current.author : '';
   const btn = t.querySelector('.t-send');
+  const sentKey = talkKey(box);
   btn.disabled = true; btn.textContent = '送信中…';
   postToScript({ type: 'talk', title, author, radioName: t.querySelector('.t-name').value.trim(), body, target, radioOk: t.querySelector('.t-use .chip.on').dataset.use }, () => {
+    draft.del(sentKey);
     t.classList.remove('on'); t.innerHTML = '';
     const th = box.querySelector('.thanks');
     th.innerHTML = `<div class="ring">${CHECK_SVG}</div><h3 class="round">ありがとう！</h3><p>ちゃんと届きました。<br>ラジオで読まれるかも、お楽しみに。</p>`;
@@ -834,11 +873,28 @@ $('l-send').addEventListener('click', () => {
   const categories = [...document.querySelectorAll('#l-cats .chip.on')].map(c => c.textContent).join('・');
   $('l-send').disabled = true; $('l-send').textContent = '送信中…';
   postToScript({ type: 'letter', radioName: $('l-name').value.trim(), body, radioOk: document.querySelector('.l-use .chip.on').dataset.use, categories }, () => {
+    draft.del('letter');
     $('l-form').style.display = 'none';
     $('l-done').classList.add('on');
     window.scrollTo(0, 0);
   });
 });
+function letterSave() {
+  const name = $('l-name').value, body = $('l-body').value;
+  if (!name.trim() && !body.trim()) { draft.del('letter'); return; }
+  draft.set('letter', { name, body, cats: [...document.querySelectorAll('#l-cats .chip')].map(c => c.classList.contains('on')), use: document.querySelector('.l-use .chip.on').dataset.use });
+}
+$('l-form').addEventListener('input', letterSave);
+$('l-form').addEventListener('click', e => { if (e.target.closest('.chip')) setTimeout(letterSave); });
+function letterRestore() {
+  const d = draft.get('letter');
+  if (!d) return;
+  $('l-name').value = d.name;
+  $('l-body').value = d.body;
+  document.querySelectorAll('#l-cats .chip').forEach((c, i) => c.classList.toggle('on', !!d.cats[i]));
+  document.querySelectorAll('.l-use .chip').forEach(c => c.classList.toggle('on', c.dataset.use === d.use));
+}
+letterRestore();
 function resetLetter() {
   if (!$('l-done').classList.contains('on')) return;
   $('l-form').reset();
@@ -1084,6 +1140,7 @@ async function rsvSend() {
     rsvItems = r.items;
     $('rsv-rows').innerHTML = '';
     rsvAddRow('');
+    draft.del('rsv');
     rsvJustDone = true;
     rsvRenderBox();
     rsvSetSend('info');
@@ -1137,16 +1194,53 @@ async function rsvRefresh() {
   } catch (e) {}
 }
 let rsvPrefillOpen = false;
+// 記入中の作品を残す
+function rsvSaveDraft() {
+  const list = [...$('rsv-rows').children].map(r => ({
+    title: r.querySelector('.rsv-input').value,
+    vols: [...r.querySelectorAll('.rsv-vols button.on')].map(b => b.dataset.v),
+    other: r.querySelector('.rsv-other').value,
+  })).filter(x => x.title.trim());
+  if (list.length) draft.set('rsv', list); else draft.del('rsv');
+}
+let rsvRestoreDone = false;
+function rsvRestoreDraft() {
+  if (rsvRestoreDone) return false;
+  rsvRestoreDone = true;
+  const list = draft.get('rsv');
+  if (!list || !list.length) return false;
+  $('rsv-rows').innerHTML = '';
+  list.forEach(x => {
+    const row = rsvAddRow(x.title);
+    x.vols.forEach(v => { const b = row.querySelector(`.rsv-vols [data-v="${v}"]`); if (b) b.classList.add('on'); });
+    const other = row.querySelector('.rsv-other');
+    other.value = x.other;
+    other.classList.toggle('on', x.vols.includes('その他'));
+  });
+  return true;
+}
+$('rsv-rows').addEventListener('input', rsvSaveDraft);
+$('rsv-rows').addEventListener('click', () => setTimeout(rsvSaveDraft));
 function rsvOpenGift() {
   if (!RSV_READY) { rsvSetSend('info'); return; }
   rsvLoadTitles();
+  const restored = rsvRestoreDraft();
   rsvUpdateRows();
-  rsvPrefillOpen = !!rsvPrefill;
+  rsvPrefillOpen = !!rsvPrefill || restored;
   if (rsvPrefill) {
-    const blank = [...$('rsv-rows').children].find(r => !r.querySelector('.rsv-input').value.trim());
-    if (blank) { blank.querySelector('.rsv-input').value = rsvPrefill; rsvCheckRow(blank); rsvUpdateSend(); }
-    else rsvAddRow(rsvPrefill);
+    const rows = [...$('rsv-rows').children];
+    const has = rows.some(r => norm(r.querySelector('.rsv-input').value) === norm(rsvPrefill));
+    const blank = rows.find(r => !r.querySelector('.rsv-input').value.trim());
+    if (!has) {
+      if (blank) { blank.querySelector('.rsv-input').value = rsvPrefill; rsvCheckRow(blank); rsvUpdateSend(); }
+      else rsvAddRow(rsvPrefill);
+      rsvSaveDraft();
+    }
     rsvPrefill = '';
+    rsvSetSend('form');
+    $('g-send').classList.remove('closed');
+    rsvChev();
+  } else if (restored) {
     rsvSetSend('form');
     $('g-send').classList.remove('closed');
     rsvChev();
@@ -1266,6 +1360,8 @@ document.addEventListener('click', e => {
   }
 });
 
+$('q').value = searchMemo.get('q');
+$('lq').value = searchMemo.get('lq');
 route(false);
 loadBooks();
 </script>
