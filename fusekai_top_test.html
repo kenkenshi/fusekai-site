@@ -999,11 +999,12 @@ function rsvShowStatus(r) {
   const has = r && (r.same.length || r.near.length);
   $('none').classList.toggle('has-st', !!has);
   st.classList.toggle('on', !!has);
-  $('none-gift').textContent = has && r.same.length ? '別の巻を予約する' : 'プレゼントを予約する';
+  const allTaken = !!r && r.same.some(x => x.vol === '全巻' || x.vol === '上・下巻');
+  $('none-gift').textContent = has && r.same.length ? 'それでも予約する' : 'プレゼントを予約する';
   if (!has) { st.innerHTML = ''; return; }
   st.classList.toggle('near', !r.same.length);
   st.innerHTML = r.same.length
-    ? `${RSV_ICON}<b>お嬢がプレゼント準備中</b><strong>${r.same.map(x => esc(rsvLabel(x))).join('<br>')}</strong>同じ巻だと被ってしまいます。`
+    ? `${RSV_ICON}<b>お嬢がプレゼント準備中</b><strong>${r.same.map(x => esc(rsvLabel(x))).join('<br>')}</strong>${allTaken ? '全巻が準備中なので、送ると被ってしまいます。' : '同じ巻だと被ってしまいます。'}`
     : `${RSV_ICON}<b>近い名前の作品を、お嬢がプレゼント準備中</b><strong>${r.near.map(x => esc(rsvLabel(x))).join('<br>')}</strong>続編を巻数で書いている場合もあるので、同じ本かもしれません。`;
 }
 let rsvSearchTimer = 0;
