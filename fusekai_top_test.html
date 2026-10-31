@@ -387,6 +387,7 @@ body.typing .lib-dock, body.kb .lib-dock { bottom: var(--kb, 0px); padding-botto
 .rsv-item b { display: block; font-size: 14px; font-weight: 900; line-height: 1.4; word-break: break-all; }
 .rsv-item small { display: block; margin-top: 2px; font-size: 11.5px; color: var(--ink-soft); }
 .rsv-item button { flex: 0 0 auto; padding: 5px 10px; border-radius: 999px; border: 1.5px solid var(--line); background: #fff; font-size: 11.5px; font-weight: 900; color: var(--ink-soft); }
+.rsv-linknote { margin-top: 12px; font-size: 13px; font-weight: 700; line-height: 1.6; color: var(--ink); }
 .rsv-link { display: block; width: 100%; margin-top: 10px; padding: 10px 0; border-radius: 999px; border: 2px solid var(--ink); background: #fff; font-size: 13px; font-weight: 900; box-shadow: 0 2px 0 var(--ink); }
 .rsv-undone { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding: 10px 12px; border-radius: 12px; background: #f3ecfb; font-size: 13.5px; font-weight: 700; line-height: 1.5; }
 .rsv-undone span { flex: 1; min-width: 0; word-break: break-all; }
@@ -1178,7 +1179,7 @@ function rsvRenderBox() {
     + (rsvJustDone ? '<p class="rsv-ok">予約しました！</p>' : '')
     + undo
     + rsvItems.map(x => `<div class="rsv-item"><div><b>${esc(x.title)}</b><small>${esc(x.vol)}／あと${x.left}日</small></div><button type="button" data-cancel="${esc(x.id)}">取り消す</button></div>`).join('')
-    + (rsvItems.length ? '<button type="button" class="rsv-add" id="rsv-more">＋ 作品を追加</button><button type="button" class="rsv-link" id="rsv-link">別のスマホでも見るリンクをコピー</button>' : '');
+    + (rsvItems.length ? '<button type="button" class="rsv-add" id="rsv-more">＋ 作品を追加</button><p class="rsv-linknote">XやYouTubeから開き直すと、この予定が出ないことがあります。あとで確認や取り消しをするときは、下のリンクを使ってください。リンクを知っている人は予定を見られるので、人には渡さないでください。</p><button type="button" class="rsv-link" id="rsv-link">あとで見るためのリンクをコピー</button>' : '');
 }
 function rsvChev() {
   document.querySelectorAll('.g-cards .card > .g-top[data-open]').forEach(t => { t.querySelector('.chev').textContent = t.parentElement.classList.contains('closed') ? '›' : '⌄'; });
