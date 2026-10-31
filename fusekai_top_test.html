@@ -488,6 +488,7 @@ body.typing .lib-dock, body.kb .lib-dock { bottom: var(--kb, 0px); padding-botto
         <p class="radio-note">届いた声は、<em>YouTubeの実写ラジオ</em>で読むかも！</p>
         <div class="talk" data-target="この作品"></div>
         <div class="thanks"></div>
+        <div class="acts one" id="w-gift-acts"><button type="button" id="w-gift" data-go="gift">続きの巻をプレゼントする</button></div>
         <section class="same">
           <h2 class="round">同じ作者の本</h2>
           <div class="row" id="w-same"></div>
@@ -795,6 +796,7 @@ function renderWork(b) {
   $('w-author').textContent = b.author + (volText(b) ? '　' + b.vol.replace(/^積読[\s　:：・,，]*/, '') : '');
   $('w-memo').textContent = b.memo;
   $('w-memo').style.display = b.memo ? '' : 'none';
+  $('w-gift-acts').style.display = RSV_READY && b.vol && !b.vol.includes('上下') ? '' : 'none';
   const box = document.querySelector('#p-work .work-info');
   resetTalk(box);
   talkRestore(box);
@@ -1109,13 +1111,14 @@ async function rsvCheckRow(row) {
   const n = norm(v);
   if (!n) { say(''); return; }
   const onShelf = books.find(b => b.vol && norm(b.title) === n);
-  if (onShelf) { const v = volText(onShelf); say('すでに本棚にあります' + (v ? '（' + v + '）' : '')); return; }
-  say('');
+  const onShelfVol = onShelf ? volText(onShelf) : '';
+  const shelf = !onShelf ? '' : /^上下/.test(onShelfVol) ? `すでに本棚にあります（${onShelfVol}）。` : `本棚にあります${onShelfVol ? `（${onShelfVol}）` : ''}。続きの巻を選んでください。`;
+  say(shelf);
   try {
     const r = await rsvGet({ action: 'check', q: v });
     if (row.querySelector('.rsv-input').value.trim() !== v || !r.ok) return;
-    if (r.same.length) say('ほかのお嬢が準備中です：' + r.same.map(rsvLabel).join('／'));
-    else if (r.near.length) say('近い名前の作品が準備中です。同じ作品なら被ります：' + r.near.map(rsvLabel).join('／'), true);
+    if (r.same.length) say(shelf + 'ほかのお嬢が準備中です：' + r.same.map(rsvLabel).join('／'));
+    else if (r.near.length) say(shelf + '近い名前の作品が準備中です。同じ作品なら被ります：' + r.near.map(rsvLabel).join('／'), true);
   } catch (e) {}
 }
 function rsvRowVol(row) {
@@ -1274,6 +1277,7 @@ function rsvOpenGift() {
 }
 if (RSV_READY && rsvToken) rsvRefresh();
 $('none-gift').addEventListener('click', () => { rsvPrefill = RSV_READY ? $('q').value.trim() : ''; });
+$('w-gift').addEventListener('click', () => { rsvPrefill = current.title; });
 $('rsv-add').addEventListener('click', () => rsvAddRow('').querySelector('.rsv-input').focus());
 $('rsv-send').addEventListener('click', rsvSend);
 $('rsv-skip').addEventListener('click', () => {
