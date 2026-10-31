@@ -319,6 +319,90 @@ body.typing .lib-dock, body.kb .lib-dock { bottom: var(--kb, 0px); padding-botto
   #p-gift .sheet { max-width: 900px; }
   .g-cards { grid-template-columns: 1fr 1fr; align-items: start; }
 }
+
+/* ===== プレゼント予約 ===== */
+.none .acts { grid-template-columns: 1fr; }
+.none .acts button { background: #fff; color: var(--ink); }
+.none .acts button.pri { background: var(--pink); color: #fff; }
+.none.has-st > p { display: none; }
+.none.has-st .acts button.pri { background: #fff; color: var(--ink); }
+.rsv-st { display: none; padding: 14px; border-radius: 12px; background: #fff5fa; border: 1.5px solid #ffc4de; text-align: center; font-size: 12.5px; line-height: 1.7; color: var(--ink-soft); }
+.rsv-st.on { display: block; }
+.rsv-st b { display: block; margin-top: 4px; font-size: 16px; font-weight: 900; line-height: 1.5; color: #d9347f; }
+.rsv-icon { display: block; margin: 0 auto; width: 56px; height: 56px; }
+.rsv-st strong { display: block; margin: 4px 0 2px; font-size: 14.5px; font-weight: 900; color: var(--ink); word-break: break-all; }
+.rsv-st.near { background: #faf3ff; border-color: #e3c7f2; }
+.rsv-st.near b { color: var(--purple); }
+.rsv-off { display: none !important; }
+.rsv-home { display: flex; align-items: center; gap: 10px; width: 100%; margin-top: 16px; padding: 10px 14px; border-radius: 16px; border: 2px solid var(--pink); background: #fff; box-shadow: 0 4px 0 var(--pink); text-align: left; }
+.rsv-home .rsv-icon { margin: 0; width: 36px; height: 36px; flex: 0 0 auto; }
+.rsv-home span { flex: 1; min-width: 0; }
+.rsv-home b { display: block; font-size: 15px; font-weight: 900; }
+.rsv-home small { display: block; font-size: 11.5px; font-weight: 700; color: var(--ink-soft); }
+.rsv-home i { font-style: normal; font-size: 20px; font-weight: 900; color: var(--pink); }
+.rsv-private { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 10px; padding: 7px 10px; border-radius: 10px; background: #f3ecfb; font-size: 12.5px; font-weight: 900; color: var(--purple); }
+.rsv-private svg { flex: 0 0 auto; width: 15px; height: 15px; }
+.g-cards .card.closed > *:not(.g-top) { display: none; }
+.g-top { width: 100%; text-align: left; }
+.g-top > div { flex: 1; min-width: 0; }
+.g-top .chev { font-style: normal; font-size: 20px; font-weight: 900; color: var(--pink); }
+#rsv-box { border-color: var(--pink); grid-column: 1 / -1; }
+#rsv-box .gi { background: var(--pink); }
+.rsv-ask { margin-top: 14px; padding: 13px; border-radius: 14px; background: #fff0f7; border: 2px solid var(--pink); }
+.rsv-ask > b { display: block; font-size: 15px; font-weight: 900; color: var(--pink); }
+.rsv-ask > p { margin-top: 3px; font-size: 12.5px; line-height: 1.6; }
+.rsv-row { position: relative; margin-top: 10px; padding: 11px; border-radius: 12px; background: #fff; border: 1.5px solid var(--line); }
+.rsv-input { width: 100%; padding: 9px 11px; border: 1.5px solid var(--ink); border-radius: 10px; background: #fff; font-size: 16px; font-weight: 700; }
+.rsv-row.multi .rsv-input { width: calc(100% - 34px); }
+.rsv-del { position: absolute; right: 10px; top: 16px; width: 26px; height: 26px; border-radius: 50%; background: #efe6f8; font-weight: 900; color: var(--ink-soft); }
+.rsv-cands { display: none; margin-top: 6px; border: 1.5px solid var(--line); border-radius: 10px; background: #fff; overflow: hidden; }
+.rsv-cands.on { display: block; }
+.rsv-cands button { display: block; width: 100%; padding: 9px 11px; text-align: left; border-top: 1px solid var(--line); font-size: 13.5px; font-weight: 900; line-height: 1.35; }
+.rsv-cands button:first-child { border-top: 0; }
+.rsv-cands small { display: block; font-size: 11px; font-weight: 600; color: var(--ink-soft); }
+.rsv-cands .free { color: var(--pink); font-size: 12.5px; }
+.rsv-status { display: none; margin-top: 8px; padding: 8px 10px; border-radius: 8px; background: #fff5fa; font-size: 14px; line-height: 1.6; font-weight: 900; color: #d9347f; }
+.rsv-status.on { display: block; }
+.rsv-status.near { background: #faf3ff; color: var(--purple); }
+.rsv-hint p { margin-top: 8px; font-size: 12px; font-weight: 700; line-height: 1.6; color: var(--purple); }
+.rsv-hint button { display: block; width: 100%; margin-top: 5px; padding: 8px 10px; border-radius: 8px; border: 1.5px solid #e3c7f2; background: #faf3ff; text-align: left; font-size: 13px; font-weight: 900; line-height: 1.4; }
+.rsv-vols { margin-top: 8px; display: flex; gap: 5px; flex-wrap: wrap; }
+.rsv-vols button { padding: 5px 11px; border-radius: 999px; border: 1.5px solid var(--line); background: #fff; font-size: 12px; font-weight: 900; }
+.rsv-vols button.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+.rsv-other { display: none; width: 100%; margin-top: 6px; padding: 7px 10px; border: 1.5px solid var(--line); border-radius: 8px; background: #fff; font-size: 16px; }
+.rsv-other.on { display: block; }
+.rsv-add { display: block; width: 100%; margin-top: 10px; padding: 10px 0; border-radius: 12px; border: 2px dashed var(--pink); background: #fff; color: var(--pink); font-size: 13.5px; font-weight: 900; }
+.rsv-send { display: block; width: 100%; margin-top: 12px; padding: 13px 0; border-radius: 14px; font-weight: 900; font-size: 15px; color: #fff; background: var(--pink); border: 2px solid var(--ink); box-shadow: 0 4px 0 var(--ink); }
+.rsv-send:disabled { opacity: .6; }
+.rsv-err { display: none; margin-top: 8px; font-size: 12.5px; font-weight: 700; color: #e03b6f; }
+.rsv-err.on { display: block; }
+.rsv-note { margin-top: 10px; font-size: 11.5px; line-height: 1.7; color: var(--ink-soft); }
+.rsv-skip { display: block; width: 100%; margin-top: 14px; padding: 12px 0; border-radius: 14px; border: 2px solid var(--ink); background: #fff; box-shadow: 0 4px 0 var(--ink); }
+.rsv-skip b { display: block; font-size: 15px; font-weight: 900; }
+.rsv-skip small { display: block; margin-top: 2px; font-size: 12px; font-weight: 700; color: var(--ink-soft); }
+.rsv-ok { margin-top: 10px; padding: 8px 12px; border-radius: 10px; background: #fff0f7; text-align: center; font-size: 13px; font-weight: 900; color: var(--pink); }
+.rsv-item { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding: 11px 12px; border-radius: 12px; background: #faf6ff; border: 1.5px solid var(--line); }
+.rsv-item > div { flex: 1; min-width: 0; }
+.rsv-item b { display: block; font-size: 14px; font-weight: 900; line-height: 1.4; word-break: break-all; }
+.rsv-item small { display: block; margin-top: 2px; font-size: 11.5px; color: var(--ink-soft); }
+.rsv-item button { flex: 0 0 auto; padding: 5px 10px; border-radius: 999px; border: 1.5px solid var(--line); background: #fff; font-size: 11.5px; font-weight: 900; color: var(--ink-soft); }
+.rsv-linknote { margin-top: 12px; padding: 10px 12px; border-radius: 10px; background: #f7f4fb; font-size: 13px; font-weight: 700; line-height: 1.6; color: var(--ink); }
+.rsv-linknote b { display: block; font-weight: 900; }
+.rsv-linknote ul { margin: 4px 0 0; padding-left: 1.2em; }
+.rsv-link { display: block; width: 100%; margin-top: 4px; padding: 8px 0; border: 0; background: none; font-size: 13px; font-weight: 700; color: var(--ink); text-decoration: underline; }
+.rsv-undone { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding: 10px 12px; border-radius: 12px; background: #f3ecfb; font-size: 13.5px; font-weight: 700; line-height: 1.5; }
+.rsv-undone span { flex: 1; min-width: 0; word-break: break-all; }
+.rsv-undone button { flex: 0 0 auto; padding: 8px 14px; border-radius: 999px; border: 2px solid var(--ink); background: #fff; font-size: 13.5px; font-weight: 900; }
+.rsv-modal { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 20px; background: rgba(26,10,48,.45); }
+.rsv-modal-card { width: 100%; max-width: 360px; padding: 22px 18px 18px; border-radius: 20px; background: #fff; border: 2px solid var(--ink); box-shadow: 0 5px 0 var(--ink); text-align: center; }
+.rsv-modal-card h3 { font-size: 19px; font-weight: 900; line-height: 1.4; }
+.rsv-modal-work { margin-top: 12px; padding: 10px 12px; border-radius: 12px; background: #faf6ff; font-size: 15px; font-weight: 900; line-height: 1.5; word-break: break-all; }
+.rsv-modal-note { margin-top: 10px; font-size: 14px; line-height: 1.6; color: var(--ink-soft); }
+.rsv-modal-yes, .rsv-modal-no { display: block; width: 100%; margin-top: 12px; padding: 14px 0; border-radius: 14px; border: 2px solid var(--ink); box-shadow: 0 4px 0 var(--ink); font-size: 15px; font-weight: 900; }
+.rsv-modal-yes { background: var(--ink); color: #fff; }
+.rsv-modal-yes:disabled { opacity: .6; }
+.rsv-modal-no { background: #fff; color: var(--ink); }
+.rsv-hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 </style>
 </head>
 <body data-page="top">
@@ -345,12 +429,13 @@ body.typing .lib-dock, body.kb .lib-dock { bottom: var(--kb, 0px); padding-botto
         <div class="sugg" id="sugg"></div>
         <div class="none" id="none">
           <p>けんしはまだ<br><em id="none-q"></em>を知らないかも！</p>
-          <small>ぜひ教えてください。YouTubeの実写ラジオで読むかも！</small>
-          <div class="acts"><button type="button" class="main" id="none-talk">布教したい</button><button type="button" data-go="gift">プレゼントする</button></div>
+          <div class="rsv-st" id="rsv-st"></div>
+          <div class="acts"><button type="button" class="pri" id="none-gift" data-go="gift">プレゼントを予約する</button><button type="button" id="none-talk">布教したい</button></div>
           <div class="talk" data-target="未読作品"></div>
           <div class="thanks"></div>
         </div>
       </div>
+      <button type="button" class="rsv-home rsv-off" id="rsv-home" data-go="gift"></button>
       <div class="menu">
         <button class="m read" data-go="lib" data-cat="read"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5C4.5 4 7.5 4 12 6c4.5-2 7.5-2 10-.5V19c-2.5-1.5-5.5-1.5-10 .5-4.5-2-7.5-2-10-.5z"/><path d="M12 6v13.5"/></svg></i><b>既読</b><span><em id="n-read">-</em>作品</span></button>
         <button class="m later" data-go="lib" data-cat="later"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg></i><b>これから読む</b><span><em id="n-later">-</em>作品</span></button>
@@ -467,8 +552,21 @@ body.typing .lib-dock, body.kb .lib-dock { bottom: var(--kb, 0px); padding-botto
       <p>いただいた本は、<em>本棚の「これから読む」</em>に並びます。<br>ひとつひとつ大切に受け取ります。</p>
     </section>
     <div class="g-cards">
-      <section class="card">
-        <div class="g-top"><i class="gi pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5L12 3l9 4.5v9L12 21l-9-4.5z"/><path d="M3 7.5l9 4.5 9-4.5M12 12v9M7.5 5.2l9 4.6"/></svg></i><div><b>本や物を送る</b><small>郵送・宅配</small></div></div>
+      <section class="card rsv-off" id="rsv-box"></section>
+      <section class="card closed" id="g-send">
+        <button type="button" class="g-top" data-open><i class="gi pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5L12 3l9 4.5v9L12 21l-9-4.5z"/><path d="M3 7.5l9 4.5 9-4.5M12 12v9M7.5 5.2l9 4.6"/></svg></i><div><b>本や物を送る</b><small>郵送・宅配</small></div><i class="chev">›</i></button>
+        <div class="rsv-ask" id="rsv-form">
+          <b>本を送るなら、先に予約！</b>
+          <p>ほかのお嬢と被らないように。途中まで打てば候補が出ます。</p>
+          <div id="rsv-rows"></div>
+          <input class="rsv-hp" id="rsv-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <button type="button" class="rsv-add" id="rsv-add">＋ 作品を追加</button>
+          <button type="button" class="rsv-send" id="rsv-send">予約する</button>
+          <p class="rsv-err" id="rsv-err"></p>
+          <p class="rsv-note">予約は30日で自動的に消えます。作品は一覧には載らず、同じ作品を探した人にだけ「準備中」と出ます。候補は国立国会図書館書誌データをもとに作成しています。</p>
+        </div>
+        <button type="button" class="rsv-skip" id="rsv-skip"><b>送り先を見る ›</b><small>本以外を送るとき・予約しないとき</small></button>
+        <div id="g-send-info" class="rsv-off">
         <div class="g-box">
           <span class="g-label">送り先</span>
           <p class="g-addr">〒152-0035<br>東京都目黒区自由が丘2-16-12 RJ3</p>
@@ -477,9 +575,10 @@ body.typing .lib-dock, body.kb .lib-dock { bottom: var(--kb, 0px); padding-botto
           <button type="button" class="g-copy" data-copy="〒152-0035 東京都目黒区自由が丘2-16-12 RJ3 けんし">住所をコピー</button>
         </div>
         <p class="g-ng"><b>受け取れないもの</b>食べ物・飲み物・生き物</p>
+        </div>
       </section>
-      <section class="card">
-        <div class="g-top"><i class="gi purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg></i><div><b>Amazonギフトカードで布教する</b><small>Eメールタイプ</small></div></div>
+      <section class="card closed">
+        <button type="button" class="g-top" data-open><i class="gi purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg></i><div><b>Amazonギフトカードで布教する</b><small>Eメールタイプ</small></div><i class="chev">›</i></button>
         <p class="g-text">「〇〇買ってくれ」「〇〇作品代」など、<em>読んでほしい作品をメッセージに添えて</em>送ってください。けんしが買って読みます（動画にするかも）。</p>
         <div class="g-box row2">
           <div><span class="g-label">受取人のメールアドレス</span><p class="g-mail">fusekai.gift@gmail.com</p></div>
@@ -615,6 +714,8 @@ const hitHTML = b => `<button class="hit" data-i="${books.indexOf(b)}">${b.img ?
 function search(q) {
   $('q').closest('.search').classList.toggle('has', !!q);
   const n = norm(q);
+  searchMemo.set('q', q);
+  rsvShowStatus(null);
   if (!n || !books.length) { $('sugg').classList.remove('on'); $('none').classList.remove('on'); return; }
   const byTitle = books.filter(b => norm(b.title).includes(n) || norm(b.yomi).includes(n));
   const byAuthor = books.filter(b => !byTitle.includes(b) && norm(b.author).includes(n));
@@ -627,10 +728,12 @@ function search(q) {
     if ($('none-q').textContent !== '「' + q + '」') resetTalk($('none'));
     $('none-q').textContent = '「' + q + '」';
     $('none').classList.add('on'); $('sugg').classList.remove('on');
+    rsvSearch(q);
+    talkRestore($('none'));
   }
 }
 $('q').addEventListener('input', e => search(e.target.value));
-$('q').addEventListener('keydown', e => { if (e.key === 'Enter') e.target.blur(); });
+$('q').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing && e.keyCode !== 229) e.target.blur(); });
 $('q-clear').addEventListener('click', e => { e.preventDefault(); $('q').value = ''; search(''); $('q').focus(); });
 
 /* ── 本棚 ── */
@@ -639,6 +742,7 @@ const rowOf = b => { const c = norm(b.yomi || b.title)[0] || ''; const r = ROWS.
 let cat = 'all';
 function renderLib() {
   if (!books.length) return;
+  searchMemo.set('lq', $('lq').value);
   const lq = norm($('lq').value);
   $('lq').closest('.search').classList.toggle('has', !!$('lq').value);
   $('p-lib').classList.toggle('searching', !!lq);
@@ -660,7 +764,7 @@ function renderLib() {
   document.querySelectorAll('.seg button').forEach(b => b.classList.toggle('on', b.dataset.cat === cat));
 }
 $('lq').addEventListener('input', () => { renderLib(); window.scrollTo(0, 0); });
-$('lq').addEventListener('keydown', e => { if (e.key === 'Enter') e.target.blur(); });
+$('lq').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing && e.keyCode !== 229) e.target.blur(); });
 $('lq-clear').addEventListener('click', e => { e.preventDefault(); $('lq').value = ''; renderLib(); });
 document.addEventListener('click', e => {
   if (e.target.closest('[data-cat-all]')) { history.replaceState(null, '', '#lib/all'); cat = 'all'; renderLib(); }
@@ -692,12 +796,43 @@ function renderWork(b) {
   $('w-memo').style.display = b.memo ? '' : 'none';
   const box = document.querySelector('#p-work .work-info');
   resetTalk(box);
+  talkRestore(box);
   const same = b.author ? books.filter(x => x !== b && x.vol && x.author === b.author) : [];
   $('w-same').innerHTML = same.length ? same.map(x => bookHTML(x, false)).join('') : '<p class="only">本棚にはこの1作品だけ</p>';
   watchImgs($('w-same'));
 }
 
+/* ── 下書き（再読み込みしても打った文字を残す。送信したら消す） ── */
+const DRAFT_DAYS = 7;
+const draft = {
+  get(k) { try { const o = JSON.parse(localStorage.getItem('draft:' + k)); return o && Date.now() - o.at < DRAFT_DAYS * 86400000 ? o.v : null; } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem('draft:' + k, JSON.stringify({ at: Date.now(), v })); } catch (e) {} },
+  del(k) { try { localStorage.removeItem('draft:' + k); } catch (e) {} },
+};
+// 検索の文字は、開き直したときまで残ると邪魔なのでタブを閉じるまでにする
+const searchMemo = {
+  get(k) { try { return sessionStorage.getItem('search:' + k) || ''; } catch (e) { return ''; } },
+  set(k, v) { try { sessionStorage.setItem('search:' + k, v); } catch (e) {} },
+};
+
 /* ── 語りたい・布教したい ── */
+const talkKey = box => box.querySelector('.talk').dataset.target === 'この作品' ? 'talk:work:' + current.title : 'talk:none:' + norm($('q').value);
+function talkSave(box) {
+  const t = box.querySelector('.talk');
+  const name = t.querySelector('.t-name').value, body = t.querySelector('.t-body').value;
+  if (name.trim() || body.trim()) draft.set(talkKey(box), { kind: t.dataset.kind, name, body, use: t.querySelector('.t-use .chip.on').dataset.use });
+  else draft.del(talkKey(box));
+}
+function talkRestore(box) {
+  const t = box.querySelector('.talk');
+  if (t.innerHTML) return;
+  const d = draft.get(talkKey(box));
+  if (!d) return;
+  openTalk(box, d.kind);
+  t.querySelector('.t-name').value = d.name;
+  t.querySelector('.t-body').value = d.body;
+  t.querySelectorAll('.t-use .chip').forEach(c => c.classList.toggle('on', c.dataset.use === d.use));
+}
 function resetTalk(box) {
   const t = box.querySelector('.talk'), th = box.querySelector('.thanks');
   t.classList.remove('on'); t.innerHTML = ''; th.classList.remove('on'); th.innerHTML = '';
@@ -709,7 +844,10 @@ function openTalk(box, kind) {
     t.appendChild($('talk-tpl').content.cloneNode(true));
     t.querySelector('.t-ok').addEventListener('change', e => { t.querySelector('.t-send').disabled = !e.target.checked; });
     t.querySelector('.t-send').addEventListener('click', () => sendTalk(box));
+    t.addEventListener('input', () => talkSave(box));
+    t.querySelector('.t-use').addEventListener('click', () => setTimeout(() => talkSave(box)));
   }
+  t.dataset.kind = kind;
   const later = kind === '語る' && current && current.later;
   t.querySelector('h3').textContent = kind === '布教したい' ? 'けんしに布教する' : 'この作品について語る';
   t.querySelector('.t-body').placeholder = kind === '布教したい' ? 'どんなところが好き？けんしに布教してみよう'
@@ -726,8 +864,10 @@ function sendTalk(box) {
   const title = target === 'この作品' ? current.title : $('q').value.trim();
   const author = target === 'この作品' ? current.author : '';
   const btn = t.querySelector('.t-send');
+  const sentKey = talkKey(box);
   btn.disabled = true; btn.textContent = '送信中…';
   postToScript({ type: 'talk', title, author, radioName: t.querySelector('.t-name').value.trim(), body, target, radioOk: t.querySelector('.t-use .chip.on').dataset.use }, () => {
+    draft.del(sentKey);
     t.classList.remove('on'); t.innerHTML = '';
     const th = box.querySelector('.thanks');
     th.innerHTML = `<div class="ring">${CHECK_SVG}</div><h3 class="round">ありがとう！</h3><p>ちゃんと届きました。<br>ラジオで読まれるかも、お楽しみに。</p>`;
@@ -747,11 +887,28 @@ $('l-send').addEventListener('click', () => {
   const categories = [...document.querySelectorAll('#l-cats .chip.on')].map(c => c.textContent).join('・');
   $('l-send').disabled = true; $('l-send').textContent = '送信中…';
   postToScript({ type: 'letter', radioName: $('l-name').value.trim(), body, radioOk: document.querySelector('.l-use .chip.on').dataset.use, categories }, () => {
+    draft.del('letter');
     $('l-form').style.display = 'none';
     $('l-done').classList.add('on');
     window.scrollTo(0, 0);
   });
 });
+function letterSave() {
+  const name = $('l-name').value, body = $('l-body').value;
+  if (!name.trim() && !body.trim()) { draft.del('letter'); return; }
+  draft.set('letter', { name, body, cats: [...document.querySelectorAll('#l-cats .chip')].map(c => c.classList.contains('on')), use: document.querySelector('.l-use .chip.on').dataset.use });
+}
+$('l-form').addEventListener('input', letterSave);
+$('l-form').addEventListener('click', e => { if (e.target.closest('.chip')) setTimeout(letterSave); });
+function letterRestore() {
+  const d = draft.get('letter');
+  if (!d) return;
+  $('l-name').value = d.name;
+  $('l-body').value = d.body;
+  document.querySelectorAll('#l-cats .chip').forEach((c, i) => c.classList.toggle('on', !!d.cats[i]));
+  document.querySelectorAll('.l-use .chip').forEach(c => c.classList.toggle('on', c.dataset.use === d.use));
+}
+letterRestore();
 function resetLetter() {
   if (!$('l-done').classList.contains('on')) return;
   $('l-form').reset();
@@ -803,6 +960,401 @@ document.querySelectorAll('.g-copy').forEach(b => b.addEventListener('click', as
   setTimeout(() => { b.textContent = t0; b.classList.remove('done'); }, 1600);
 }));
 
+/* ── プレゼント予約 ── */
+const RSV_URL = 'https://script.google.com/macros/s/AKfycbwEOjupYBaRIrU9FGF_wFTSF7SwjXgJQxaUAepg1SJnncIzqZK45uKuzvhyspCvpbag/exec';
+const RSV_READY = !!(RSV_URL || window.__rsvStub);
+const RSV_ICON = '<svg class="rsv-icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 10C14 5.5 8.5 2.5 6.5 5.8 4.8 8.6 9.5 10 16 10zM16 10c2-4.500 7.500-7.500 9.500-4.200C27.200 8.600 22.500 10 16 10z" fill="#b03ad8" stroke="#1a0a30" stroke-width="2" stroke-linejoin="round"/><rect x="5" y="15" width="22" height="14" rx="3" fill="#ff4f9e" stroke="#1a0a30" stroke-width="2.200"/><rect x="3" y="10" width="26" height="6" rx="2" fill="#ffc4de" stroke="#1a0a30" stroke-width="2.200"/><rect x="13.500" y="11.100" width="5" height="16.800" fill="#b03ad8"/></svg>';
+const RSV_LOCK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.400" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
+const RSV_VOLS = ['全巻', '上巻', '下巻', '1巻', '2巻', '3巻', 'その他'];
+const RSV_ERR = 'うまく送れませんでした。時間をおいてもう一度お試しください';
+const rsvStore = {
+  get() { try { return localStorage.getItem('rsv_token') || ''; } catch (e) { return ''; } },
+  set(v) { try { localStorage.setItem('rsv_token', v); } catch (e) {} },
+};
+let rsvToken = rsvStore.get();
+let rsvItems = [];
+let rsvPrefill = '';
+let rsvJustDone = false;
+const boxParam = new URLSearchParams(location.search).get('box');
+if (boxParam) {
+  rsvToken = boxParam; rsvStore.set(boxParam);
+  history.replaceState(null, '', location.pathname + '#gift');
+}
+async function rsvGet(params) {
+  if (window.__rsvStub) return window.__rsvStub('GET', params);
+  const res = await fetch(RSV_URL + '?' + new URLSearchParams(params));
+  return res.json();
+}
+async function rsvPost(data) {
+  if (window.__rsvStub) return window.__rsvStub('POST', data);
+  const res = await fetch(RSV_URL, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'payload=' + encodeURIComponent(JSON.stringify(data)) });
+  return res.json();
+}
+const rsvLabel = x => x.title + '（' + x.vol + '）';
+
+// 検索で本棚になかった作品が予約済みなら知らせる
+function rsvShowStatus(r) {
+  const st = $('rsv-st');
+  const has = r && (r.same.length || r.near.length);
+  $('none').classList.toggle('has-st', !!has);
+  st.classList.toggle('on', !!has);
+  $('none-gift').textContent = has && r.same.length ? '別の巻を予約する' : 'プレゼントを予約する';
+  if (!has) { st.innerHTML = ''; return; }
+  st.classList.toggle('near', !r.same.length);
+  st.innerHTML = r.same.length
+    ? `${RSV_ICON}<b>お嬢がプレゼント準備中</b><strong>${r.same.map(x => esc(rsvLabel(x))).join('<br>')}</strong>同じ巻だと被ってしまいます。`
+    : `${RSV_ICON}<b>近い名前の作品を、お嬢がプレゼント準備中</b><strong>${r.near.map(x => esc(rsvLabel(x))).join('<br>')}</strong>続編を巻数で書いている場合もあるので、同じ本かもしれません。`;
+}
+let rsvSearchTimer = 0;
+function rsvSearch(q) {
+  if (!RSV_READY) return;
+  clearTimeout(rsvSearchTimer);
+  rsvSearchTimer = setTimeout(async () => {
+    try {
+      const r = await rsvGet({ action: 'check', q });
+      if ($('q').value === q && r.ok) rsvShowStatus(r);
+    } catch (e) {}
+  }, 400);
+}
+
+// 候補（プレゼントページを開いたときに初めて読み込む）
+let rsvTitles = null;
+function rsvLoadTitles() {
+  if (rsvTitles) return;
+  rsvTitles = [];
+  fetch('rsv_titles.json').then(r => r.json()).then(list => {
+    rsvTitles = list.map(([title, author, yomi]) => ({ title, author, nt: norm(title), ny: norm(yomi) }));
+  }).catch(() => { rsvTitles = null; });
+}
+function rsvFindTitles(n) {
+  const hits = [];
+  for (const t of rsvTitles || []) {
+    const head = t.nt.startsWith(n) || t.ny.startsWith(n);
+    if (head || t.nt.includes(n) || t.ny.includes(n)) hits.push({ t, head });
+  }
+  return hits.sort((a, b) => (b.head - a.head) || (a.t.nt.length - b.t.nt.length)).slice(0, 6).map(x => x.t);
+}
+
+// 記入欄
+function rsvAddRow(title) {
+  const row = document.createElement('div');
+  row.className = 'rsv-row';
+  row.innerHTML = `<input class="rsv-input" type="text" enterkeyhint="done" maxlength="100" placeholder="作品名" autocomplete="off" autocorrect="off" autocapitalize="off"><button type="button" class="rsv-del" aria-label="この作品を消す">×</button><div class="rsv-cands"></div><p class="rsv-status"></p><div class="rsv-hint"></div><div class="rsv-vols">${RSV_VOLS.map(v => `<button type="button" data-v="${v}">${v}</button>`).join('')}</div><input class="rsv-other" type="text" maxlength="12" placeholder="例：4〜6">`;
+  const input = row.querySelector('.rsv-input'), cands = row.querySelector('.rsv-cands');
+  let timer = 0;
+  input.addEventListener('input', () => {
+    rsvShowCands(row);
+    clearTimeout(timer);
+    timer = setTimeout(() => rsvCheckRow(row), 500);
+    rsvUpdateSend();
+  });
+  input.addEventListener('blur', () => setTimeout(() => cands.classList.remove('on'), 200));
+  cands.addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    if (b.dataset.title) input.value = b.dataset.title;
+    cands.classList.remove('on');
+    rsvCheckRow(row);
+    rsvSequelHint(row);
+    rsvUpdateSend();
+  });
+  row.querySelector('.rsv-hint').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    input.value = b.dataset.title;
+    row.querySelectorAll('.rsv-vols button.on').forEach(x => x.classList.remove('on'));
+    row.querySelector('.rsv-other').classList.remove('on');
+    rsvCheckRow(row);
+    rsvSequelHint(row);
+  });
+  row.querySelector('.rsv-vols').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    const all = b.dataset.v === '全巻';
+    if (!b.classList.contains('on')) row.querySelectorAll('.rsv-vols button').forEach(x => { if (all || x.dataset.v === '全巻') x.classList.remove('on'); });
+    b.classList.toggle('on');
+    row.querySelector('.rsv-other').classList.toggle('on', !!row.querySelector('.rsv-vols [data-v="その他"].on'));
+    rsvSequelHint(row);
+  });
+  row.querySelector('.rsv-del').addEventListener('click', () => { row.remove(); rsvUpdateRows(); });
+  $('rsv-rows').appendChild(row);
+  if (title) { input.value = title; rsvCheckRow(row); }
+  rsvUpdateRows();
+  return row;
+}
+function rsvShowCands(row) {
+  const input = row.querySelector('.rsv-input'), cands = row.querySelector('.rsv-cands');
+  const n = norm(input.value);
+  if (n.length < 2) { cands.classList.remove('on'); return; }
+  const v = input.value.trim();
+  cands.innerHTML = rsvFindTitles(n).map(t => `<button type="button" data-title="${esc(t.title)}">${esc(t.title)}<small>${esc(t.author)}</small></button>`).join('')
+    + `<button type="button" class="free">候補にない → 「${esc(v)}」のまま予約</button>`;
+  cands.classList.add('on');
+}
+// 2巻以降を選んだとき、同じ作者の続編が別の作品として出ていれば知らせる（続編を巻数で書く間違いを防ぐ）
+function rsvSequelHint(row) {
+  const hint = row.querySelector('.rsv-hint');
+  const n = norm(row.querySelector('.rsv-input').value);
+  const later = [...row.querySelectorAll('.rsv-vols button.on')].some(b => !['全巻', '上巻', '1巻'].includes(b.dataset.v));
+  const self = later && n.length >= 2 && (rsvTitles || []).find(t => t.nt === n);
+  const list = self ? rsvTitles.filter(t => t.author === self.author && t.nt !== n && t.nt.startsWith(n)).slice(0, 3) : [];
+  hint.innerHTML = list.length ? '<p>別の作品として出ている続編があります。こちらですか？</p>' + list.map(t => `<button type="button" data-title="${esc(t.title)}">${esc(t.title)}</button>`).join('') : '';
+}
+async function rsvCheckRow(row) {
+  const v = row.querySelector('.rsv-input').value.trim();
+  const st = row.querySelector('.rsv-status');
+  const say = (text, near) => { st.textContent = text; st.classList.toggle('on', !!text); st.classList.toggle('near', !!near); };
+  const n = norm(v);
+  if (!n) { say(''); return; }
+  const onShelf = books.find(b => b.vol && norm(b.title) === n);
+  if (onShelf) { const v = volText(onShelf); say('すでに本棚にあります' + (v ? '（' + v + '）' : '')); return; }
+  say('');
+  try {
+    const r = await rsvGet({ action: 'check', q: v });
+    if (row.querySelector('.rsv-input').value.trim() !== v || !r.ok) return;
+    if (r.same.length) say('ほかのお嬢が準備中です：' + r.same.map(rsvLabel).join('／'));
+    else if (r.near.length) say('近い名前の作品が準備中です。同じ作品なら被ります：' + r.near.map(rsvLabel).join('／'), true);
+  } catch (e) {}
+}
+function rsvRowVol(row) {
+  const on = [...row.querySelectorAll('.rsv-vols button.on')].map(b => b.dataset.v);
+  if (!on.length) return '';
+  if (on[0] === '全巻') return '全巻';
+  const parts = on.filter(v => v !== 'その他').map(v => v.replace('巻', ''));
+  const other = row.querySelector('.rsv-other').value.trim().replace(/巻$/, '');
+  if (on.includes('その他')) { if (!other) return ''; parts.push(other); }
+  return parts.join('・') + '巻';
+}
+function rsvUpdateRows() {
+  const rows = [...$('rsv-rows').children];
+  if (!rows.length) { rsvAddRow(''); return; }
+  rows.forEach(r => r.classList.toggle('multi', rows.length > 1));
+  rows.forEach(r => r.querySelector('.rsv-del').classList.toggle('rsv-off', rows.length < 2));
+  $('rsv-add').classList.toggle('rsv-off', rows.length >= 10);
+  rsvUpdateSend();
+}
+function rsvUpdateSend() {
+  const n = [...$('rsv-rows').children].filter(r => r.querySelector('.rsv-input').value.trim()).length;
+  $('rsv-send').textContent = n > 1 ? n + '作品を予約する' : '予約する';
+}
+async function rsvSend() {
+  const err = $('rsv-err');
+  const say = t => { err.textContent = t; err.classList.toggle('on', !!t); };
+  const rows = [...$('rsv-rows').children].filter(r => r.querySelector('.rsv-input').value.trim());
+  if (!rows.length) { say('作品名を入れてください'); return; }
+  const items = rows.map(r => ({ title: r.querySelector('.rsv-input').value.trim(), vol: rsvRowVol(r) }));
+  if (items.some(x => !x.vol)) { say('送る巻を選んでください'); return; }
+  say('');
+  const btn = $('rsv-send');
+  btn.disabled = true; btn.textContent = '予約しています…';
+  try {
+    const r = await rsvPost({ type: 'reserve', token: rsvToken, items, hp: $('rsv-hp').value });
+    if (!r.ok) throw new Error(r.error);
+    rsvToken = r.token; rsvStore.set(r.token);
+    rsvItems = r.items;
+    $('rsv-rows').innerHTML = '';
+    rsvAddRow('');
+    draft.del('rsv');
+    rsvJustDone = true;
+    rsvRenderBox();
+    rsvSetSend('info');
+    $('g-send').classList.remove('closed');
+    rsvChev();
+    $('p-gift').scrollIntoView({ block: 'start' });
+    window.scrollTo(0, 0);
+  } catch (e) { say(RSV_ERR); }
+  btn.disabled = false;
+  rsvUpdateSend();
+}
+
+// 予約した人にだけ見える予約ボックス
+function rsvRenderBox() {
+  const home = $('rsv-home');
+  home.classList.toggle('rsv-off', !rsvItems.length);
+  home.innerHTML = rsvItems.length ? `${RSV_ICON}<span><b>プレゼント予定を確認</b><small>${rsvItems.length}作品を予約中・あなたにだけ表示</small></span><i>›</i>` : '';
+  const box = $('rsv-box');
+  box.classList.toggle('rsv-off', !rsvItems.length && !rsvUndo);
+  if (!rsvItems.length && !rsvUndo) { box.innerHTML = ''; return; }
+  const undo = rsvUndo ? `<div class="rsv-undone"><span>「${esc(rsvLabel(rsvUndo))}」を取り消しました</span><button type="button" id="rsv-undo">元に戻す</button></div>` : '';
+  box.innerHTML = `<div class="g-top"><i class="gi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/></svg></i><div><b>プレゼント予定の確認</b></div></div><p class="rsv-private">${RSV_LOCK}このページは、あなたにしか見えていません</p>`
+    + (rsvJustDone ? '<p class="rsv-ok">予約しました！</p>' : '')
+    + undo
+    + rsvItems.map(x => `<div class="rsv-item"><div><b>${esc(x.title)}</b><small>${esc(x.vol)}／あと${x.left}日で自動で消えます</small></div><button type="button" data-cancel="${esc(x.id)}">取り消す</button></div>`).join('')
+    + (rsvItems.length ? '<button type="button" class="rsv-add" id="rsv-more">＋ 作品を追加</button><div class="rsv-linknote"><b>別のアプリから開くと、この予定は出ないことがあります</b><ul><li>予約はそのまま残ります。ほかのお嬢には「準備中」と出ます</li><li>取り消さなくても、30日たつと自動で消えます</li></ul></div><button type="button" class="rsv-link" id="rsv-link">別のアプリでも見られるリンクをコピー</button>' : '');
+}
+function rsvChev() {
+  document.querySelectorAll('.g-cards .card > .g-top[data-open]').forEach(t => { t.querySelector('.chev').textContent = t.parentElement.classList.contains('closed') ? '›' : '⌄'; });
+}
+// 本や物のカードの中身：form＝予約の記入欄／info＝送り先
+function rsvSetSend(mode) {
+  const form = mode === 'form';
+  $('rsv-form').classList.toggle('rsv-off', !form);
+  $('rsv-skip').classList.toggle('rsv-off', !form);
+  $('g-send-info').classList.toggle('rsv-off', form);
+  rsvSkipLabel();
+}
+// 記入欄はそのまま残して、送り先だけを開け閉めする（打っていた作品名を消さない）
+function rsvSkipLabel() {
+  const open = !$('g-send-info').classList.contains('rsv-off');
+  $('rsv-skip').innerHTML = open ? '<b>送り先を閉じる</b>' : '<b>送り先を見る ›</b><small>本以外を送るとき・予約しないとき</small>';
+}
+async function rsvRefresh() {
+  if (!rsvToken) return;
+  try {
+    const r = await rsvGet({ action: 'mine', token: rsvToken });
+    if (!r.ok) return;
+    const had = rsvItems.length;
+    rsvItems = r.items;
+    rsvRenderBox();
+    if (rsvItems.length && !had && !rsvPrefillOpen) rsvSetSend('info');
+  } catch (e) {}
+}
+let rsvPrefillOpen = false;
+// 記入中の作品を残す
+function rsvSaveDraft() {
+  const list = [...$('rsv-rows').children].map(r => ({
+    title: r.querySelector('.rsv-input').value,
+    vols: [...r.querySelectorAll('.rsv-vols button.on')].map(b => b.dataset.v),
+    other: r.querySelector('.rsv-other').value,
+  })).filter(x => x.title.trim());
+  if (list.length) draft.set('rsv', list); else draft.del('rsv');
+}
+let rsvRestoreDone = false;
+function rsvRestoreDraft() {
+  if (rsvRestoreDone) return false;
+  rsvRestoreDone = true;
+  const list = draft.get('rsv');
+  if (!list || !list.length) return false;
+  $('rsv-rows').innerHTML = '';
+  list.forEach(x => {
+    const row = rsvAddRow(x.title);
+    x.vols.forEach(v => { const b = row.querySelector(`.rsv-vols [data-v="${v}"]`); if (b) b.classList.add('on'); });
+    const other = row.querySelector('.rsv-other');
+    other.value = x.other;
+    other.classList.toggle('on', x.vols.includes('その他'));
+  });
+  return true;
+}
+$('rsv-rows').addEventListener('input', rsvSaveDraft);
+$('rsv-rows').addEventListener('click', () => setTimeout(rsvSaveDraft));
+function rsvOpenGift() {
+  if (!RSV_READY) { rsvSetSend('info'); return; }
+  rsvLoadTitles();
+  const restored = rsvRestoreDraft();
+  rsvUpdateRows();
+  rsvPrefillOpen = !!rsvPrefill || restored;
+  if (rsvPrefill) {
+    const rows = [...$('rsv-rows').children];
+    const has = rows.some(r => norm(r.querySelector('.rsv-input').value) === norm(rsvPrefill));
+    const blank = rows.find(r => !r.querySelector('.rsv-input').value.trim());
+    if (!has) {
+      if (blank) { blank.querySelector('.rsv-input').value = rsvPrefill; rsvCheckRow(blank); rsvUpdateSend(); }
+      else rsvAddRow(rsvPrefill);
+      rsvSaveDraft();
+    }
+    rsvPrefill = '';
+    rsvSetSend('form');
+    $('g-send').classList.remove('closed');
+    rsvChev();
+  } else if (restored) {
+    rsvSetSend('form');
+    $('g-send').classList.remove('closed');
+    rsvChev();
+  } else if (!rsvItems.length) {
+    rsvSetSend('form');
+  } else {
+    rsvSetSend('info');
+  }
+  rsvJustDone = false;
+  rsvUndo = null;
+  rsvRenderBox();
+  rsvRefresh();
+}
+if (RSV_READY && rsvToken) rsvRefresh();
+$('none-gift').addEventListener('click', () => { rsvPrefill = RSV_READY ? $('q').value.trim() : ''; });
+$('rsv-add').addEventListener('click', () => rsvAddRow('').querySelector('.rsv-input').focus());
+$('rsv-send').addEventListener('click', rsvSend);
+$('rsv-skip').addEventListener('click', () => {
+  const info = $('g-send-info');
+  info.classList.toggle('rsv-off');
+  rsvSkipLabel();
+  if (!info.classList.contains('rsv-off')) info.scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+document.querySelector('#p-gift').addEventListener('click', async e => {
+  const top = e.target.closest('.g-top[data-open]');
+  if (top) { top.parentElement.classList.toggle('closed'); rsvChev(); return; }
+  if (e.target.id === 'rsv-more') {
+    rsvSetSend('form');
+    $('g-send').classList.remove('closed');
+    rsvChev();
+    $('g-send').scrollIntoView({ block: 'center' });
+    return;
+  }
+  if (e.target.id === 'rsv-link') {
+    const url = location.origin + location.pathname + '?box=' + rsvToken + '#gift';
+    try { await navigator.clipboard.writeText(url); } catch (err) {
+      const ta = document.createElement('textarea'); ta.value = url; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); } catch (err2) {}
+      ta.remove();
+    }
+    const t0 = e.target.textContent; e.target.textContent = 'コピーしました。人には渡さないでください';
+    setTimeout(() => { e.target.textContent = t0; }, 2200);
+    return;
+  }
+  const c = e.target.closest('[data-cancel]');
+  if (c) { rsvAskCancel(rsvItems.find(x => x.id === c.dataset.cancel)); return; }
+  if (e.target.id === 'rsv-undo') rsvUndoCancel(e.target);
+});
+
+// 取り消しの確認カード
+function rsvCloseAsk() {
+  const m = $('rsv-modal');
+  if (m) m.remove();
+  document.removeEventListener('keydown', rsvAskKey);
+}
+function rsvAskKey(e) { if (e.key === 'Escape') rsvCloseAsk(); }
+function rsvAskCancel(item) {
+  if (!item) return;
+  rsvCloseAsk();
+  const m = document.createElement('div');
+  m.id = 'rsv-modal';
+  m.className = 'rsv-modal';
+  m.innerHTML = `<div class="rsv-modal-card" role="dialog" aria-modal="true" aria-labelledby="rsv-modal-title"><h3 id="rsv-modal-title" class="round">この予約を取り消しますか？</h3><p class="rsv-modal-work">${esc(rsvLabel(item))}</p><p class="rsv-modal-note">ほかのお嬢に出ている「準備中」も消えます。</p><p class="rsv-err" id="rsv-modal-err"></p><button type="button" class="rsv-modal-yes" id="rsv-modal-yes">予約を取り消す</button><button type="button" class="rsv-modal-no" id="rsv-modal-no">やめる</button></div>`;
+  document.body.appendChild(m);
+  m.addEventListener('click', e => { if (e.target === m) rsvCloseAsk(); });
+  document.addEventListener('keydown', rsvAskKey);
+  $('rsv-modal-no').addEventListener('click', rsvCloseAsk);
+  $('rsv-modal-yes').addEventListener('click', async e => {
+    const btn = e.currentTarget;
+    btn.disabled = true; btn.textContent = '取り消しています…';
+    try {
+      const r = await rsvPost({ type: 'cancel', token: rsvToken, id: item.id });
+      if (!r.ok) throw new Error(r.error);
+      rsvItems = r.items; rsvJustDone = false; rsvUndo = item;
+      rsvRenderBox();
+      if (!rsvItems.length) rsvSetSend('form');
+      rsvCloseAsk();
+    } catch (err) {
+      btn.disabled = false; btn.textContent = '予約を取り消す';
+      const msg = $('rsv-modal-err'); msg.textContent = RSV_ERR; msg.classList.add('on');
+    }
+  });
+  $('rsv-modal-no').focus();
+}
+// 取り消した直後なら元に戻せる（予約し直すので、期限はまた30日になる）
+let rsvUndo = null;
+async function rsvUndoCancel(btn) {
+  if (!rsvUndo) return;
+  btn.disabled = true; btn.textContent = '戻しています…';
+  try {
+    const r = await rsvPost({ type: 'reserve', token: rsvToken, items: [{ title: rsvUndo.title, vol: rsvUndo.vol }], hp: '' });
+    if (!r.ok) throw new Error(r.error);
+    rsvItems = r.items; rsvUndo = null;
+    rsvRenderBox();
+    if (!$('rsv-rows').querySelector('.rsv-input').value.trim() && $('rsv-rows').children.length < 2) rsvSetSend('info');
+  } catch (err) { btn.disabled = false; btn.textContent = '失敗しました。もう一度'; }
+}
+
 /* ── ページ切り替え（URLの#で管理。スマホの戻るにも対応） ── */
 const scrollMemo = {};
 function show(p) {
@@ -826,7 +1378,7 @@ function route(keepScroll) {
     if (current !== b) renderWork(b);
     show('work');
   } else if (p === 'letter') { resetLetter(); show('letter'); }
-  else if (p === 'gift') show('gift');
+  else if (p === 'gift') { rsvOpenGift(); show('gift'); }
   else show('top');
   const key = document.body.dataset.page;
   window.scrollTo(0, keepScroll && scrollMemo[key] != null ? scrollMemo[key] : 0);
@@ -866,6 +1418,8 @@ document.addEventListener('click', e => {
   }
 });
 
+$('q').value = searchMemo.get('q');
+$('lq').value = searchMemo.get('lq');
 route(false);
 loadBooks();
 </script>
