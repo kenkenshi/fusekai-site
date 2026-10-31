@@ -388,6 +388,18 @@ body.typing .lib-dock, body.kb .lib-dock { bottom: var(--kb, 0px); padding-botto
 .rsv-item small { display: block; margin-top: 2px; font-size: 11.5px; color: var(--ink-soft); }
 .rsv-item button { flex: 0 0 auto; padding: 5px 10px; border-radius: 999px; border: 1.5px solid var(--line); background: #fff; font-size: 11.5px; font-weight: 900; color: var(--ink-soft); }
 .rsv-link { display: block; width: 100%; margin-top: 10px; padding: 10px 0; border-radius: 999px; border: 2px solid var(--ink); background: #fff; font-size: 13px; font-weight: 900; box-shadow: 0 2px 0 var(--ink); }
+.rsv-undone { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding: 10px 12px; border-radius: 12px; background: #f3ecfb; font-size: 13.5px; font-weight: 700; line-height: 1.5; }
+.rsv-undone span { flex: 1; min-width: 0; word-break: break-all; }
+.rsv-undone button { flex: 0 0 auto; padding: 8px 14px; border-radius: 999px; border: 2px solid var(--ink); background: #fff; font-size: 13.5px; font-weight: 900; }
+.rsv-modal { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 20px; background: rgba(26,10,48,.45); }
+.rsv-modal-card { width: 100%; max-width: 360px; padding: 22px 18px 18px; border-radius: 20px; background: #fff; border: 2px solid var(--ink); box-shadow: 0 5px 0 var(--ink); text-align: center; }
+.rsv-modal-card h3 { font-size: 19px; font-weight: 900; line-height: 1.4; }
+.rsv-modal-work { margin-top: 12px; padding: 10px 12px; border-radius: 12px; background: #faf6ff; font-size: 15px; font-weight: 900; line-height: 1.5; word-break: break-all; }
+.rsv-modal-note { margin-top: 10px; font-size: 14px; line-height: 1.6; color: var(--ink-soft); }
+.rsv-modal-yes, .rsv-modal-no { display: block; width: 100%; margin-top: 12px; padding: 14px 0; border-radius: 14px; border: 2px solid var(--ink); box-shadow: 0 4px 0 var(--ink); font-size: 15px; font-weight: 900; }
+.rsv-modal-yes { background: var(--ink); color: #fff; }
+.rsv-modal-yes:disabled { opacity: .6; }
+.rsv-modal-no { background: #fff; color: var(--ink); }
 .rsv-hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 </style>
 </head>
@@ -1159,12 +1171,14 @@ function rsvRenderBox() {
   home.classList.toggle('rsv-off', !rsvItems.length);
   home.innerHTML = rsvItems.length ? `${RSV_ICON}<span><b>プレゼント予定を確認</b><small>${rsvItems.length}作品を予約中・あなたにだけ表示</small></span><i>›</i>` : '';
   const box = $('rsv-box');
-  box.classList.toggle('rsv-off', !rsvItems.length);
-  if (!rsvItems.length) { box.innerHTML = ''; return; }
+  box.classList.toggle('rsv-off', !rsvItems.length && !rsvUndo);
+  if (!rsvItems.length && !rsvUndo) { box.innerHTML = ''; return; }
+  const undo = rsvUndo ? `<div class="rsv-undone"><span>「${esc(rsvLabel(rsvUndo))}」を取り消しました</span><button type="button" id="rsv-undo">元に戻す</button></div>` : '';
   box.innerHTML = `<div class="g-top"><i class="gi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/></svg></i><div><b>プレゼント予定の確認</b></div></div><p class="rsv-private">${RSV_LOCK}このページは、あなたにしか見えていません</p>`
     + (rsvJustDone ? '<p class="rsv-ok">予約しました！</p>' : '')
+    + undo
     + rsvItems.map(x => `<div class="rsv-item"><div><b>${esc(x.title)}</b><small>${esc(x.vol)}／あと${x.left}日</small></div><button type="button" data-cancel="${esc(x.id)}">取り消す</button></div>`).join('')
-    + '<button type="button" class="rsv-add" id="rsv-more">＋ 作品を追加</button><button type="button" class="rsv-link" id="rsv-link">別のスマホでも見るリンクをコピー</button>';
+    + (rsvItems.length ? '<button type="button" class="rsv-add" id="rsv-more">＋ 作品を追加</button><button type="button" class="rsv-link" id="rsv-link">別のスマホでも見るリンクをコピー</button>' : '');
 }
 function rsvChev() {
   document.querySelectorAll('.g-cards .card > .g-top[data-open]').forEach(t => { t.querySelector('.chev').textContent = t.parentElement.classList.contains('closed') ? '›' : '⌄'; });
@@ -1250,6 +1264,7 @@ function rsvOpenGift() {
     rsvSetSend('info');
   }
   rsvJustDone = false;
+  rsvUndo = null;
   rsvRenderBox();
   rsvRefresh();
 }
@@ -1285,17 +1300,58 @@ document.querySelector('#p-gift').addEventListener('click', async e => {
     return;
   }
   const c = e.target.closest('[data-cancel]');
-  if (c) {
-    if (c.dataset.sure !== '1') { c.dataset.sure = '1'; c.textContent = '本当に取り消す'; return; }
-    c.disabled = true;
-    try {
-      const r = await rsvPost({ type: 'cancel', token: rsvToken, id: c.dataset.cancel });
-      if (!r.ok) throw new Error(r.error);
-      rsvItems = r.items; rsvJustDone = false; rsvRenderBox();
-      if (!rsvItems.length) rsvSetSend('form');
-    } catch (err) { c.disabled = false; c.textContent = '失敗しました'; }
-  }
+  if (c) { rsvAskCancel(rsvItems.find(x => x.id === c.dataset.cancel)); return; }
+  if (e.target.id === 'rsv-undo') rsvUndoCancel(e.target);
 });
+
+// 取り消しの確認カード
+function rsvCloseAsk() {
+  const m = $('rsv-modal');
+  if (m) m.remove();
+  document.removeEventListener('keydown', rsvAskKey);
+}
+function rsvAskKey(e) { if (e.key === 'Escape') rsvCloseAsk(); }
+function rsvAskCancel(item) {
+  if (!item) return;
+  rsvCloseAsk();
+  const m = document.createElement('div');
+  m.id = 'rsv-modal';
+  m.className = 'rsv-modal';
+  m.innerHTML = `<div class="rsv-modal-card" role="dialog" aria-modal="true" aria-labelledby="rsv-modal-title"><h3 id="rsv-modal-title" class="round">この予約を取り消しますか？</h3><p class="rsv-modal-work">${esc(rsvLabel(item))}</p><p class="rsv-modal-note">ほかのお嬢に出ている「準備中」も消えます。</p><p class="rsv-err" id="rsv-modal-err"></p><button type="button" class="rsv-modal-yes" id="rsv-modal-yes">予約を取り消す</button><button type="button" class="rsv-modal-no" id="rsv-modal-no">やめる</button></div>`;
+  document.body.appendChild(m);
+  m.addEventListener('click', e => { if (e.target === m) rsvCloseAsk(); });
+  document.addEventListener('keydown', rsvAskKey);
+  $('rsv-modal-no').addEventListener('click', rsvCloseAsk);
+  $('rsv-modal-yes').addEventListener('click', async e => {
+    const btn = e.currentTarget;
+    btn.disabled = true; btn.textContent = '取り消しています…';
+    try {
+      const r = await rsvPost({ type: 'cancel', token: rsvToken, id: item.id });
+      if (!r.ok) throw new Error(r.error);
+      rsvItems = r.items; rsvJustDone = false; rsvUndo = item;
+      rsvRenderBox();
+      if (!rsvItems.length) rsvSetSend('form');
+      rsvCloseAsk();
+    } catch (err) {
+      btn.disabled = false; btn.textContent = '予約を取り消す';
+      const msg = $('rsv-modal-err'); msg.textContent = RSV_ERR; msg.classList.add('on');
+    }
+  });
+  $('rsv-modal-no').focus();
+}
+// 取り消した直後なら元に戻せる（予約し直すので、期限はまた30日になる）
+let rsvUndo = null;
+async function rsvUndoCancel(btn) {
+  if (!rsvUndo) return;
+  btn.disabled = true; btn.textContent = '戻しています…';
+  try {
+    const r = await rsvPost({ type: 'reserve', token: rsvToken, items: [{ title: rsvUndo.title, vol: rsvUndo.vol }], hp: '' });
+    if (!r.ok) throw new Error(r.error);
+    rsvItems = r.items; rsvUndo = null;
+    rsvRenderBox();
+    if (!$('rsv-rows').querySelector('.rsv-input').value.trim() && $('rsv-rows').children.length < 2) rsvSetSend('info');
+  } catch (err) { btn.disabled = false; btn.textContent = '失敗しました。もう一度'; }
+}
 
 /* ── ページ切り替え（URLの#で管理。スマホの戻るにも対応） ── */
 const scrollMemo = {};
