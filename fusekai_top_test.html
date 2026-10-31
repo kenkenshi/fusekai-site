@@ -1037,7 +1037,7 @@ async function rsvCheckRow(row) {
   const n = norm(v);
   if (!n) { say(''); return; }
   const onShelf = books.find(b => b.vol && norm(b.title) === n);
-  if (onShelf) { say('もう本棚にあります（' + onShelf.vol + '）。別の巻なら大丈夫です'); return; }
+  if (onShelf) { const v = volText(onShelf); say('もう本棚にあります' + (v ? '（' + v + '）' : '')); return; }
   say('');
   try {
     const r = await rsvGet({ action: 'check', q: v });
