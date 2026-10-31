@@ -387,7 +387,9 @@ body.typing .lib-dock, body.kb .lib-dock { bottom: var(--kb, 0px); padding-botto
 .rsv-item b { display: block; font-size: 14px; font-weight: 900; line-height: 1.4; word-break: break-all; }
 .rsv-item small { display: block; margin-top: 2px; font-size: 11.5px; color: var(--ink-soft); }
 .rsv-item button { flex: 0 0 auto; padding: 5px 10px; border-radius: 999px; border: 1.5px solid var(--line); background: #fff; font-size: 11.5px; font-weight: 900; color: var(--ink-soft); }
-.rsv-linknote { margin-top: 12px; font-size: 13px; font-weight: 700; line-height: 1.6; color: var(--ink); opacity: .75; }
+.rsv-linknote { margin-top: 12px; padding: 10px 12px; border-radius: 10px; background: #f7f4fb; font-size: 13px; font-weight: 700; line-height: 1.6; color: var(--ink); }
+.rsv-linknote b { display: block; font-weight: 900; }
+.rsv-linknote ul { margin: 4px 0 0; padding-left: 1.2em; }
 .rsv-link { display: block; width: 100%; margin-top: 4px; padding: 8px 0; border: 0; background: none; font-size: 13px; font-weight: 700; color: var(--ink); text-decoration: underline; }
 .rsv-undone { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding: 10px 12px; border-radius: 12px; background: #f3ecfb; font-size: 13.5px; font-weight: 700; line-height: 1.5; }
 .rsv-undone span { flex: 1; min-width: 0; word-break: break-all; }
@@ -1178,8 +1180,8 @@ function rsvRenderBox() {
   box.innerHTML = `<div class="g-top"><i class="gi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/></svg></i><div><b>プレゼント予定の確認</b></div></div><p class="rsv-private">${RSV_LOCK}このページは、あなたにしか見えていません</p>`
     + (rsvJustDone ? '<p class="rsv-ok">予約しました！</p>' : '')
     + undo
-    + rsvItems.map(x => `<div class="rsv-item"><div><b>${esc(x.title)}</b><small>${esc(x.vol)}／あと${x.left}日</small></div><button type="button" data-cancel="${esc(x.id)}">取り消す</button></div>`).join('')
-    + (rsvItems.length ? '<button type="button" class="rsv-add" id="rsv-more">＋ 作品を追加</button><p class="rsv-linknote">別のアプリから開くと、この予定が出ないことがあります。予約は30日で自動で消えるので、そのままで大丈夫です。</p><button type="button" class="rsv-link" id="rsv-link">あとで見るためのリンクをコピー</button>' : '');
+    + rsvItems.map(x => `<div class="rsv-item"><div><b>${esc(x.title)}</b><small>${esc(x.vol)}／あと${x.left}日で自動で消えます</small></div><button type="button" data-cancel="${esc(x.id)}">取り消す</button></div>`).join('')
+    + (rsvItems.length ? '<button type="button" class="rsv-add" id="rsv-more">＋ 作品を追加</button><div class="rsv-linknote"><b>別のアプリから開くと、この予定は出ないことがあります</b><ul><li>予約はそのまま残ります。ほかのお嬢には「準備中」と出ます</li><li>取り消さなくても、30日たつと自動で消えます</li></ul></div><button type="button" class="rsv-link" id="rsv-link">別のアプリでも見られるリンクをコピー</button>' : '');
 }
 function rsvChev() {
   document.querySelectorAll('.g-cards .card > .g-top[data-open]').forEach(t => { t.querySelector('.chev').textContent = t.parentElement.classList.contains('closed') ? '›' : '⌄'; });
