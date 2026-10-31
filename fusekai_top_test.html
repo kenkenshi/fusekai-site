@@ -963,7 +963,7 @@ const RSV_URL = 'https://script.google.com/macros/s/AKfycbwEOjupYBaRIrU9FGF_wFTS
 const RSV_READY = !!(RSV_URL || window.__rsvStub);
 const RSV_ICON = '<svg class="rsv-icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 10C14 5.5 8.5 2.5 6.5 5.8 4.8 8.6 9.5 10 16 10zM16 10c2-4.500 7.500-7.500 9.500-4.200C27.200 8.600 22.500 10 16 10z" fill="#b03ad8" stroke="#1a0a30" stroke-width="2" stroke-linejoin="round"/><rect x="5" y="15" width="22" height="14" rx="3" fill="#ff4f9e" stroke="#1a0a30" stroke-width="2.200"/><rect x="3" y="10" width="26" height="6" rx="2" fill="#ffc4de" stroke="#1a0a30" stroke-width="2.200"/><rect x="13.500" y="11.100" width="5" height="16.800" fill="#b03ad8"/></svg>';
 const RSV_LOCK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.400" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
-const RSV_VOLS = ['全巻', '1巻', '2巻', '3巻', 'その他'];
+const RSV_VOLS = ['全巻', '上巻', '下巻', '1巻', '2巻', '3巻', 'その他'];
 const RSV_ERR = 'うまく送れませんでした。時間をおいてもう一度お試しください';
 const rsvStore = {
   get() { try { return localStorage.getItem('rsv_token') || ''; } catch (e) { return ''; } },
@@ -1093,7 +1093,7 @@ function rsvShowCands(row) {
 function rsvSequelHint(row) {
   const hint = row.querySelector('.rsv-hint');
   const n = norm(row.querySelector('.rsv-input').value);
-  const later = [...row.querySelectorAll('.rsv-vols button.on')].some(b => !['全巻', '1巻'].includes(b.dataset.v));
+  const later = [...row.querySelectorAll('.rsv-vols button.on')].some(b => !['全巻', '上巻', '1巻'].includes(b.dataset.v));
   const self = later && n.length >= 2 && (rsvTitles || []).find(t => t.nt === n);
   const list = self ? rsvTitles.filter(t => t.author === self.author && t.nt !== n && t.nt.startsWith(n)).slice(0, 3) : [];
   hint.innerHTML = list.length ? '<p>別の作品として出ている続編があります。こちらですか？</p>' + list.map(t => `<button type="button" data-title="${esc(t.title)}">${esc(t.title)}</button>`).join('') : '';
