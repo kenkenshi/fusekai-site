@@ -1118,6 +1118,12 @@ function rsvSetSend(mode) {
   $('rsv-form').classList.toggle('rsv-off', !form);
   $('rsv-skip').classList.toggle('rsv-off', !form);
   $('g-send-info').classList.toggle('rsv-off', form);
+  rsvSkipLabel();
+}
+// 記入欄はそのまま残して、送り先だけを開け閉めする（打っていた作品名を消さない）
+function rsvSkipLabel() {
+  const open = !$('g-send-info').classList.contains('rsv-off');
+  $('rsv-skip').innerHTML = open ? '<b>送り先を閉じる</b>' : '<b>送り先を見る ›</b><small>本以外を送るとき・予約しないとき</small>';
 }
 async function rsvRefresh() {
   if (!rsvToken) return;
@@ -1157,7 +1163,12 @@ if (RSV_READY && rsvToken) rsvRefresh();
 $('none-gift').addEventListener('click', () => { rsvPrefill = RSV_READY ? $('q').value.trim() : ''; });
 $('rsv-add').addEventListener('click', () => rsvAddRow('').querySelector('.rsv-input').focus());
 $('rsv-send').addEventListener('click', rsvSend);
-$('rsv-skip').addEventListener('click', () => rsvSetSend('info'));
+$('rsv-skip').addEventListener('click', () => {
+  const info = $('g-send-info');
+  info.classList.toggle('rsv-off');
+  rsvSkipLabel();
+  if (!info.classList.contains('rsv-off')) info.scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
 document.querySelector('#p-gift').addEventListener('click', async e => {
   const top = e.target.closest('.g-top[data-open]');
   if (top) { top.parentElement.classList.toggle('closed'); rsvChev(); return; }
