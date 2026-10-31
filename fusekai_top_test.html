@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta name="robots" content="noindex">
+<link rel="icon" href="./favicon.ico?v=20261006" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png?v=20261006">
+<link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png?v=20261006">
+<link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png?v=20261006">
+<!-- スマホのホーム画面に追加したとき用 -->
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="腐世界">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f6efff">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>けんしの腐世界生活</title>
+<meta name="description" content="腐女子・腐男子さんの恋愛事情・仕事・日常の失敗談と、けんしが読んだBL漫画をショーケース。お便り・おすすめ作品も受付中。">
+<meta property="og:title" content="けんしの腐世界生活">
+<meta property="og:description" content="腐女子・腐男子さんの恋愛事情・仕事・日常の失敗談と、けんしが読んだBL漫画をショーケース。お便り・おすすめ作品も受付中。">
+<meta property="og:image" content="https://kenkenshi.github.io/fusekai-site/logo.png">
+<meta property="og:url" content="https://kenkenshi.github.io/fusekai-site/fusekai_top.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="けんしの腐世界生活">
+<meta name="twitter:description" content="腐女子・腐男子さんの恋愛事情・仕事・日常の失敗談と、けんしが読んだBL漫画をショーケース。お便り・おすすめ作品も受付中。">
+<meta name="twitter:image" content="https://kenkenshi.github.io/fusekai-site/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a0a30;
+  --ink-soft: #5a4a78;
+  --bg: #f6efff;
+  --purple: #b03ad8;
+  --pink: #ff4f9e;
+  --cyan: #19bde0;
+  --orange: #ff8a3d;
+  --line: #e6d8f5;
+  --radius: 18px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+/* 縦にスクロールしているときに画面が左右に動かないようにする／いちばん上・下での引っぱり（ゴムのような戻り）を止める */
+html, body { overflow-x: hidden; overflow-x: clip; overscroll-behavior: none; }
+html { background: var(--bg); }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  color: var(--ink);
+  min-height: 100vh;
+  min-height: 100svh;
+  padding-bottom: calc(70px + env(safe-area-inset-bottom));
+}
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(25,189,224,.16) 0%, transparent 45%),
+    radial-gradient(ellipse at 100% 0%, rgba(255,79,158,.16) 0%, transparent 45%);
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+.round { font-family: 'Zen Maru Gothic', 'Noto Sans JP', sans-serif; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+.page { display: none; }
+.page.on { display: block; }
+
+/* ===== 上の帯 ===== */
+.bar {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(255,250,255,.86);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.bar .home-link img { height: 34px; display: block; }
+body[data-page="top"] .bar .home-link { visibility: hidden; }
+.bar nav { display: none; gap: 4px; }
+.bar nav button { padding: 8px 14px; border-radius: 999px; font-weight: 700; font-size: 14px; color: var(--ink-soft); }
+.bar nav button.on { background: var(--ink); color: #fff; }
+.bar .count { font-size: 12px; font-weight: 700; color: var(--ink-soft); padding: 6px 10px 6px 12px; border-radius: 999px; background: #fff; border: 1.5px solid var(--line); }
+.bar .count b { color: var(--pink); font-size: 15px; }
+.bar .count i { font-style: normal; font-weight: 900; margin-left: 2px; }
+
+/* ===== トップ ===== */
+.home { min-height: calc(100vh - 56px - 70px); min-height: calc(100svh - 56px - 70px); display: flex; flex-direction: column; }
+.finder { flex: 1; width: 100%; max-width: 560px; margin: 0 auto; padding: 48px 0 24px; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+.hero-logo { display: block; width: 72%; max-width: 320px; margin: 0 auto; }
+.lead { margin-top: 10px; font-size: 16px; font-weight: 900; line-height: 1.6; }
+.lead em { font-style: normal; color: var(--pink); }
+.lead small { display: block; font-size: 12px; font-weight: 500; color: var(--ink-soft); }
+.search-box { margin-top: 20px; text-align: left; }
+.search {
+  display: flex; align-items: center; gap: 8px;
+  background: #fff; border: 2px solid var(--ink); border-radius: 999px;
+  padding: 14px 14px 14px 18px; box-shadow: 0 4px 0 var(--ink);
+}
+.search input { border: none; outline: none; font: inherit; font-size: 16px; flex: 1; min-width: 0; background: none; color: var(--ink); }
+input[type=search]::-webkit-search-cancel-button { -webkit-appearance: none; display: none; }
+.sicon { width: 20px; height: 20px; flex: 0 0 auto; color: var(--ink-soft); }
+.search .clear { width: 28px; height: 28px; border-radius: 50%; background: #efe6f8; font-weight: 900; color: var(--ink-soft); display: none; }
+.search.has .clear { display: block; }
+.sugg, .none { display: none; margin-top: 10px; background: #fff; border: 2px solid var(--ink); border-radius: 16px; box-shadow: 0 4px 0 var(--ink); }
+.sugg { overflow: hidden; }
+.sugg.on, .none.on { display: block; }
+.sugg .head { padding: 8px 14px; font-size: 11px; font-weight: 900; color: var(--purple); background: #faf3ff; }
+.hit { display: grid; grid-template-columns: 42px 1fr auto; gap: 12px; align-items: center; width: 100%; padding: 9px 14px; text-align: left; }
+.hit + .hit { border-top: 1px solid var(--line); }
+.hit img, .hit .ph { width: 42px; height: 58px; object-fit: cover; border-radius: 5px; background: #efe1fb; display: block; }
+.hit b { display: block; font-size: 14px; line-height: 1.4; }
+.hit small { display: block; font-size: 11.5px; color: var(--ink-soft); margin-top: 2px; }
+.pill { padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 900; color: #fff; background: var(--cyan); white-space: nowrap; }
+.pill.later { background: var(--orange); }
+.none { padding: 18px; text-align: center; }
+.none > p { font-weight: 900; line-height: 1.6; }
+.none > p em { font-style: normal; color: var(--pink); word-break: break-all; }
+.none > small { display: block; margin-top: 6px; font-size: 12.5px; color: var(--ink-soft); }
+.none .talk { text-align: left; }
+.menu { margin-top: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; text-align: left; }
+.menu .m { position: relative; display: block; text-align: left; padding: 14px 14px 13px; background: #fff; border-radius: 16px; border: 2px solid var(--ink); box-shadow: 0 4px 0 var(--ink); transition: transform .08s, box-shadow .08s; }
+.menu .m:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--ink); }
+.menu .m::after { content: ''; position: absolute; right: 14px; top: 22px; width: 8px; height: 8px; border-top: 2.5px solid var(--ink); border-right: 2.5px solid var(--ink); transform: rotate(45deg); }
+.menu .m i { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 11px; color: #fff; }
+.menu .m i svg { width: 22px; height: 22px; }
+.menu .read i { background: var(--cyan); }
+.menu .later i { background: var(--orange); }
+.menu .letter i { background: var(--pink); }
+.menu .gift i { background: var(--purple); }
+.menu .m b { display: block; margin-top: 10px; font-size: 15.5px; font-weight: 900; }
+.menu .m span { display: block; margin-top: 2px; font-size: 12px; font-weight: 700; color: var(--ink-soft); }
+.menu .m span em { font-style: normal; font-size: 15px; font-weight: 900; color: var(--ink); margin-right: 1px; }
+.foot { padding: 22px 0 10px; border-top: 1px dashed var(--line); text-align: center; }
+.foot .sns { display: flex; justify-content: center; gap: 10px; }
+.foot .sns a { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: #fff; border: 1.5px solid var(--ink); }
+.foot .sns svg { width: 18px; height: 18px; }
+.foot p { margin-top: 12px; font-size: 11px; color: var(--ink-soft); }
+
+/* ===== 本の表紙 ===== */
+.book { display: block; width: 100%; text-align: left; }
+.cover {
+  position: relative; width: 100%; aspect-ratio: 3/4.2; border-radius: 8px; overflow: hidden;
+  background: linear-gradient(160deg, #efe1fb, #fde6f2);
+  box-shadow: 0 2px 0 rgba(26,10,48,.08), 0 8px 18px rgba(80,30,130,.16);
+}
+.cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cover .noimg { position: absolute; inset: 0; display: grid; place-items: center; padding: 10px; text-align: center; font-size: 12px; font-weight: 900; color: var(--ink-soft); }
+.badge { position: absolute; left: 6px; top: 6px; width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; background: var(--pink); color: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.2); }
+.badge svg { width: 14px; height: 14px; }
+.ltag { position: absolute; left: 0; right: 0; top: 0; padding: 3px 0; text-align: center; font-size: 10px; font-weight: 900; color: #fff; background: rgba(240,122,28,.92); }
+.ltag ~ .badge { top: 24px; }
+.vol { position: absolute; right: 6px; bottom: 6px; padding: 2px 7px; border-radius: 6px; font-size: 10.5px; font-weight: 700; color: #fff; background: rgba(26,10,48,.72); }
+.book .t { margin-top: 7px; font-size: 12.5px; font-weight: 700; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.book .a { margin-top: 2px; font-size: 11px; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ===== 本棚 ===== */
+.lib-head { padding: 18px 0 0; }
+.seg { display: inline-flex; padding: 4px; border-radius: 999px; background: #fff; border: 1.5px solid var(--ink); max-width: 100%; }
+.seg button { padding: 8px 14px; border-radius: 999px; font-weight: 900; font-size: 14px; white-space: nowrap; }
+.seg button small { font-size: 11px; font-weight: 700; opacity: .7; }
+.seg button.on { background: var(--ink); color: #fff; }
+.lib-sticky {
+  position: sticky; top: 55px; z-index: 10;
+  margin: 12px -16px 0; padding: 10px 12px;
+  background: rgba(246,239,255,.92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.lib-search { padding: 7px 10px 7px 14px; box-shadow: 0 3px 0 var(--ink); }
+.lib-search input { font-size: 16px; }
+.lib-search .clear { width: 24px; height: 24px; }
+.kana { display: flex; gap: 4px; }
+.searching .kana, .searching .lib-sticky { display: none; }
+.lib-none { padding: 30px 0; text-align: center; font-size: 14px; line-height: 1.8; color: var(--ink-soft); }
+.lib-none b { color: var(--ink); }
+.lib-none button { margin-top: 12px; padding: 11px 20px; border-radius: 999px; border: 2px solid var(--ink); background: #fff; font-weight: 900; box-shadow: 0 3px 0 var(--ink); }
+/* あかさたなは横に動かさず、画面の幅に全部おさめる */
+.kana button { flex: 1 1 0; min-width: 0; max-width: 48px; height: 36px; padding: 0; border-radius: 999px; background: #fff; border: 1px solid var(--line); font-weight: 900; font-size: 14px; }
+.kana button.on { background: var(--pink); border-color: var(--pink); color: #fff; }
+.group { scroll-margin-top: 170px; }
+.group h3 { margin: 20px 0 10px; font-size: 15px; font-weight: 900; display: flex; align-items: center; gap: 8px; }
+.group h3 small { color: var(--ink-soft); font-weight: 700; }
+.group h3::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 10px; padding-bottom: 8px; }
+.loading { padding: 40px 0; text-align: center; color: var(--ink-soft); font-size: 13px; }
+
+/* ===== 作品 ===== */
+.work { padding-top: 18px; padding-bottom: 24px; }
+.back { font-size: 13px; font-weight: 700; color: var(--purple); }
+.work-main { margin-top: 12px; }
+.work-cover { width: 62%; max-width: 260px; margin: 0 auto; }
+.work-info { margin-top: 18px; }
+.label { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 900; color: #fff; background: var(--cyan); }
+.label.later { background: var(--orange); }
+.work-info h1 { margin-top: 8px; font-size: 23px; font-weight: 900; line-height: 1.4; }
+.work-info .au { margin-top: 4px; color: var(--ink-soft); font-size: 14px; }
+.memo { margin-top: 16px; background: #fff; border-radius: var(--radius); border: 2px solid var(--ink); padding: 14px 16px; font-size: 15px; line-height: 1.8; white-space: pre-wrap; }
+.memo::before { content: 'けんしのひとこと'; display: block; font-size: 11px; font-weight: 900; color: var(--pink); margin-bottom: 4px; white-space: normal; }
+.acts { margin-top: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.acts button { padding: 14px 0; border-radius: 14px; font-weight: 900; border: 2px solid var(--ink); box-shadow: 0 4px 0 var(--ink); background: #fff; }
+.acts button.main { background: var(--ink); color: #fff; }
+.acts.one { grid-template-columns: 1fr; }
+.radio-note { margin-top: 10px; text-align: center; font-size: 12.5px; font-weight: 700; color: var(--ink-soft); }
+.radio-note em { font-style: normal; color: var(--pink); }
+.same { margin-top: 26px; }
+.same h2 { font-size: 16px; font-weight: 900; margin-bottom: 10px; }
+.row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 10px; padding: 4px 0 16px; }
+.same .only { font-size: 13px; color: var(--ink-soft); }
+
+/* ===== 語りたいフォーム・お便り ===== */
+.talk { display: none; margin-top: 14px; background: #fff; border: 2px solid var(--ink); border-radius: 16px; box-shadow: 0 4px 0 var(--ink); padding: 16px; }
+.talk.on { display: block; }
+.talk h3 { font-size: 15px; font-weight: 900; margin-bottom: 12px; }
+.f + .f { margin-top: 16px; }
+.f > label { display: block; font-size: 14px; font-weight: 900; margin-bottom: 8px; }
+.f > label small { margin-left: 6px; font-size: 11px; font-weight: 700; color: var(--ink-soft); }
+.f input, .f textarea { width: 100%; font: inherit; font-size: 16px; padding: 12px 14px; border-radius: 12px; border: 1.5px solid var(--line); background: #faf6ff; outline: none; resize: vertical; color: var(--ink); }
+.f input:focus, .f textarea:focus { border-color: var(--purple); background: #fff; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { padding: 8px 12px; border-radius: 999px; border: 1.5px solid var(--line); background: #faf6ff; font-size: 13px; font-weight: 700; }
+.chip.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+.tg { display: flex; align-items: center; gap: 10px; margin-top: 16px; font-size: 14px; font-weight: 700; cursor: pointer; }
+.tg input { position: absolute; opacity: 0; pointer-events: none; }
+.tg span { flex: 0 0 auto; width: 22px; height: 22px; border-radius: 7px; border: 2px solid var(--ink); background: #fff; display: grid; place-items: center; }
+.tg input:checked + span { background: var(--pink); border-color: var(--pink); }
+.tg input:checked + span::after { content: ''; width: 9px; height: 5px; border-left: 2.5px solid #fff; border-bottom: 2.5px solid #fff; transform: translateY(-1px) rotate(-45deg); }
+.note { margin-top: 16px; padding: 14px; border-radius: 14px; background: #faf3ff; border: 1.5px dashed #d9c3ef; text-align: left; }
+.note b { font-size: 13px; }
+.note ul { margin: 6px 0 0 18px; font-size: 12.5px; line-height: 1.75; color: var(--ink-soft); }
+.note .tg { margin-top: 12px; }
+.send { margin-top: 18px; width: 100%; padding: 16px 0; border-radius: 16px; font-size: 16px; font-weight: 900; color: #fff; background: linear-gradient(135deg, #ff6fb0, #c64be6); border: 2px solid var(--ink); box-shadow: 0 4px 0 var(--ink); }
+.send:disabled { background: #d8cfe3; cursor: not-allowed; }
+.err { display: none; margin-top: 10px; font-size: 13px; font-weight: 700; color: #e03b6f; text-align: center; }
+.err.on { display: block; }
+.thanks { display: none; margin-top: 14px; text-align: center; background: #fff; border: 2px solid var(--ink); border-radius: 16px; box-shadow: 0 4px 0 var(--ink); padding: 22px 16px; }
+.thanks.on { display: block; }
+.thanks .ring { width: 56px; height: 56px; margin: 0 auto; border-radius: 50%; background: var(--pink); color: #fff; display: grid; place-items: center; }
+.thanks .ring svg { width: 30px; height: 30px; }
+.thanks h3 { margin-top: 12px; font-size: 19px; font-weight: 900; }
+.thanks p { margin-top: 6px; font-size: 13.5px; line-height: 1.8; color: var(--ink-soft); }
+.thanks button { margin-top: 14px; padding: 11px 22px; border-radius: 999px; border: 2px solid var(--ink); font-weight: 900; }
+
+.sheet { max-width: 640px; padding-top: 20px; padding-bottom: 24px; }
+.s-head { text-align: center; }
+.s-head h1 { font-size: 26px; font-weight: 900; }
+.s-head p { margin-top: 8px; font-size: 13.5px; line-height: 1.8; color: var(--ink-soft); }
+.s-head p em { font-style: normal; font-weight: 900; color: var(--pink); }
+.card { margin-top: 20px; background: #fff; border: 2px solid var(--ink); border-radius: 20px; box-shadow: 0 5px 0 var(--ink); padding: 18px 16px; }
+.l-done.thanks { margin-top: 20px; padding: 32px 18px; border-radius: 20px; }
+
+/* ===== プレゼント ===== */
+.g-cards { margin-top: 20px; display: grid; gap: 16px; }
+.g-cards .card { margin-top: 0; padding: 16px; }
+.g-top { display: flex; align-items: center; gap: 12px; }
+.g-top b { display: block; font-size: 16px; font-weight: 900; line-height: 1.4; }
+.g-top small { display: block; font-size: 12px; font-weight: 700; color: var(--ink-soft); }
+.gi { flex: 0 0 auto; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; color: #fff; }
+.gi svg { width: 22px; height: 22px; }
+.gi.pink { background: var(--pink); }
+.gi.purple { background: var(--purple); }
+.g-box { margin-top: 14px; padding: 14px; border-radius: 14px; background: #faf6ff; border: 1.5px solid var(--line); }
+.g-box.row2 { display: flex; align-items: center; gap: 10px; }
+.g-box.row2 > div { flex: 1; min-width: 0; }
+.g-label { display: block; font-size: 11px; font-weight: 900; color: var(--purple); }
+.g-label + p { margin-top: 2px; }
+.g-addr { font-size: 15px; font-weight: 900; line-height: 1.7; margin-bottom: 10px; }
+.g-name { font-size: 14px; font-weight: 700; }
+.g-mail { font-size: 15px; font-weight: 900; word-break: break-all; }
+.g-copy { flex: 0 0 auto; padding: 8px 14px; border-radius: 999px; border: 2px solid var(--ink); background: #fff; font-size: 13px; font-weight: 900; box-shadow: 0 2px 0 var(--ink); }
+.g-box:not(.row2) .g-copy { margin-top: 12px; }
+.g-copy.done { background: var(--ink); color: #fff; }
+.g-ng { margin-top: 12px; font-size: 13px; color: var(--ink-soft); }
+.g-ng b { display: inline-block; margin-right: 8px; padding: 2px 8px; border-radius: 6px; font-size: 11px; color: #fff; background: #e03b6f; }
+.g-text { margin-top: 12px; font-size: 13.5px; line-height: 1.8; }
+.g-text em { font-style: normal; font-weight: 900; color: var(--pink); }
+.g-hint { margin-top: 8px; font-size: 11.5px; line-height: 1.7; color: var(--ink-soft); }
+.g-foot { margin-top: 18px; text-align: center; font-size: 12.5px; color: var(--ink-soft); }
+
+/* ===== スマホの下のタブ ===== */
+body.typing .tabbar, body.kb .tabbar { display: none; }
+/* 本棚の検索欄は、チャットの入力欄のように画面の下（下のタブの上）に置く */
+.lib-dock {
+  display: none; position: fixed; left: 0; right: 0; bottom: calc(62px + env(safe-area-inset-bottom)); z-index: 29;
+  padding: 8px 12px; pointer-events: none;
+}
+.lib-dock .search { pointer-events: auto; }
+body[data-page="lib"] .lib-dock { display: block; }
+body[data-page="lib"] { padding-bottom: calc(130px + env(safe-area-inset-bottom)); }
+body.typing .lib-dock, body.kb .lib-dock { bottom: var(--kb, 0px); padding-bottom: 8px; }
+.chips.use .chip { flex: 1 1 0; text-align: center; }
+.talk { scroll-margin-top: 70px; }
+.tabbar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  background: rgba(255,250,255,.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid var(--line); padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+}
+.tabbar button { display: grid; justify-items: center; gap: 2px; padding: 4px 0; font-size: 10.5px; font-weight: 700; color: var(--ink-soft); }
+.tabbar button svg { width: 24px; height: 24px; }
+.tabbar button.on { color: var(--pink); }
+
+/* ===== PC（960px以上） ===== */
+@media (min-width: 960px) {
+  body { padding-bottom: 0; }
+  .tabbar { display: none; }
+  .bar { padding: 12px 32px; }
+  .bar .home-link img { height: 40px; }
+  .bar nav { display: flex; }
+  .wrap { padding: 0 32px; }
+  .home { min-height: calc(100vh - 65px); min-height: calc(100svh - 65px); }
+  .finder { padding-top: 64px; }
+  .lib-sticky { top: 65px; margin: 14px 0 0; padding: 10px 0; }
+  body[data-page="lib"] .lib-dock { bottom: 20px; left: 50%; right: auto; width: 480px; transform: translateX(-50%); padding: 0; background: none; border: 0; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  body[data-page="lib"] { padding-bottom: 90px; }
+  .grid { grid-template-columns: repeat(6, 1fr); gap: 22px 18px; }
+  .work-main { display: grid; grid-template-columns: 320px 1fr; gap: 40px; align-items: start; }
+  .work-cover { width: 100%; max-width: none; margin: 0; position: sticky; top: 90px; }
+  .work-info { margin-top: 0; }
+  .work-info h1 { font-size: 32px; }
+  .acts, .work-info .talk, .work-info .thanks { max-width: 520px; }
+  .row { grid-template-columns: repeat(5, 1fr); gap: 18px 14px; }
+  #p-gift .sheet { max-width: 900px; }
+  .g-cards { grid-template-columns: 1fr 1fr; align-items: start; }
+}
+
+/* ===== プレゼント予約 ===== */
+.none .acts { grid-template-columns: 1fr; }
+.none .acts button { background: #fff; color: var(--ink); }
+.none .acts button.pri { background: var(--pink); color: #fff; }
+.none.has-st > p { display: none; }
+.none.has-st .acts button.pri { background: #fff; color: var(--ink); }
+.rsv-st { display: none; padding: 14px; border-radius: 12px; background: #fff5fa; border: 1.5px solid #ffc4de; text-align: center; font-size: 12.5px; line-height: 1.7; color: var(--ink-soft); }
+.rsv-st.on { display: block; }
+.rsv-st b { display: block; margin-top: 4px; font-size: 16px; font-weight: 900; line-height: 1.5; color: #d9347f; }
+.rsv-icon { display: block; margin: 0 auto; width: 56px; height: 56px; }
+.rsv-st strong { display: block; margin: 4px 0 2px; font-size: 14.5px; font-weight: 900; color: var(--ink); word-break: break-all; }
+.rsv-st.near { background: #faf3ff; border-color: #e3c7f2; }
+.rsv-st.near b { color: var(--purple); }
+.rsv-off { display: none !important; }
+.rsv-home { display: flex; align-items: center; gap: 10px; width: 100%; margin-top: 16px; padding: 10px 14px; border-radius: 16px; border: 2px solid var(--pink); background: #fff; box-shadow: 0 4px 0 var(--pink); text-align: left; }
+.rsv-home .rsv-icon { margin: 0; width: 36px; height: 36px; flex: 0 0 auto; }
+.rsv-home span { flex: 1; min-width: 0; }
+.rsv-home b { display: block; font-size: 15px; font-weight: 900; }
+.rsv-home small { display: block; font-size: 11.5px; font-weight: 700; color: var(--ink-soft); }
+.rsv-home i { font-style: normal; font-size: 20px; font-weight: 900; color: var(--pink); }
+.rsv-private { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 10px; padding: 7px 10px; border-radius: 10px; background: #f3ecfb; font-size: 12.5px; font-weight: 900; color: var(--purple); }
+.rsv-private svg { flex: 0 0 auto; width: 15px; height: 15px; }
+.g-cards .card.closed > *:not(.g-top) { display: none; }
+.g-top { width: 100%; text-align: left; }
+.g-top > div { flex: 1; min-width: 0; }
+.g-top .chev { font-style: normal; font-size: 20px; font-weight: 900; color: var(--pink); }
+#rsv-box { border-color: var(--pink); grid-column: 1 / -1; }
+#rsv-box .gi { background: var(--pink); }
+.rsv-ask { margin-top: 14px; padding: 13px; border-radius: 14px; background: #fff0f7; border: 2px solid var(--pink); }
+.rsv-ask > b { display: block; font-size: 15px; font-weight: 900; color: var(--pink); }
+.rsv-ask > p { margin-top: 3px; font-size: 12.5px; line-height: 1.6; }
+.rsv-row { position: relative; margin-top: 10px; padding: 11px; border-radius: 12px; background: #fff; border: 1.5px solid var(--line); }
+.rsv-input { width: 100%; padding: 9px 11px; border: 1.5px solid var(--ink); border-radius: 10px; background: #fff; font-size: 16px; font-weight: 700; }
+.rsv-row.multi .rsv-input { width: calc(100% - 34px); }
+.rsv-del { position: absolute; right: 10px; top: 16px; width: 26px; height: 26px; border-radius: 50%; background: #efe6f8; font-weight: 900; color: var(--ink-soft); }
+.rsv-cands { display: none; margin-top: 6px; border: 1.5px solid var(--line); border-radius: 10px; background: #fff; overflow: hidden; }
+.rsv-cands.on { display: block; }
+.rsv-cands button { display: block; width: 100%; padding: 9px 11px; text-align: left; border-top: 1px solid var(--line); font-size: 13.5px; font-weight: 900; line-height: 1.35; }
+.rsv-cands button:first-child { border-top: 0; }
+.rsv-cands small { display: block; font-size: 11px; font-weight: 600; color: var(--ink-soft); }
+.rsv-cands .free { color: var(--pink); font-size: 12.5px; }
+.rsv-status { display: none; margin-top: 6px; font-size: 12px; line-height: 1.6; font-weight: 700; color: #d9347f; }
+.rsv-status.on { display: block; }
+.rsv-status.near { color: var(--purple); }
+.rsv-hint p { margin-top: 8px; font-size: 12px; font-weight: 700; line-height: 1.6; color: var(--purple); }
+.rsv-hint button { display: block; width: 100%; margin-top: 5px; padding: 8px 10px; border-radius: 8px; border: 1.5px solid #e3c7f2; background: #faf3ff; text-align: left; font-size: 13px; font-weight: 900; line-height: 1.4; }
+.rsv-vols { margin-top: 8px; display: flex; gap: 5px; flex-wrap: wrap; }
+.rsv-vols button { padding: 5px 11px; border-radius: 999px; border: 1.5px solid var(--line); background: #fff; font-size: 12px; font-weight: 900; }
+.rsv-vols button.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+.rsv-other { display: none; width: 100%; margin-top: 6px; padding: 7px 10px; border: 1.5px solid var(--line); border-radius: 8px; background: #fff; font-size: 16px; }
+.rsv-other.on { display: block; }
+.rsv-add { display: block; width: 100%; margin-top: 10px; padding: 10px 0; border-radius: 12px; border: 2px dashed var(--pink); background: #fff; color: var(--pink); font-size: 13.5px; font-weight: 900; }
+.rsv-send { display: block; width: 100%; margin-top: 12px; padding: 13px 0; border-radius: 14px; font-weight: 900; font-size: 15px; color: #fff; background: var(--pink); border: 2px solid var(--ink); box-shadow: 0 4px 0 var(--ink); }
+.rsv-send:disabled { opacity: .6; }
+.rsv-err { display: none; margin-top: 8px; font-size: 12.5px; font-weight: 700; color: #e03b6f; }
+.rsv-err.on { display: block; }
+.rsv-note { margin-top: 10px; font-size: 11.5px; line-height: 1.7; color: var(--ink-soft); }
+.rsv-skip { display: block; width: 100%; margin-top: 14px; padding: 12px 0; border-radius: 14px; border: 2px solid var(--ink); background: #fff; box-shadow: 0 4px 0 var(--ink); }
+.rsv-skip b { display: block; font-size: 15px; font-weight: 900; }
+.rsv-skip small { display: block; margin-top: 2px; font-size: 12px; font-weight: 700; color: var(--ink-soft); }
+.rsv-ok { margin-top: 10px; padding: 8px 12px; border-radius: 10px; background: #fff0f7; text-align: center; font-size: 13px; font-weight: 900; color: var(--pink); }
+.rsv-item { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding: 11px 12px; border-radius: 12px; background: #faf6ff; border: 1.5px solid var(--line); }
+.rsv-item > div { flex: 1; min-width: 0; }
+.rsv-item b { display: block; font-size: 14px; font-weight: 900; line-height: 1.4; word-break: break-all; }
+.rsv-item small { display: block; margin-top: 2px; font-size: 11.5px; color: var(--ink-soft); }
+.rsv-item button { flex: 0 0 auto; padding: 5px 10px; border-radius: 999px; border: 1.5px solid var(--line); background: #fff; font-size: 11.5px; font-weight: 900; color: var(--ink-soft); }
+.rsv-link { display: block; width: 100%; margin-top: 10px; padding: 10px 0; border-radius: 999px; border: 2px solid var(--ink); background: #fff; font-size: 13px; font-weight: 900; box-shadow: 0 2px 0 var(--ink); }
+.rsv-hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+</style>
+</head>
+<body data-page="top">
+
+<header class="bar">
+  <a class="home-link" href="#" data-go="top"><img src="logo.png" alt="けんしの腐世界生活"></a>
+  <nav>
+    <button data-go="top">トップ</button>
+    <button data-go="lib" data-cat="all">本棚</button>
+    <button data-go="letter">お便り</button>
+    <button data-go="gift">プレゼント</button>
+  </nav>
+  <button class="count" data-go="lib" data-cat="all">漫画 <b id="total">-</b> 作品 <i>›</i></button>
+</header>
+
+<!-- トップ -->
+<main class="page on" id="p-top">
+  <div class="wrap home">
+    <section class="finder">
+      <img class="hero-logo" src="logo.png" alt="けんしの腐世界生活">
+      <p class="lead">布教の前に、<em>けんしの本棚をチェック！</em><small>作品名・作者名で <span id="n-all">-</span> 作品から探せます</small></p>
+      <div class="search-box">
+        <label class="search"><svg class="sicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/></svg><input id="q" type="search" enterkeyhint="search" placeholder="作品名・作者名を入れてみて" autocomplete="off" autocorrect="off" autocapitalize="off"><button type="button" class="clear" id="q-clear" aria-label="消す">×</button></label>
+        <div class="sugg" id="sugg"></div>
+        <div class="none" id="none">
+          <p>けんしはまだ<br><em id="none-q"></em>を知らないかも！</p>
+          <div class="rsv-st" id="rsv-st"></div>
+          <div class="acts"><button type="button" class="pri" id="none-gift" data-go="gift">プレゼントを予約する</button><button type="button" id="none-talk">布教したい</button></div>
+          <div class="talk" data-target="未読作品"></div>
+          <div class="thanks"></div>
+        </div>
+      </div>
+      <button type="button" class="rsv-home rsv-off" id="rsv-home" data-go="gift"></button>
+      <div class="menu">
+        <button class="m read" data-go="lib" data-cat="read"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5C4.5 4 7.5 4 12 6c4.5-2 7.5-2 10-.5V19c-2.5-1.5-5.5-1.5-10 .5-4.5-2-7.5-2-10-.5z"/><path d="M12 6v13.5"/></svg></i><b>既読</b><span><em id="n-read">-</em>作品</span></button>
+        <button class="m later" data-go="lib" data-cat="later"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg></i><b>これから読む</b><span><em id="n-later">-</em>作品</span></button>
+        <button class="m letter" data-go="letter"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg></i><b>お便りを書く</b><span>ラジオで読むかも</span></button>
+        <button class="m gift" data-go="gift"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v8h14v-8M12 8v12"/><path d="M12 8C10 4 6.5 4.5 7.5 7.5 8 8 12 8 12 8zM12 8c2-4 5.5-3.5 4.5-.5C16 8 12 8 12 8z"/></svg></i><b>プレゼント</b><span>本やギフト券を送る</span></button>
+      </div>
+    </section>
+    <footer class="foot">
+      <div class="sns">
+        <a href="https://x.com/secret_kenshi" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24" fill="#1a0a30"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L2.19 2.25h6.945l4.265 5.638L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="https://youtube.com/@kenshi-blbook" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="#c00"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+        <a href="https://www.tiktok.com/@kenshi_bl" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="#1a0a30"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg></a>
+        <a href="https://www.instagram.com/kenshi.bl/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="#1a0a30"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
+      </div>
+      <p>けんしの腐世界生活</p>
+    </footer>
+  </div>
+</main>
+
+<!-- 本棚 -->
+<main class="page" id="p-lib">
+  <div class="wrap">
+    <div class="lib-head">
+      <div class="seg">
+        <button data-cat="all">すべて <small id="s-all"></small></button>
+        <button data-cat="read">既読 <small id="s-read"></small></button>
+        <button data-cat="later">これから読む <small id="s-later"></small></button>
+      </div>
+    </div>
+    <div class="lib-sticky">
+      <div class="kana" id="kana"></div>
+    </div>
+    <div id="groups"><p class="loading">本棚を読み込み中…</p></div>
+  </div>
+</main>
+
+<!-- 作品 -->
+<main class="page" id="p-work">
+  <div class="wrap work">
+    <button class="back" data-back>← もどる</button>
+    <div class="work-main">
+      <div class="work-cover" id="w-cover"></div>
+      <div class="work-info">
+        <span class="label" id="w-label"></span>
+        <h1 id="w-title"></h1>
+        <div class="au" id="w-author"></div>
+        <div class="memo" id="w-memo"></div>
+        <div class="acts one"><button type="button" class="main" data-talk="語る" id="w-talk">この作品について語る</button></div>
+        <p class="radio-note">届いた声は、<em>YouTubeの実写ラジオ</em>で読むかも！</p>
+        <div class="talk" data-target="この作品"></div>
+        <div class="thanks"></div>
+        <section class="same">
+          <h2 class="round">同じ作者の本</h2>
+          <div class="row" id="w-same"></div>
+        </section>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- お便り -->
+<main class="page" id="p-letter">
+  <div class="wrap sheet">
+    <section class="s-head">
+      <h1 class="round">お便りを書く</h1>
+      <p>届いたお便りは、<em>YouTubeの実写ラジオ</em>で読むかも！</p>
+    </section>
+    <form class="card" id="l-form" onsubmit="return false">
+      <div class="f">
+        <label>カテゴリ<small>いくつでも</small></label>
+        <div class="chips" id="l-cats">
+          <button type="button" class="chip">けんしにメッセージ（質問など）</button>
+          <button type="button" class="chip">腐女子あるある・告白</button>
+          <button type="button" class="chip">恋愛・仕事のお悩み</button>
+          <button type="button" class="chip">聞いて欲しいこと</button>
+          <button type="button" class="chip">オススメ漫画・布教</button>
+        </div>
+      </div>
+      <div class="f">
+        <label for="l-name">ラジオネーム<small>なくてもOK</small></label>
+        <input id="l-name" maxlength="50" placeholder="腐女子Aさん、匿名希望 など">
+      </div>
+      <div class="f">
+        <label for="l-body">お便りの内容</label>
+        <textarea id="l-body" rows="6" maxlength="5000" placeholder="けんしへのメッセージ、おすすめ作品、感想など自由に書いてください"></textarea>
+      </div>
+      <div class="f use-q"><label>ラジオ・動画で使っていい？</label><div class="chips use l-use"><button type="button" class="chip on" data-use="yes">使ってOK</button><button type="button" class="chip" data-use="no">使わないでほしい</button></div></div>
+      <div class="note">
+        <b>送る前に確認してね</b>
+        <ul>
+          <li>ラジオ・動画で紹介させてもらうことがあります</li>
+          <li>名前や住所など、個人が分かることは書かないでください</li>
+          <li>直接的すぎる性表現は採用できないことがあります（けんしは笑いながら読みますが…）</li>
+        </ul>
+        <label class="tg"><input type="checkbox" id="l-ok"><span></span>確認しました</label>
+      </div>
+      <button type="button" class="send" id="l-send" disabled>お便りを送る</button>
+      <p class="err" id="l-err"></p>
+    </form>
+    <section class="thanks l-done" id="l-done">
+      <div class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <h3 class="round">お便りありがとう！</h3>
+      <p>ちゃんと届きました。<br>ラジオで読まれるかも、お楽しみに。</p>
+      <button type="button" data-go="top">トップにもどる</button>
+    </section>
+  </div>
+</main>
+
+<!-- プレゼント -->
+<main class="page" id="p-gift">
+  <div class="wrap sheet">
+    <section class="s-head">
+      <h1 class="round">プレゼントを送る</h1>
+      <p>いただいた本は、<em>本棚の「これから読む」</em>に並びます。<br>ひとつひとつ大切に受け取ります。</p>
+    </section>
+    <div class="g-cards">
+      <section class="card rsv-off" id="rsv-box"></section>
+      <section class="card closed" id="g-send">
+        <button type="button" class="g-top" data-open><i class="gi pink"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5L12 3l9 4.5v9L12 21l-9-4.5z"/><path d="M3 7.5l9 4.5 9-4.5M12 12v9M7.5 5.2l9 4.6"/></svg></i><div><b>本や物を送る</b><small>郵送・宅配</small></div><i class="chev">›</i></button>
+        <div class="rsv-ask" id="rsv-form">
+          <b>本を送るなら、先に予約！</b>
+          <p>ほかのお嬢と被らないように。途中まで打てば候補が出ます。</p>
+          <div id="rsv-rows"></div>
+          <input class="rsv-hp" id="rsv-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <button type="button" class="rsv-add" id="rsv-add">＋ 作品を追加</button>
+          <button type="button" class="rsv-send" id="rsv-send">予約する</button>
+          <p class="rsv-err" id="rsv-err"></p>
+          <p class="rsv-note">予約は30日で自動的に消えます。作品は一覧には載らず、同じ作品を探した人にだけ「準備中」と出ます。候補は国立国会図書館書誌データをもとに作成しています。</p>
+        </div>
+        <button type="button" class="rsv-skip" id="rsv-skip"><b>送り先を見る ›</b><small>本以外を送るとき・予約しないとき</small></button>
+        <div id="g-send-info" class="rsv-off">
+        <div class="g-box">
+          <span class="g-label">送り先</span>
+          <p class="g-addr">〒152-0035<br>東京都目黒区自由が丘2-16-12 RJ3</p>
+          <span class="g-label">宛名</span>
+          <p class="g-name">けんし　または　山田けんし</p>
+          <button type="button" class="g-copy" data-copy="〒152-0035 東京都目黒区自由が丘2-16-12 RJ3 けんし">住所をコピー</button>
+        </div>
+        <p class="g-ng"><b>受け取れないもの</b>食べ物・飲み物・生き物</p>
+        </div>
+      </section>
+      <section class="card closed">
+        <button type="button" class="g-top" data-open><i class="gi purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg></i><div><b>Amazonギフトカードで布教する</b><small>Eメールタイプ</small></div><i class="chev">›</i></button>
+        <p class="g-text">「〇〇買ってくれ」「〇〇作品代」など、<em>読んでほしい作品をメッセージに添えて</em>送ってください。けんしが買って読みます（動画にするかも）。</p>
+        <div class="g-box row2">
+          <div><span class="g-label">受取人のメールアドレス</span><p class="g-mail">fusekai.gift@gmail.com</p></div>
+          <button type="button" class="g-copy" data-copy="fusekai.gift@gmail.com">コピー</button>
+        </div>
+        <p class="g-hint">Amazonでギフトカードを買うときの「受取人のメールアドレス」に入れてください</p>
+      </section>
+    </div>
+    <p class="g-foot">いただいたプレゼントは、動画やSNSでご報告します</p>
+  </div>
+</main>
+
+<div class="lib-dock" id="lib-dock"><label class="search lib-search"><svg class="sicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/></svg><input id="lq" type="search" enterkeyhint="search" placeholder="本棚の中を探す" autocomplete="off" autocorrect="off" autocapitalize="off"><button type="button" class="clear" id="lq-clear" aria-label="消す">×</button></label></div>
+<nav class="tabbar">
+  <button data-go="top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>トップ</button>
+  <button data-go="lib" data-cat="all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h4v16H4zM10 4h4v16h-4zM16.5 5l3.5 1-3.5 14-3.5-1z"/></svg>本棚</button>
+  <button data-go="letter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18v12H3z"/><path d="M3 6l9 7 9-7"/></svg>お便り</button>
+  <button data-go="gift"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10h16v10H4zM3 7h18v3H3zM12 7v13"/><path d="M12 7c-2-4-6-3-5 0M12 7c2-4 6-3 5 0"/></svg>プレゼント</button>
+</nav>
+
+<template id="talk-tpl">
+  <h3 class="round"></h3>
+  <div class="f"><label>ラジオネーム<small>なくてもOK</small></label><input class="t-name" maxlength="50" placeholder="腐女子Aさん、匿名希望 など"></div>
+  <div class="f"><label>内容</label><textarea class="t-body" rows="5" maxlength="5000" placeholder="どんなところが好き？けんしに布教してみよう"></textarea></div>
+  <div class="f use-q"><label>ラジオ・動画で使っていい？</label><div class="chips use t-use"><button type="button" class="chip on" data-use="yes">使ってOK</button><button type="button" class="chip" data-use="no">使わないでほしい</button></div></div>
+  <div class="note">
+    <b>送る前に確認してね</b>
+    <ul>
+      <li>ラジオ・動画で紹介させてもらうことがあります</li>
+      <li>名前や住所など、個人が分かることは書かないでください</li>
+      <li>直接的すぎる性表現は採用できないことがあります（けんしは笑いながら読みますが…）</li>
+    </ul>
+    <label class="tg"><input type="checkbox" class="t-ok"><span></span>確認しました</label>
+  </div>
+  <button type="button" class="send t-send" disabled>送る</button>
+  <p class="err t-err"></p>
+</template>
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfS8nV_egG3PEdttzKOPq88-yOB6_fbjAounh4hJEVlWpHlMVGkQkaSi59VOkkBo8/exec';
+const CSV_URL    = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQlkVklqYpy0eGF2c8jDc8Dns5jRW7iUHs3QQarG3V6vOlkBESrykKtQK13HtWVwIY14XziYjWr-gBC/pub?output=csv';
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const GIFT_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v8h14v-8M12 8v12"/><path d="M12 8C10 4 6.5 4.5 7.5 7.5 8 8 12 8 12 8zM12 8c2-4 5.5-3.5 4.5-.5C16 8 12 8 12 8z"/></svg>';
+const CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
+/* ── 既読リストの読み込み ── */
+let books = [], read = [], later = [];
+
+function parseCSV(text) {
+  const rows = [];
+  let row = [], cur = '', inQ = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (inQ) {
+      if (ch === '"') { if (text[i + 1] === '"') { cur += '"'; i++; } else inQ = false; }
+      else cur += ch;
+    } else if (ch === '"') inQ = true;
+    else if (ch === ',') { row.push(cur); cur = ''; }
+    else if (ch === '\n') { row.push(cur); rows.push(row); row = []; cur = ''; }
+    else if (ch !== '\r') cur += ch;
+  }
+  if (cur || row.length) { row.push(cur); rows.push(row); }
+  return rows.slice(1);
+}
+
+async function loadBooks() {
+  try {
+    const res = await fetch(CSV_URL + '&t=' + Date.now());
+    const rows = parseCSV(await res.text());
+    books = rows.map(r => ({
+      title:  (r[0] || '').trim(),
+      author: (r[1] || '').trim(),
+      vol:    (r[2] || '').trim(),
+      memo:   (r[3] || '').trim(),
+      img:    (r[5] || '').trim(),
+      gift:   !!(r[6] || '').trim(),
+      yomi:   (r[7] || '').trim(),
+    })).filter(b => b.title);
+    books.forEach(b => { b.later = b.vol.startsWith('積読'); });
+    const shelved = books.filter(b => b.vol);
+    read = shelved.filter(b => !b.later);
+    later = shelved.filter(b => b.later);
+    $('total').textContent = $('n-all').textContent = $('s-all').textContent = shelved.length;
+    $('n-read').textContent = $('s-read').textContent = read.length;
+    $('n-later').textContent = $('s-later').textContent = later.length;
+    if ($('q').value) search($('q').value);
+    renderLib();
+    route(true);
+  } catch (e) {
+    $('groups').innerHTML = '<p class="loading">読み込みに失敗しました。時間をおいて開き直してください</p>';
+  }
+}
+
+/* ── 表紙 ── */
+const imgAt = (url, w) => {
+  const m = url.match(/[?&]id=([^&]+)/);
+  return m ? 'https://lh3.googleusercontent.com/d/' + m[1] + '=w' + w : url.replace(/sz=w\d+/, 'sz=w' + w);
+};
+const imgBackup = (url, w) => url.replace(/sz=w\d+/, 'sz=w' + w);
+
+// 表紙は画面に近づいたものから読み込む（ブラウザ任せの遅延読み込みは、iPhoneで読み込まれないことがあるため自前で行う）
+const lazyIO = 'IntersectionObserver' in window
+  ? new IntersectionObserver(entries => entries.forEach(e => {
+      if (e.isIntersecting) { loadImg(e.target); lazyIO.unobserve(e.target); }
+    }), { rootMargin: '600px 0px' })
+  : null;
+function loadImg(img) {
+  if (img.src) return;
+  img.addEventListener('error', () => {
+    if (img.dataset.backup && img.src !== img.dataset.backup) img.src = img.dataset.backup;
+  });
+  img.src = img.dataset.src;
+}
+function watchImgs(root) {
+  root.querySelectorAll('img[data-src]').forEach(img => lazyIO ? lazyIO.observe(img) : loadImg(img));
+}
+const volText = b => b.vol.replace(/^積読[\s　:：・,，]*/, '').replace(/〜/g, '-');
+function coverHTML(b, w, showLater) {
+  const img = b.img ? `<img data-src="${esc(imgAt(b.img, w))}" data-backup="${esc(imgBackup(b.img, w))}" alt="">` : `<div class="noimg">${esc(b.title)}</div>`;
+  return `<div class="cover">${img}${showLater && b.later ? '<span class="ltag">これから読む</span>' : ''}${b.gift ? `<span class="badge" title="お嬢からのプレゼント">${GIFT_SVG}</span>` : ''}${volText(b) ? `<span class="vol">${esc(volText(b))}</span>` : ''}</div>`;
+}
+function bookHTML(b, showLater) {
+  return `<button class="book" data-i="${books.indexOf(b)}">${coverHTML(b, 400, showLater)}<div class="t">${esc(b.title)}</div><div class="a">${esc(b.author)}</div></button>`;
+}
+
+/* ── 検索 ── */
+const norm = s => (s || '').normalize('NFKC').toLowerCase()
+  .replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60))
+  .replace(/[\s・、。,.!?！？「」『』()（）〜~\-ー:：♡☆★]/g, '');
+const hitHTML = b => `<button class="hit" data-i="${books.indexOf(b)}">${b.img ? `<img src="${esc(imgAt(b.img, 120))}" alt="">` : '<span class="ph"></span>'}<span><b>${esc(b.title)}</b><small>${esc(b.author)}</small></span><span class="pill${b.later ? ' later' : ''}">${b.later ? 'これから読む' : '既読'}</span></button>`;
+function search(q) {
+  $('q').closest('.search').classList.toggle('has', !!q);
+  const n = norm(q);
+  rsvShowStatus(null);
+  if (!n || !books.length) { $('sugg').classList.remove('on'); $('none').classList.remove('on'); return; }
+  const byTitle = books.filter(b => norm(b.title).includes(n) || norm(b.yomi).includes(n));
+  const byAuthor = books.filter(b => !byTitle.includes(b) && norm(b.author).includes(n));
+  if (byTitle.length + byAuthor.length) {
+    $('sugg').innerHTML =
+      (byTitle.length ? '<div class="head">作品名</div>' + byTitle.slice(0, 8).map(hitHTML).join('') : '') +
+      (byAuthor.length ? '<div class="head">作者名</div>' + byAuthor.slice(0, 8).map(hitHTML).join('') : '');
+    $('sugg').classList.add('on'); $('none').classList.remove('on');
+  } else {
+    if ($('none-q').textContent !== '「' + q + '」') resetTalk($('none'));
+    $('none-q').textContent = '「' + q + '」';
+    $('none').classList.add('on'); $('sugg').classList.remove('on');
+    rsvSearch(q);
+  }
+}
+$('q').addEventListener('input', e => search(e.target.value));
+$('q').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing && e.keyCode !== 229) e.target.blur(); });
+$('q-clear').addEventListener('click', e => { e.preventDefault(); $('q').value = ''; search(''); $('q').focus(); });
+
+/* ── 本棚 ── */
+const ROWS = [['あ','あいうえおぁぃぅぇぉゔ'],['か','かきくけこがぎぐげご'],['さ','さしすせそざじずぜぞ'],['た','たちつてとだぢづでどっ'],['な','なにぬねの'],['は','はひふへほばびぶべぼぱぴぷぺぽ'],['ま','まみむめも'],['や','やゆよゃゅょ'],['ら','らりるれろ'],['わ','わをん']];
+const rowOf = b => { const c = norm(b.yomi || b.title)[0] || ''; const r = ROWS.find(([, s]) => s.includes(c)); return r ? r[0] : '英'; };
+let cat = 'all';
+function renderLib() {
+  if (!books.length) return;
+  const lq = norm($('lq').value);
+  $('lq').closest('.search').classList.toggle('has', !!$('lq').value);
+  $('p-lib').classList.toggle('searching', !!lq);
+  const list = (cat === 'all' ? read.concat(later) : cat === 'read' ? read : later)
+    .filter(b => !lq || norm(b.title).includes(lq) || norm(b.yomi).includes(lq) || norm(b.author).includes(lq))
+    .sort((a, b) => norm(a.yomi || a.title).localeCompare(norm(b.yomi || b.title), 'ja'));
+  if (lq) {
+    $('groups').innerHTML = list.length
+      ? `<section class="group"><h3>見つかった作品 <small>${list.length}作品</small></h3><div class="grid">${list.map(b => bookHTML(b, cat === 'all')).join('')}</div></section>`
+      : `<div class="lib-none"><b>「${esc($('lq').value)}」</b>は${cat === 'all' ? '本棚に' : cat === 'read' ? '既読に' : 'これから読むに'}ありませんでした<br>${cat === 'all' ? '' : '<button type="button" data-cat-all>すべての中で探す</button><br>'}<button type="button" data-fukyou>けんしに布教する</button></div>`;
+    watchImgs($('groups'));
+    document.querySelectorAll('.seg button').forEach(b => b.classList.toggle('on', b.dataset.cat === cat));
+    return;
+  }
+  const groups = [...ROWS.map(r => r[0]), '英'].map(k => [k, list.filter(b => rowOf(b) === k)]).filter(([, l]) => l.length);
+  $('kana').innerHTML = groups.map(([k], i) => `<button class="${i ? '' : 'on'}" data-k="${k}">${k}</button>`).join('');
+  $('groups').innerHTML = groups.map(([k, l]) => `<section class="group" id="g-${k}"><h3>${k === '英' ? '英数字' : k + '行'} <small>${l.length}作品</small></h3><div class="grid">${l.map(b => bookHTML(b, cat === 'all')).join('')}</div></section>`).join('');
+  watchImgs($('groups'));
+  document.querySelectorAll('.seg button').forEach(b => b.classList.toggle('on', b.dataset.cat === cat));
+}
+$('lq').addEventListener('input', () => { renderLib(); window.scrollTo(0, 0); });
+$('lq').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing && e.keyCode !== 229) e.target.blur(); });
+$('lq-clear').addEventListener('click', e => { e.preventDefault(); $('lq').value = ''; renderLib(); });
+document.addEventListener('click', e => {
+  if (e.target.closest('[data-cat-all]')) { history.replaceState(null, '', '#lib/all'); cat = 'all'; renderLib(); }
+  if (e.target.closest('[data-fukyou]')) { $('q').value = $('lq').value; go('#'); search($('q').value); }
+});
+let spyLock = 0;
+window.addEventListener('scroll', () => {
+  if (!$('p-lib').classList.contains('on') || Date.now() < spyLock) return;
+  let cur = null;
+  const groupEls = document.querySelectorAll('.group');
+  groupEls.forEach(g => { if (g.getBoundingClientRect().top < 140) cur = g.id.slice(2); });
+  // いちばん下まで来たら、最後の行（わ・英数字など短い行）を選ぶ
+  if (groupEls.length && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) cur = groupEls[groupEls.length - 1].id.slice(2);
+  const btns = document.querySelectorAll('.kana button');
+  btns.forEach((x, i) => x.classList.toggle('on', cur ? x.dataset.k === cur : i === 0));
+}, { passive: true });
+
+/* ── 作品ページ ── */
+let current = null;
+function renderWork(b) {
+  current = b;
+  $('w-cover').innerHTML = coverHTML(b, 600, false);
+  $('w-cover').querySelectorAll('img[data-src]').forEach(loadImg);
+  $('w-label').textContent = b.later ? 'これから読む' : '既読';
+  $('w-label').className = 'label' + (b.later ? ' later' : '');
+  $('w-title').textContent = b.title;
+  $('w-author').textContent = b.author + (volText(b) ? '　' + b.vol.replace(/^積読[\s　:：・,，]*/, '') : '');
+  $('w-memo').textContent = b.memo;
+  $('w-memo').style.display = b.memo ? '' : 'none';
+  const box = document.querySelector('#p-work .work-info');
+  resetTalk(box);
+  const same = b.author ? books.filter(x => x !== b && x.vol && x.author === b.author) : [];
+  $('w-same').innerHTML = same.length ? same.map(x => bookHTML(x, false)).join('') : '<p class="only">本棚にはこの1作品だけ</p>';
+  watchImgs($('w-same'));
+}
+
+/* ── 語りたい・布教したい ── */
+function resetTalk(box) {
+  const t = box.querySelector('.talk'), th = box.querySelector('.thanks');
+  t.classList.remove('on'); t.innerHTML = ''; th.classList.remove('on'); th.innerHTML = '';
+}
+function openTalk(box, kind) {
+  const t = box.querySelector('.talk');
+  box.querySelector('.thanks').classList.remove('on');
+  if (!t.innerHTML) {
+    t.appendChild($('talk-tpl').content.cloneNode(true));
+    t.querySelector('.t-ok').addEventListener('change', e => { t.querySelector('.t-send').disabled = !e.target.checked; });
+    t.querySelector('.t-send').addEventListener('click', () => sendTalk(box));
+  }
+  const later = kind === '語る' && current && current.later;
+  t.querySelector('h3').textContent = kind === '布教したい' ? 'けんしに布教する' : 'この作品について語る';
+  t.querySelector('.t-body').placeholder = kind === '布教したい' ? 'どんなところが好き？けんしに布教してみよう'
+    : later ? 'けんしはまだ読んでいません。どこが好き？読む前に熱を伝えて！' : 'どこが好き？どのシーンが刺さった？';
+  t.classList.add('on');
+}
+function sendTalk(box) {
+  const t = box.querySelector('.talk');
+  const body = t.querySelector('.t-body').value.trim();
+  const err = t.querySelector('.t-err');
+  if (!body) { err.textContent = '内容を書いてください'; err.classList.add('on'); return; }
+  err.classList.remove('on');
+  const target = t.dataset.target;
+  const title = target === 'この作品' ? current.title : $('q').value.trim();
+  const author = target === 'この作品' ? current.author : '';
+  const btn = t.querySelector('.t-send');
+  btn.disabled = true; btn.textContent = '送信中…';
+  postToScript({ type: 'talk', title, author, radioName: t.querySelector('.t-name').value.trim(), body, target, radioOk: t.querySelector('.t-use .chip.on').dataset.use }, () => {
+    t.classList.remove('on'); t.innerHTML = '';
+    const th = box.querySelector('.thanks');
+    th.innerHTML = `<div class="ring">${CHECK_SVG}</div><h3 class="round">ありがとう！</h3><p>ちゃんと届きました。<br>ラジオで読まれるかも、お楽しみに。</p>`;
+    th.classList.add('on');
+  });
+}
+$('none-talk').addEventListener('click', () => openTalk($('none'), '布教したい'));
+document.querySelectorAll('[data-talk]').forEach(b => b.addEventListener('click', () => openTalk(document.querySelector('#p-work .work-info'), b.dataset.talk)));
+
+/* ── お便り ── */
+document.querySelectorAll('#l-cats .chip').forEach(c => c.addEventListener('click', () => c.classList.toggle('on')));
+$('l-ok').addEventListener('change', e => { $('l-send').disabled = !e.target.checked; });
+$('l-send').addEventListener('click', () => {
+  const body = $('l-body').value.trim();
+  if (!body) { $('l-err').textContent = 'お便りの内容を書いてください'; $('l-err').classList.add('on'); return; }
+  $('l-err').classList.remove('on');
+  const categories = [...document.querySelectorAll('#l-cats .chip.on')].map(c => c.textContent).join('・');
+  $('l-send').disabled = true; $('l-send').textContent = '送信中…';
+  postToScript({ type: 'letter', radioName: $('l-name').value.trim(), body, radioOk: document.querySelector('.l-use .chip.on').dataset.use, categories }, () => {
+    $('l-form').style.display = 'none';
+    $('l-done').classList.add('on');
+    window.scrollTo(0, 0);
+  });
+});
+function resetLetter() {
+  if (!$('l-done').classList.contains('on')) return;
+  $('l-form').reset();
+  document.querySelectorAll('#l-cats .chip').forEach(c => c.classList.remove('on'));
+  document.querySelectorAll('.l-use .chip').forEach(c => c.classList.toggle('on', c.dataset.use === 'yes'));
+  $('l-send').disabled = true; $('l-send').textContent = 'お便りを送る';
+  $('l-form').style.display = ''; $('l-done').classList.remove('on');
+}
+
+/* ── ラジオ・動画で使っていい？（どちらか1つを選ぶ） ── */
+document.addEventListener('click', e => {
+  const c = e.target.closest('.use .chip');
+  if (!c) return;
+  c.parentElement.querySelectorAll('.chip').forEach(x => x.classList.toggle('on', x === c));
+});
+
+/* ── 文字を打っている間は下のタブを隠す（iPhoneでキーボードの上に乗って入力欄を隠すため） ── */
+const isField = el => el && (el.tagName === 'TEXTAREA' || (el.tagName === 'INPUT' && el.type !== 'checkbox'));
+document.addEventListener('focusin', e => { if (isField(e.target)) document.body.classList.add('typing'); });
+document.addEventListener('focusout', () => setTimeout(() => { if (!isField(document.activeElement)) document.body.classList.remove('typing'); }, 100));
+if (window.visualViewport) {
+  const kb = () => {
+    const h = window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop;
+    document.body.classList.toggle('kb', h > 120);
+    document.documentElement.style.setProperty('--kb', Math.max(0, h) + 'px');
+  };
+  window.visualViewport.addEventListener('resize', kb);
+  window.visualViewport.addEventListener('scroll', kb);
+}
+
+/* ── 送信（Apps Script） ── */
+function postToScript(data, cb) {
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'payload=' + encodeURIComponent(JSON.stringify(data)),
+  }).then(() => cb && cb()).catch(() => cb && cb());
+}
+
+/* ── プレゼント ── */
+document.querySelectorAll('.g-copy').forEach(b => b.addEventListener('click', async () => {
+  try { await navigator.clipboard.writeText(b.dataset.copy); } catch (e) {
+    const ta = document.createElement('textarea'); ta.value = b.dataset.copy; document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); } catch (e2) {}
+    ta.remove();
+  }
+  const t0 = b.textContent; b.textContent = 'コピーしました'; b.classList.add('done');
+  setTimeout(() => { b.textContent = t0; b.classList.remove('done'); }, 1600);
+}));
+
+/* ── プレゼント予約 ── */
+const RSV_URL = 'https://script.google.com/macros/s/AKfycbwEOjupYBaRIrU9FGF_wFTSF7SwjXgJQxaUAepg1SJnncIzqZK45uKuzvhyspCvpbag/exec';
+const RSV_READY = !!(RSV_URL || window.__rsvStub);
+const RSV_ICON = '<svg class="rsv-icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 10C14 5.5 8.5 2.5 6.5 5.8 4.8 8.6 9.5 10 16 10zM16 10c2-4.500 7.500-7.500 9.500-4.200C27.200 8.600 22.500 10 16 10z" fill="#b03ad8" stroke="#1a0a30" stroke-width="2" stroke-linejoin="round"/><rect x="5" y="15" width="22" height="14" rx="3" fill="#ff4f9e" stroke="#1a0a30" stroke-width="2.200"/><rect x="3" y="10" width="26" height="6" rx="2" fill="#ffc4de" stroke="#1a0a30" stroke-width="2.200"/><rect x="13.500" y="11.100" width="5" height="16.800" fill="#b03ad8"/></svg>';
+const RSV_LOCK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.400" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
+const RSV_VOLS = ['全巻', '1巻', '2巻', '3巻', 'その他'];
+const RSV_ERR = 'うまく送れませんでした。時間をおいてもう一度お試しください';
+const rsvStore = {
+  get() { try { return localStorage.getItem('rsv_token') || ''; } catch (e) { return ''; } },
+  set(v) { try { localStorage.setItem('rsv_token', v); } catch (e) {} },
+};
+let rsvToken = rsvStore.get();
+let rsvItems = [];
+let rsvPrefill = '';
+let rsvJustDone = false;
+const boxParam = new URLSearchParams(location.search).get('box');
+if (boxParam) {
+  rsvToken = boxParam; rsvStore.set(boxParam);
+  history.replaceState(null, '', location.pathname + '#gift');
+}
+async function rsvGet(params) {
+  if (window.__rsvStub) return window.__rsvStub('GET', params);
+  const res = await fetch(RSV_URL + '?' + new URLSearchParams(params));
+  return res.json();
+}
+async function rsvPost(data) {
+  if (window.__rsvStub) return window.__rsvStub('POST', data);
+  const res = await fetch(RSV_URL, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'payload=' + encodeURIComponent(JSON.stringify(data)) });
+  return res.json();
+}
+const rsvLabel = x => x.title + '（' + x.vol + '）';
+
+// 検索で本棚になかった作品が予約済みなら知らせる
+function rsvShowStatus(r) {
+  const st = $('rsv-st');
+  const has = r && (r.same.length || r.near.length);
+  $('none').classList.toggle('has-st', !!has);
+  st.classList.toggle('on', !!has);
+  $('none-gift').textContent = has && r.same.length ? '別の巻を予約する' : 'プレゼントを予約する';
+  if (!has) { st.innerHTML = ''; return; }
+  st.classList.toggle('near', !r.same.length);
+  st.innerHTML = r.same.length
+    ? `${RSV_ICON}<b>お嬢がプレゼント準備中</b><strong>${r.same.map(x => esc(rsvLabel(x))).join('<br>')}</strong>同じ巻だと被ってしまいます。`
+    : `${RSV_ICON}<b>近い名前の作品を、お嬢がプレゼント準備中</b><strong>${r.near.map(x => esc(rsvLabel(x))).join('<br>')}</strong>続編を巻数で書いている場合もあるので、同じ本かもしれません。`;
+}
+let rsvSearchTimer = 0;
+function rsvSearch(q) {
+  if (!RSV_READY) return;
+  clearTimeout(rsvSearchTimer);
+  rsvSearchTimer = setTimeout(async () => {
+    try {
+      const r = await rsvGet({ action: 'check', q });
+      if ($('q').value === q && r.ok) rsvShowStatus(r);
+    } catch (e) {}
+  }, 400);
+}
+
+// 候補（プレゼントページを開いたときに初めて読み込む）
+let rsvTitles = null;
+function rsvLoadTitles() {
+  if (rsvTitles) return;
+  rsvTitles = [];
+  fetch('rsv_titles.json').then(r => r.json()).then(list => {
+    rsvTitles = list.map(([title, author, yomi]) => ({ title, author, nt: norm(title), ny: norm(yomi) }));
+  }).catch(() => { rsvTitles = null; });
+}
+function rsvFindTitles(n) {
+  const hits = [];
+  for (const t of rsvTitles || []) {
+    const head = t.nt.startsWith(n) || t.ny.startsWith(n);
+    if (head || t.nt.includes(n) || t.ny.includes(n)) hits.push({ t, head });
+  }
+  return hits.sort((a, b) => (b.head - a.head) || (a.t.nt.length - b.t.nt.length)).slice(0, 6).map(x => x.t);
+}
+
+// 記入欄
+function rsvAddRow(title) {
+  const row = document.createElement('div');
+  row.className = 'rsv-row';
+  row.innerHTML = `<input class="rsv-input" type="text" enterkeyhint="done" maxlength="100" placeholder="作品名" autocomplete="off" autocorrect="off" autocapitalize="off"><button type="button" class="rsv-del" aria-label="この作品を消す">×</button><div class="rsv-cands"></div><p class="rsv-status"></p><div class="rsv-hint"></div><div class="rsv-vols">${RSV_VOLS.map(v => `<button type="button" data-v="${v}">${v}</button>`).join('')}</div><input class="rsv-other" type="text" maxlength="12" placeholder="例：4〜6">`;
+  const input = row.querySelector('.rsv-input'), cands = row.querySelector('.rsv-cands');
+  let timer = 0;
+  input.addEventListener('input', () => {
+    rsvShowCands(row);
+    clearTimeout(timer);
+    timer = setTimeout(() => rsvCheckRow(row), 500);
+    rsvUpdateSend();
+  });
+  input.addEventListener('blur', () => setTimeout(() => cands.classList.remove('on'), 200));
+  cands.addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    if (b.dataset.title) input.value = b.dataset.title;
+    cands.classList.remove('on');
+    rsvCheckRow(row);
+    rsvSequelHint(row);
+    rsvUpdateSend();
+  });
+  row.querySelector('.rsv-hint').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    input.value = b.dataset.title;
+    row.querySelectorAll('.rsv-vols button.on').forEach(x => x.classList.remove('on'));
+    row.querySelector('.rsv-other').classList.remove('on');
+    rsvCheckRow(row);
+    rsvSequelHint(row);
+  });
+  row.querySelector('.rsv-vols').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    const all = b.dataset.v === '全巻';
+    if (!b.classList.contains('on')) row.querySelectorAll('.rsv-vols button').forEach(x => { if (all || x.dataset.v === '全巻') x.classList.remove('on'); });
+    b.classList.toggle('on');
+    row.querySelector('.rsv-other').classList.toggle('on', !!row.querySelector('.rsv-vols [data-v="その他"].on'));
+    rsvSequelHint(row);
+  });
+  row.querySelector('.rsv-del').addEventListener('click', () => { row.remove(); rsvUpdateRows(); });
+  $('rsv-rows').appendChild(row);
+  if (title) { input.value = title; rsvCheckRow(row); }
+  rsvUpdateRows();
+  return row;
+}
+function rsvShowCands(row) {
+  const input = row.querySelector('.rsv-input'), cands = row.querySelector('.rsv-cands');
+  const n = norm(input.value);
+  if (n.length < 2) { cands.classList.remove('on'); return; }
+  const v = input.value.trim();
+  cands.innerHTML = rsvFindTitles(n).map(t => `<button type="button" data-title="${esc(t.title)}">${esc(t.title)}<small>${esc(t.author)}</small></button>`).join('')
+    + `<button type="button" class="free">候補にない → 「${esc(v)}」のまま予約</button>`;
+  cands.classList.add('on');
+}
+// 2巻以降を選んだとき、同じ作者の続編が別の作品として出ていれば知らせる（続編を巻数で書く間違いを防ぐ）
+function rsvSequelHint(row) {
+  const hint = row.querySelector('.rsv-hint');
+  const n = norm(row.querySelector('.rsv-input').value);
+  const later = [...row.querySelectorAll('.rsv-vols button.on')].some(b => !['全巻', '1巻'].includes(b.dataset.v));
+  const self = later && n.length >= 2 && (rsvTitles || []).find(t => t.nt === n);
+  const list = self ? rsvTitles.filter(t => t.author === self.author && t.nt !== n && t.nt.startsWith(n)).slice(0, 3) : [];
+  hint.innerHTML = list.length ? '<p>別の作品として出ている続編があります。こちらですか？</p>' + list.map(t => `<button type="button" data-title="${esc(t.title)}">${esc(t.title)}</button>`).join('') : '';
+}
+async function rsvCheckRow(row) {
+  const v = row.querySelector('.rsv-input').value.trim();
+  const st = row.querySelector('.rsv-status');
+  const say = (text, near) => { st.textContent = text; st.classList.toggle('on', !!text); st.classList.toggle('near', !!near); };
+  const n = norm(v);
+  if (!n) { say(''); return; }
+  const onShelf = books.find(b => b.vol && norm(b.title) === n);
+  if (onShelf) { say('もう本棚にあります（' + onShelf.vol + '）。別の巻なら大丈夫です'); return; }
+  say('');
+  try {
+    const r = await rsvGet({ action: 'check', q: v });
+    if (row.querySelector('.rsv-input').value.trim() !== v || !r.ok) return;
+    if (r.same.length) say('ほかのお嬢が準備中です：' + r.same.map(rsvLabel).join('／'));
+    else if (r.near.length) say('近い名前の作品が準備中です。同じ作品なら被ります：' + r.near.map(rsvLabel).join('／'), true);
+  } catch (e) {}
+}
+function rsvRowVol(row) {
+  const on = [...row.querySelectorAll('.rsv-vols button.on')].map(b => b.dataset.v);
+  if (!on.length) return '';
+  if (on[0] === '全巻') return '全巻';
+  const parts = on.filter(v => v !== 'その他').map(v => v.replace('巻', ''));
+  const other = row.querySelector('.rsv-other').value.trim().replace(/巻$/, '');
+  if (on.includes('その他')) { if (!other) return ''; parts.push(other); }
+  return parts.join('・') + '巻';
+}
+function rsvUpdateRows() {
+  const rows = [...$('rsv-rows').children];
+  if (!rows.length) { rsvAddRow(''); return; }
+  rows.forEach(r => r.classList.toggle('multi', rows.length > 1));
+  rows.forEach(r => r.querySelector('.rsv-del').classList.toggle('rsv-off', rows.length < 2));
+  $('rsv-add').classList.toggle('rsv-off', rows.length >= 10);
+  rsvUpdateSend();
+}
+function rsvUpdateSend() {
+  const n = [...$('rsv-rows').children].filter(r => r.querySelector('.rsv-input').value.trim()).length;
+  $('rsv-send').textContent = n > 1 ? n + '作品を予約する' : '予約する';
+}
+async function rsvSend() {
+  const err = $('rsv-err');
+  const say = t => { err.textContent = t; err.classList.toggle('on', !!t); };
+  const rows = [...$('rsv-rows').children].filter(r => r.querySelector('.rsv-input').value.trim());
+  if (!rows.length) { say('作品名を入れてください'); return; }
+  const items = rows.map(r => ({ title: r.querySelector('.rsv-input').value.trim(), vol: rsvRowVol(r) }));
+  if (items.some(x => !x.vol)) { say('送る巻を選んでください'); return; }
+  say('');
+  const btn = $('rsv-send');
+  btn.disabled = true; btn.textContent = '予約しています…';
+  try {
+    const r = await rsvPost({ type: 'reserve', token: rsvToken, items, hp: $('rsv-hp').value });
+    if (!r.ok) throw new Error(r.error);
+    rsvToken = r.token; rsvStore.set(r.token);
+    rsvItems = r.items;
+    $('rsv-rows').innerHTML = '';
+    rsvAddRow('');
+    rsvJustDone = true;
+    rsvRenderBox();
+    rsvSetSend('info');
+    $('g-send').classList.remove('closed');
+    rsvChev();
+    $('p-gift').scrollIntoView({ block: 'start' });
+    window.scrollTo(0, 0);
+  } catch (e) { say(RSV_ERR); }
+  btn.disabled = false;
+  rsvUpdateSend();
+}
+
+// 予約した人にだけ見える予約ボックス
+function rsvRenderBox() {
+  const home = $('rsv-home');
+  home.classList.toggle('rsv-off', !rsvItems.length);
+  home.innerHTML = rsvItems.length ? `${RSV_ICON}<span><b>プレゼント予定を確認</b><small>${rsvItems.length}作品を予約中・あなたにだけ表示</small></span><i>›</i>` : '';
+  const box = $('rsv-box');
+  box.classList.toggle('rsv-off', !rsvItems.length);
+  if (!rsvItems.length) { box.innerHTML = ''; return; }
+  box.innerHTML = `<div class="g-top"><i class="gi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/></svg></i><div><b>プレゼント予定の確認</b></div></div><p class="rsv-private">${RSV_LOCK}このページは、あなたにしか見えていません</p>`
+    + (rsvJustDone ? '<p class="rsv-ok">予約しました！</p>' : '')
+    + rsvItems.map(x => `<div class="rsv-item"><div><b>${esc(x.title)}</b><small>${esc(x.vol)}／あと${x.left}日</small></div><button type="button" data-cancel="${esc(x.id)}">取り消す</button></div>`).join('')
+    + '<button type="button" class="rsv-add" id="rsv-more">＋ 作品を追加</button><button type="button" class="rsv-link" id="rsv-link">別のスマホでも見るリンクをコピー</button>';
+}
+function rsvChev() {
+  document.querySelectorAll('.g-cards .card > .g-top[data-open]').forEach(t => { t.querySelector('.chev').textContent = t.parentElement.classList.contains('closed') ? '›' : '⌄'; });
+}
+// 本や物のカードの中身：form＝予約の記入欄／info＝送り先
+function rsvSetSend(mode) {
+  const form = mode === 'form';
+  $('rsv-form').classList.toggle('rsv-off', !form);
+  $('rsv-skip').classList.toggle('rsv-off', !form);
+  $('g-send-info').classList.toggle('rsv-off', form);
+}
+async function rsvRefresh() {
+  if (!rsvToken) return;
+  try {
+    const r = await rsvGet({ action: 'mine', token: rsvToken });
+    if (!r.ok) return;
+    const had = rsvItems.length;
+    rsvItems = r.items;
+    rsvRenderBox();
+    if (rsvItems.length && !had && !rsvPrefillOpen) rsvSetSend('info');
+  } catch (e) {}
+}
+let rsvPrefillOpen = false;
+function rsvOpenGift() {
+  if (!RSV_READY) { rsvSetSend('info'); return; }
+  rsvLoadTitles();
+  rsvUpdateRows();
+  rsvPrefillOpen = !!rsvPrefill;
+  if (rsvPrefill) {
+    const blank = [...$('rsv-rows').children].find(r => !r.querySelector('.rsv-input').value.trim());
+    if (blank) { blank.querySelector('.rsv-input').value = rsvPrefill; rsvCheckRow(blank); rsvUpdateSend(); }
+    else rsvAddRow(rsvPrefill);
+    rsvPrefill = '';
+    rsvSetSend('form');
+    $('g-send').classList.remove('closed');
+    rsvChev();
+  } else if (!rsvItems.length) {
+    rsvSetSend('form');
+  } else {
+    rsvSetSend('info');
+  }
+  rsvJustDone = false;
+  rsvRenderBox();
+  rsvRefresh();
+}
+if (RSV_READY && rsvToken) rsvRefresh();
+$('none-gift').addEventListener('click', () => { rsvPrefill = RSV_READY ? $('q').value.trim() : ''; });
+$('rsv-add').addEventListener('click', () => rsvAddRow('').querySelector('.rsv-input').focus());
+$('rsv-send').addEventListener('click', rsvSend);
+$('rsv-skip').addEventListener('click', () => rsvSetSend('info'));
+document.querySelector('#p-gift').addEventListener('click', async e => {
+  const top = e.target.closest('.g-top[data-open]');
+  if (top) { top.parentElement.classList.toggle('closed'); rsvChev(); return; }
+  if (e.target.id === 'rsv-more') {
+    rsvSetSend('form');
+    $('g-send').classList.remove('closed');
+    rsvChev();
+    $('g-send').scrollIntoView({ block: 'center' });
+    return;
+  }
+  if (e.target.id === 'rsv-link') {
+    const url = location.origin + location.pathname + '?box=' + rsvToken + '#gift';
+    try { await navigator.clipboard.writeText(url); } catch (err) {
+      const ta = document.createElement('textarea'); ta.value = url; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); } catch (err2) {}
+      ta.remove();
+    }
+    const t0 = e.target.textContent; e.target.textContent = 'コピーしました。保存しておいてください';
+    setTimeout(() => { e.target.textContent = t0; }, 2200);
+    return;
+  }
+  const c = e.target.closest('[data-cancel]');
+  if (c) {
+    if (c.dataset.sure !== '1') { c.dataset.sure = '1'; c.textContent = '本当に取り消す'; return; }
+    c.disabled = true;
+    try {
+      const r = await rsvPost({ type: 'cancel', token: rsvToken, id: c.dataset.cancel });
+      if (!r.ok) throw new Error(r.error);
+      rsvItems = r.items; rsvJustDone = false; rsvRenderBox();
+      if (!rsvItems.length) rsvSetSend('form');
+    } catch (err) { c.disabled = false; c.textContent = '失敗しました'; }
+  }
+});
+
+/* ── ページ切り替え（URLの#で管理。スマホの戻るにも対応） ── */
+const scrollMemo = {};
+function show(p) {
+  const prev = document.body.dataset.page;
+  if (prev) scrollMemo[prev] = window.scrollY;
+  document.querySelectorAll('.page').forEach(el => el.classList.toggle('on', el.id === 'p-' + p));
+  document.body.dataset.page = p;
+  document.querySelectorAll('.bar nav [data-go], .tabbar [data-go]').forEach(el => el.classList.toggle('on', el.dataset.go === p || (p === 'work' && el.dataset.go === 'lib')));
+}
+function route(keepScroll) {
+  const h = decodeURIComponent(location.hash.slice(1));
+  const [p, arg] = h.split('/');
+  if (p === 'lib') {
+    const c = ['all', 'read', 'later'].includes(arg) ? arg : 'all';
+    if (c !== cat || !$('groups').querySelector('.group')) { cat = c; renderLib(); }
+    show('lib');
+  } else if (p === 'work' && arg) {
+    if (!books.length) return;
+    const b = books.find(x => x.title === arg);
+    if (!b) { show('top'); return; }
+    if (current !== b) renderWork(b);
+    show('work');
+  } else if (p === 'letter') { resetLetter(); show('letter'); }
+  else if (p === 'gift') { rsvOpenGift(); show('gift'); }
+  else show('top');
+  const key = document.body.dataset.page;
+  window.scrollTo(0, keepScroll && scrollMemo[key] != null ? scrollMemo[key] : 0);
+}
+let navCount = 0;
+function go(hash) {
+  navCount++;
+  if (location.hash === hash || (!location.hash && hash === '#')) { route(false); return; }
+  if (hash === '#') history.pushState(null, '', location.pathname + location.search);
+  else history.pushState(null, '', hash);
+  route(false);
+}
+window.addEventListener('popstate', () => { navCount = Math.max(0, navCount - 1); route(true); });
+
+document.addEventListener('click', e => {
+  const book = e.target.closest('[data-i]');
+  if (book) { go('#work/' + encodeURIComponent(books[+book.dataset.i].title)); return; }
+  const g = e.target.closest('[data-go]');
+  if (g) {
+    e.preventDefault();
+    const p = g.dataset.go;
+    if (p === 'lib' && $('lq').value) { $('lq').value = ''; cat = g.dataset.cat || 'all'; renderLib(); }
+    go(p === 'top' ? '#' : p === 'lib' ? '#lib/' + (g.dataset.cat || 'all') : '#' + p);
+    return;
+  }
+  const seg = e.target.closest('.seg button');
+  if (seg) { history.replaceState(null, '', '#lib/' + seg.dataset.cat); cat = seg.dataset.cat; renderLib(); window.scrollTo(0, 0); return; }
+  const k = e.target.closest('.kana button');
+  if (k) {
+    document.querySelectorAll('.kana button').forEach(x => x.classList.toggle('on', x === k));
+    spyLock = Date.now() + 800;
+    $('g-' + k.dataset.k).scrollIntoView({ block: 'start' });
+    return;
+  }
+  if (e.target.closest('[data-back]')) {
+    if (navCount > 0) history.back(); else go('#lib/all');
+  }
+});
+
+route(false);
+loadBooks();
+</script>
+</body>
+</html>
