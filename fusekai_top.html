@@ -999,7 +999,6 @@ function rsvShowStatus(r) {
   $('none').classList.toggle('has-st', !!has);
   st.classList.toggle('on', !!has);
   const allTaken = !!r && r.same.some(x => x.vol === '全巻' || x.vol === '上・下巻');
-  $('none-gift').textContent = has && r.same.length ? 'それでも予約する' : 'プレゼントを予約する';
   if (!has) { st.innerHTML = ''; return; }
   st.classList.toggle('near', !r.same.length);
   st.innerHTML = r.same.length
