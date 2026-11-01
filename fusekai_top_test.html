@@ -488,7 +488,7 @@ body.typing .lib-dock, body.kb .lib-dock { bottom: var(--kb, 0px); padding-botto
         <p class="radio-note">届いた声は、<em>YouTubeの実写ラジオ</em>で読むかも！</p>
         <div class="talk" data-target="この作品"></div>
         <div class="thanks"></div>
-        <div class="acts one" id="w-gift-acts"><button type="button" id="w-gift" data-go="gift">続きの巻をプレゼントする</button></div>
+        <div class="acts one" id="w-gift-acts"><button type="button" id="w-gift" data-go="gift">続きをプレゼントする</button></div>
         <section class="same">
           <h2 class="round">同じ作者の本</h2>
           <div class="row" id="w-same"></div>
@@ -796,7 +796,7 @@ function renderWork(b) {
   $('w-author').textContent = b.author + (volText(b) ? '　' + b.vol.replace(/^積読[\s　:：・,，]*/, '') : '');
   $('w-memo').textContent = b.memo;
   $('w-memo').style.display = b.memo ? '' : 'none';
-  $('w-gift-acts').style.display = RSV_READY && b.vol && !b.vol.includes('上下') ? '' : 'none';
+  $('w-gift-acts').style.display = RSV_READY && b.vol ? '' : 'none';
   const box = document.querySelector('#p-work .work-info');
   resetTalk(box);
   talkRestore(box);
@@ -1028,6 +1028,7 @@ function rsvLoadTitles() {
   rsvTitles = [];
   fetch('rsv_titles.json').then(r => r.json()).then(list => {
     rsvTitles = list.map(([title, author, yomi]) => ({ title, author, nt: norm(title), ny: norm(yomi) }));
+    [...$('rsv-rows').children].forEach(rsvSequelHint);
   }).catch(() => { rsvTitles = null; });
 }
 function rsvFindTitles(n) {
@@ -1095,12 +1096,13 @@ function rsvShowCands(row) {
     + `<button type="button" class="free">候補にない → 「${esc(v)}」のまま予約</button>`;
   cands.classList.add('on');
 }
-// 2巻以降を選んだとき、同じ作者の続編が別の作品として出ていれば知らせる（続編を巻数で書く間違いを防ぐ）
+// 2巻以降を選んだときや本棚にある作品のとき、同じ作者の続編が別の作品として出ていれば知らせる（続編を巻数で書く間違いを防ぐ）
 function rsvSequelHint(row) {
   const hint = row.querySelector('.rsv-hint');
   const n = norm(row.querySelector('.rsv-input').value);
   const later = [...row.querySelectorAll('.rsv-vols button.on')].some(b => !['全巻', '上巻', '1巻'].includes(b.dataset.v));
-  const self = later && n.length >= 2 && (rsvTitles || []).find(t => t.nt === n);
+  const shelved = books.some(b => b.vol && norm(b.title) === n);
+  const self = (later || shelved) && n.length >= 2 && (rsvTitles || []).find(t => t.nt === n);
   const list = self ? rsvTitles.filter(t => t.author === self.author && t.nt !== n && t.nt.startsWith(n)).slice(0, 3) : [];
   hint.innerHTML = list.length ? '<p>別の作品として出ている続編があります。こちらですか？</p>' + list.map(t => `<button type="button" data-title="${esc(t.title)}">${esc(t.title)}</button>`).join('') : '';
 }
@@ -1112,7 +1114,7 @@ async function rsvCheckRow(row) {
   if (!n) { say(''); return; }
   const onShelf = books.find(b => b.vol && norm(b.title) === n);
   const onShelfVol = onShelf ? volText(onShelf) : '';
-  const shelf = !onShelf ? '' : /^上下/.test(onShelfVol) ? `すでに本棚にあります（${onShelfVol}）。` : `本棚にあります${onShelfVol ? `（${onShelfVol}）` : ''}。続きの巻を選んでください。`;
+  const shelf = !onShelf ? '' : /^上下/.test(onShelfVol) ? `本棚にあります（${onShelfVol}）。続編なら作品名を直してください。` : `本棚にあります${onShelfVol ? `（${onShelfVol}）` : ''}。続きの巻を選ぶか、続編なら作品名を直してください。`;
   say(shelf);
   try {
     const r = await rsvGet({ action: 'check', q: v });
@@ -1256,6 +1258,7 @@ function rsvOpenGift() {
       if (blank) { blank.querySelector('.rsv-input').value = rsvPrefill; rsvCheckRow(blank); rsvUpdateSend(); }
       else rsvAddRow(rsvPrefill);
       rsvSaveDraft();
+      [...$('rsv-rows').children].forEach(rsvSequelHint);
     }
     rsvPrefill = '';
     rsvSetSend('form');
