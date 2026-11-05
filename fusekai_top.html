@@ -840,7 +840,7 @@ window.addEventListener('scroll', () => {
 
 /* ── お嬢から届いたグッズ（既読リストの「グッズ」タブ） ── */
 const GOODS_URL = CSV_URL.replace('pub?output=csv', 'pub?gid=1850980616&single=true&output=csv');
-let goods = [];
+let goods = [], goodsLoaded = false;
 async function loadGoods() {
   try {
     const res = await fetch(GOODS_URL + '&t=' + Date.now());
@@ -856,6 +856,7 @@ async function loadGoods() {
     // R18列に印があるもの（同人誌など）は載せない。サイトのURLをYouTubeの概要欄に貼っているため（2026-11-05 けんしと決定）
     })).filter(g => g.img && (g.title || g.what) && !g.r18);
   } catch (e) { goods = []; }
+  goodsLoaded = true;
   renderGoods();
 }
 // ドラマCDは「聴いた／まだ聴いてない」も出す
@@ -871,6 +872,8 @@ function renderGoods() {
 }
 // 本棚の「グッズ」：新しく届いた順。検索は作品名・中身・種類で
 function renderLibGoods(lq) {
+  // グッズのURLを直接開いたとき、読み込み前に「ありませんでした」と出さない
+  if (!goodsLoaded) { $('kana').innerHTML = ''; $('groups').innerHTML = '<p class="loading">グッズを読み込み中…</p>'; return; }
   const list = goods.slice().reverse().filter(g => !lq || [g.title, g.what, g.kind].some(x => norm(x).includes(lq)));
   $('kana').innerHTML = '';
   $('groups').innerHTML = list.length
