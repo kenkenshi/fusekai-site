@@ -756,7 +756,10 @@ const norm = s => (s || '').normalize('NFKC').toLowerCase()
 const hitHTML = b => `<button class="hit" data-i="${books.indexOf(b)}">${b.img ? `<img src="${esc(imgAt(b.img, 120))}" alt="">` : '<span class="ph"></span>'}<span><b>${esc(b.title)}</b><small>${esc(b.author)}</small></span><span class="pill${b.later ? ' later' : ''}">${b.later ? 'これから読む' : '既読'}</span></button>`;
 // グッズの「作品名」のうち、漫画の作品ではないもの
 const NOT_WORK = ['チンアナゴ', 'J.GARDEN'];
-const goodsHitHTML = g => `<button class="hit" data-g="${goods.indexOf(g)}"><img src="${esc(imgAt(g.img, 120))}" alt=""><span><b>${esc(g.title)}</b><small>${esc([g.kind || 'グッズ', g.what, g.heard ? (g.heard === '聴いた' ? '聴いた' : 'まだ聴いてない') : ''].filter(Boolean).join('・'))}</small></span><span class="pill goods">${g.kind === 'ドラマCD' ? 'ドラマCD' : 'グッズ'}</span></button>`;
+// 一覧で見せる名前：ここに入れた作品名は、中身の名前（デカチンアナゴ等）で出す（2026-11-05 けんしの依頼）
+const NAME_BY_WHAT = ['チンアナゴ'];
+const goodsName = g => NAME_BY_WHAT.includes(g.title) && g.what ? g.what : g.title;
+const goodsHitHTML = g => `<button class="hit" data-g="${goods.indexOf(g)}"><img src="${esc(imgAt(g.img, 120))}" alt=""><span><b>${esc(goodsName(g))}</b><small>${esc([g.kind || 'グッズ', goodsName(g) === g.what ? '' : g.what, g.heard ? (g.heard === '聴いた' ? '聴いた' : 'まだ聴いてない') : ''].filter(Boolean).join('・'))}</small></span><span class="pill goods">${g.kind === 'ドラマCD' ? 'ドラマCD' : 'グッズ'}</span></button>`;
 function search(q) {
   $('q').closest('.search').classList.toggle('has', !!q);
   const n = norm(q);
@@ -862,7 +865,7 @@ async function loadGoods() {
 // ドラマCDは「聴いた／まだ聴いてない」も出す
 const heardHTML = g => g.heard ? (g.heard === '聴いた' ? '<span class="gk heard">聴いた</span>' : '<span class="gk yet">まだ聴いてない</span>') : '';
 const goodsHead = list => list.some(g => g.kind === 'ドラマCD') ? (list.every(g => g.kind === 'ドラマCD') ? 'ドラマCD' : 'グッズ・ドラマCD') : 'グッズ';
-const goodsHTML = (g, inWork) => `<button type="button" class="gd${g.r18 ? ' r18' : ''}" data-g="${goods.indexOf(g)}"><div class="ph"><img data-src="${esc(imgAt(g.img, 500))}" data-backup="${esc(imgBackup(g.img, 500))}" alt="">${g.r18 ? '<span class="r18m">R18<br>タップで表示</span>' : ''}</div><div class="tx"><span class="gk">${esc(g.kind || 'グッズ')}</span>${heardHTML(g)}<div class="w">${esc(inWork ? g.what || g.title : g.title)}</div>${g.memo ? `<div class="m">${esc(g.memo)}</div>` : ''}</div></button>`;
+const goodsHTML = (g, inWork) => `<button type="button" class="gd${g.r18 ? ' r18' : ''}" data-g="${goods.indexOf(g)}"><div class="ph"><img data-src="${esc(imgAt(g.img, 500))}" data-backup="${esc(imgBackup(g.img, 500))}" alt="">${g.r18 ? '<span class="r18m">R18<br>タップで表示</span>' : ''}</div><div class="tx"><span class="gk">${esc(g.kind || 'グッズ')}</span>${heardHTML(g)}<div class="w">${esc(inWork ? g.what || g.title : goodsName(g))}</div>${g.memo ? `<div class="m">${esc(g.memo)}</div>` : ''}</div></button>`;
 function renderGoods() {
   $('s-goods').textContent = goods.length;
   $('seg-goods').hidden = !goods.length;
