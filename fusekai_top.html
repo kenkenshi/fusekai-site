@@ -212,13 +212,15 @@ input[type=search]::-webkit-search-cancel-button { -webkit-appearance: none; dis
 .goods h2 { font-size: 16px; font-weight: 900; margin-bottom: 10px; }
 .goods-lead { margin: -4px 0 12px; font-size: 12.5px; color: var(--ink-soft); }
 .goods-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding-bottom: 8px; }
-.gd { display: block; width: 100%; min-width: 0; text-align: left; background: #fff; border: 2px solid var(--ink); border-radius: 14px; overflow: hidden; box-shadow: 0 3px 0 var(--ink); padding: 0; }
+/* ボタンは中身を縦の真ん中に寄せるため、隣より背が高いと写真の上に白が出る → 上詰めにする */
+.gd { display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; width: 100%; min-width: 0; text-align: left; background: #fff; border: 2px solid var(--ink); border-radius: 14px; overflow: hidden; box-shadow: 0 3px 0 var(--ink); padding: 0; }
 .gd .ph, .gbox .ph { position: relative; overflow: hidden; background: var(--line); }
 .gd .ph { aspect-ratio: 3 / 4; }
 .gd .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .gd.r18 .ph img, .gbox .ph.r18 img { filter: blur(18px); transform: scale(1.15); }
 .gd .r18m { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; font-size: 12px; font-weight: 900; line-height: 1.5; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,.6); }
-.gd .tx { padding: 8px 10px 10px; }
+.gd .ph { flex: none; width: 100%; }
+.gd .tx { flex: 1; padding: 8px 10px 10px; }
 .gk { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 10.5px; font-weight: 900; color: #fff; background: var(--purple); }
 .gk + .gk { margin-left: 4px; }
 .gk.heard { background: var(--cyan); }
