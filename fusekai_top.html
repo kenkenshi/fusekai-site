@@ -204,6 +204,36 @@ input[type=search]::-webkit-search-cancel-button { -webkit-appearance: none; dis
 .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 10px; padding: 4px 0 16px; }
 .same .only { font-size: 13px; color: var(--ink-soft); }
 
+/* ===== お嬢から届いたグッズ ===== */
+.goods { margin-top: 26px; }
+.goods[hidden] { display: none; }
+.goods h2 { font-size: 16px; font-weight: 900; margin-bottom: 10px; }
+.goods-lead { margin: -4px 0 12px; font-size: 12.5px; color: var(--ink-soft); }
+.goods-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding-bottom: 8px; }
+.gd { display: block; width: 100%; min-width: 0; text-align: left; background: #fff; border: 2px solid var(--ink); border-radius: 14px; overflow: hidden; box-shadow: 0 3px 0 var(--ink); padding: 0; }
+.gd .ph, .gbox .ph { position: relative; overflow: hidden; background: var(--line); }
+.gd .ph { aspect-ratio: 3 / 4; }
+.gd .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.gd.r18 .ph img, .gbox .ph.r18 img { filter: blur(18px); transform: scale(1.15); }
+.gd .r18m { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; font-size: 12px; font-weight: 900; line-height: 1.5; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,.6); }
+.gd .tx { padding: 8px 10px 10px; }
+.gk { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 10.5px; font-weight: 900; color: #fff; background: var(--purple); }
+.gd .w { margin-top: 5px; font-size: 12.5px; font-weight: 900; line-height: 1.45; }
+.gd .m { margin-top: 4px; font-size: 12px; line-height: 1.55; color: var(--ink-soft); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.gbox { position: fixed; inset: 0; z-index: 100; display: none; align-items: center; justify-content: center; padding: 16px; background: rgba(26, 10, 48, .85); }
+.gbox.on { display: flex; }
+.gbox .in { width: 100%; max-width: 520px; max-height: 100%; overflow-y: auto; background: #fff; border: 2px solid var(--ink); border-radius: 18px; }
+.gbox .ph img { width: 100%; display: block; }
+.gbox .r18b { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 12px 16px; border-radius: 999px; border: 2px solid var(--ink); background: #fff; font-size: 13px; font-weight: 900; box-shadow: 0 3px 0 var(--ink); white-space: nowrap; }
+.gbox .ph:not(.r18) .r18b { display: none; }
+.gbox .tx { padding: 14px 16px 18px; }
+.gbox .w { margin-top: 6px; font-size: 16px; font-weight: 900; line-height: 1.5; }
+.gbox .c { margin-top: 2px; font-size: 12.5px; color: var(--ink-soft); }
+.gbox .m { margin-top: 12px; padding: 12px 14px; border-radius: 12px; background: #faf6ff; font-size: 14.5px; line-height: 1.8; white-space: pre-wrap; }
+.gbox .m::before { content: 'けんしのひとこと'; display: block; font-size: 11px; font-weight: 900; color: var(--pink); white-space: normal; }
+.gbox .go { margin-top: 14px; width: 100%; padding: 12px 0; border-radius: 14px; border: 2px solid var(--ink); background: #fff; font-weight: 900; box-shadow: 0 3px 0 var(--ink); }
+.gbox .x { position: fixed; top: 14px; right: 14px; width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--ink); background: #fff; font-size: 22px; font-weight: 900; line-height: 1; }
+
 /* ===== 語りたいフォーム・お便り ===== */
 .talk { display: none; margin-top: 14px; background: #fff; border: 2px solid var(--ink); border-radius: 16px; box-shadow: 0 4px 0 var(--ink); padding: 16px; }
 .talk.on { display: block; }
@@ -316,6 +346,7 @@ body.typing .lib-dock, body.kb .lib-dock { bottom: var(--kb, 0px); padding-botto
   .work-info h1 { font-size: 32px; }
   .acts, .work-info .talk, .work-info .thanks { max-width: 520px; }
   .row { grid-template-columns: repeat(5, 1fr); gap: 18px 14px; }
+  .goods-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
   #p-gift .sheet { max-width: 900px; }
   .g-cards { grid-template-columns: 1fr 1fr; align-items: start; }
 }
@@ -488,6 +519,10 @@ body.typing .lib-dock, body.kb .lib-dock { bottom: var(--kb, 0px); padding-botto
         <div class="talk" data-target="この作品"></div>
         <div class="thanks"></div>
         <div class="acts one" id="w-gift-acts"><button type="button" id="w-gift" data-go="gift">続きをプレゼントする</button></div>
+        <section class="goods" id="w-goods-sec" hidden>
+          <h2 class="round">お嬢から届いたグッズ</h2>
+          <div class="goods-grid" id="w-goods"></div>
+        </section>
         <section class="same">
           <h2 class="round">同じ作者の本</h2>
           <div class="row" id="w-same"></div>
@@ -588,6 +623,11 @@ body.typing .lib-dock, body.kb .lib-dock { bottom: var(--kb, 0px); padding-botto
         <p class="g-hint">Amazonでギフトカードを買うときの「受取人のメールアドレス」に入れてください</p>
       </section>
     </div>
+    <section class="goods" id="g-goods-sec" hidden>
+      <h2 class="round">これまでに届いたグッズ</h2>
+      <p class="goods-lead">お嬢からいただいたグッズたち。タップすると大きく見られます。</p>
+      <div class="goods-grid" id="g-goods"></div>
+    </section>
     <p class="g-foot">いただいたプレゼントは、動画やSNSでご報告します</p>
   </div>
 </main>
@@ -661,6 +701,7 @@ async function loadBooks() {
       yomi:   (r[7] || '').trim(),
     })).filter(b => b.title);
     books.forEach(b => { b.later = b.vol.startsWith('積読'); });
+    if (goods.length) renderGoods();
     const shelved = books.filter(b => b.vol);
     read = shelved.filter(b => !b.later);
     later = shelved.filter(b => b.later);
@@ -783,6 +824,61 @@ window.addEventListener('scroll', () => {
   btns.forEach((x, i) => x.classList.toggle('on', cur ? x.dataset.k === cur : i === 0));
 }, { passive: true });
 
+/* ── お嬢から届いたグッズ（既読リストの「グッズ」タブ） ── */
+const GOODS_URL = CSV_URL.replace('pub?output=csv', 'pub?gid=1850980616&single=true&output=csv');
+let goods = [];
+async function loadGoods() {
+  try {
+    const res = await fetch(GOODS_URL + '&t=' + Date.now());
+    goods = parseCSV(await res.text()).map(r => ({
+      title: (r[1] || '').trim(),
+      kind:  (r[2] || '').trim(),
+      what:  (r[3] || '').trim(),
+      memo:  (r[4] || '').trim(),
+      img:   (r[5] || '').trim(),
+      r18:   !!(r[7] || '').trim(),
+      date:  (r[8] || '').trim(),
+    })).filter(g => g.img && (g.title || g.what));
+  } catch (e) { goods = []; }
+  renderGoods();
+}
+const goodsHTML = (g, inWork) => `<button type="button" class="gd${g.r18 ? ' r18' : ''}" data-g="${goods.indexOf(g)}"><div class="ph"><img data-src="${esc(imgAt(g.img, 500))}" data-backup="${esc(imgBackup(g.img, 500))}" alt="">${g.r18 ? '<span class="r18m">R18<br>タップで表示</span>' : ''}</div><div class="tx"><span class="gk">${esc(g.kind || 'グッズ')}</span><div class="w">${esc(inWork ? g.what || g.title : g.title)}</div>${g.memo ? `<div class="m">${esc(g.memo)}</div>` : ''}</div></button>`;
+function renderGoods() {
+  $('g-goods').innerHTML = goods.slice().reverse().map(g => goodsHTML(g, false)).join('');
+  $('g-goods-sec').hidden = !goods.length;
+  watchImgs($('g-goods'));
+  if (current) renderWorkGoods(current);
+}
+function renderWorkGoods(b) {
+  const mine = goods.filter(g => g.title === b.title);
+  $('w-goods').innerHTML = mine.map(g => goodsHTML(g, true)).join('');
+  $('w-goods-sec').hidden = !mine.length;
+  watchImgs($('w-goods'));
+}
+function openGoods(i) {
+  const g = goods[i];
+  if (!g) return;
+  const b = books.find(x => x.vol && x.title === g.title);
+  const link = b && !(current === b && $('p-work').classList.contains('on'));
+  $('gbox').innerHTML = `<div class="in"><div class="ph${g.r18 ? ' r18' : ''}"><img src="${esc(imgAt(g.img, 1200))}" alt="">${g.r18 ? '<button type="button" class="r18b" data-r18>R18｜18歳以上の方はタップして表示</button>' : ''}</div><div class="tx"><span class="gk">${esc(g.kind || 'グッズ')}</span><div class="w">${esc(g.what || g.title)}</div><div class="c">${esc(g.title)}</div>${g.memo ? `<p class="m">${esc(g.memo)}</p>` : ''}${link ? `<button type="button" class="go" data-i="${books.indexOf(b)}">この作品を本棚で見る ›</button>` : ''}</div></div><button type="button" class="x" data-gclose aria-label="閉じる">×</button>`;
+  $('gbox').classList.add('on');
+  document.body.style.overflow = 'hidden';
+}
+function closeGoods() {
+  if (!$('gbox').classList.contains('on')) return;
+  $('gbox').classList.remove('on');
+  $('gbox').innerHTML = '';
+  document.body.style.overflow = '';
+}
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-g]');
+  if (t) { openGoods(+t.dataset.g); return; }
+  if (e.target.closest('[data-r18]')) { e.target.closest('.ph').classList.remove('r18'); return; }
+  if (e.target.closest('[data-gclose]') || e.target.id === 'gbox' || e.target.closest('#gbox [data-i]')) closeGoods();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeGoods(); });
+window.addEventListener('popstate', closeGoods);
+
 /* ── 作品ページ ── */
 let current = null;
 function renderWork(b) {
@@ -796,6 +892,7 @@ function renderWork(b) {
   $('w-memo').textContent = b.memo;
   $('w-memo').style.display = b.memo ? '' : 'none';
   $('w-gift-acts').style.display = RSV_READY && b.vol ? '' : 'none';
+  renderWorkGoods(b);
   const box = document.querySelector('#p-work .work-info');
   resetTalk(box);
   talkRestore(box);
@@ -1430,6 +1527,8 @@ $('q').value = searchMemo.get('q');
 $('lq').value = searchMemo.get('lq');
 route(false);
 loadBooks();
+loadGoods();
 </script>
+<div class="gbox" id="gbox"></div>
 </body>
 </html>
