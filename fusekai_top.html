@@ -111,6 +111,7 @@ input[type=search]::-webkit-search-cancel-button { -webkit-appearance: none; dis
 .hit small { display: block; font-size: 11.5px; color: var(--ink-soft); margin-top: 2px; }
 .pill { padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 900; color: #fff; background: var(--cyan); white-space: nowrap; }
 .pill.later { background: var(--orange); }
+.pill.goods { background: var(--purple); }
 .none { padding: 18px; text-align: center; }
 .none > p { font-weight: 900; line-height: 1.6; }
 .none > p em { font-style: normal; color: var(--pink); word-break: break-all; }
@@ -753,6 +754,9 @@ const norm = s => (s || '').normalize('NFKC').toLowerCase()
   .replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60))
   .replace(/[\s・、。,.!?！？「」『』()（）〜~\-ー:：♡☆★]/g, '');
 const hitHTML = b => `<button class="hit" data-i="${books.indexOf(b)}">${b.img ? `<img src="${esc(imgAt(b.img, 120))}" alt="">` : '<span class="ph"></span>'}<span><b>${esc(b.title)}</b><small>${esc(b.author)}</small></span><span class="pill${b.later ? ' later' : ''}">${b.later ? 'これから読む' : '既読'}</span></button>`;
+// グッズの「作品名」のうち、漫画の作品ではないもの
+const NOT_WORK = ['チンアナゴ', 'J.GARDEN'];
+const goodsHitHTML = g => `<button class="hit" data-g="${goods.indexOf(g)}"><img src="${esc(imgAt(g.img, 120))}" alt=""><span><b>${esc(g.title)}</b><small>${esc([g.kind || 'グッズ', g.what, g.heard ? (g.heard === '聴いた' ? '聴いた' : 'まだ聴いてない') : ''].filter(Boolean).join('・'))}</small></span><span class="pill goods">${g.kind === 'ドラマCD' ? 'ドラマCD' : 'グッズ'}</span></button>`;
 function search(q) {
   $('q').closest('.search').classList.toggle('has', !!q);
   const n = norm(q);
@@ -761,15 +765,23 @@ function search(q) {
   if (!n || !books.length) { $('sugg').classList.remove('on'); $('none').classList.remove('on'); return; }
   const byTitle = books.filter(b => norm(b.title).includes(n) || norm(b.yomi).includes(n));
   const byAuthor = books.filter(b => !byTitle.includes(b) && norm(b.author).includes(n));
+  // グッズ・ドラマCDも予測に出す（作品名・読み・中身で）
+  const byGoods = goods.filter(g => [g.title, g.what, (books.find(b => b.title === g.title) || {}).yomi].some(x => norm(x).includes(n))).reverse();
+  const goodsPart = byGoods.length ? '<div class="head">グッズ・ドラマCD</div>' + byGoods.slice(0, 6).map(goodsHitHTML).join('') : '';
   if (byTitle.length + byAuthor.length) {
     $('sugg').innerHTML =
       (byTitle.length ? '<div class="head">作品名</div>' + byTitle.slice(0, 8).map(hitHTML).join('') : '') +
-      (byAuthor.length ? '<div class="head">作者名</div>' + byAuthor.slice(0, 8).map(hitHTML).join('') : '');
+      (byAuthor.length ? '<div class="head">作者名</div>' + byAuthor.slice(0, 8).map(hitHTML).join('') : '') + goodsPart;
     $('sugg').classList.add('on'); $('none').classList.remove('on');
   } else {
+    // 本棚にない作品でも、ドラマCDなどだけ持っているときは上に出す
+    $('sugg').innerHTML = goodsPart;
+    $('sugg').classList.toggle('on', !!goodsPart);
     if ($('none-q').textContent !== '「' + q + '」') resetTalk($('none'));
     $('none-q').textContent = '「' + q + '」';
-    $('none').classList.add('on'); $('sugg').classList.remove('on');
+    // チンアナゴやJ.GARDENは漫画ではないので「まだ知らないかも／予約」は出さない
+    const notWork = byGoods.length && byGoods.every(g => NOT_WORK.includes(g.title));
+    $('none').classList.toggle('on', !notWork);
     rsvSearch(q);
     talkRestore($('none'));
   }
@@ -854,6 +866,7 @@ function renderGoods() {
   $('s-goods').textContent = goods.length;
   $('seg-goods').hidden = !goods.length;
   if (cat === 'goods') renderLib();
+  if ($('q').value) search($('q').value);
   if (current) renderWorkGoods(current);
 }
 // 本棚の「グッズ」：新しく届いた順。検索は作品名・中身・種類で
