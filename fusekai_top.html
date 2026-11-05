@@ -218,6 +218,9 @@ input[type=search]::-webkit-search-cancel-button { -webkit-appearance: none; dis
 .gd .r18m { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; font-size: 12px; font-weight: 900; line-height: 1.5; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,.6); }
 .gd .tx { padding: 8px 10px 10px; }
 .gk { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 10.5px; font-weight: 900; color: #fff; background: var(--purple); }
+.gk + .gk { margin-left: 4px; }
+.gk.heard { background: var(--cyan); }
+.gk.yet { background: var(--orange); }
 .gd .w { margin-top: 5px; font-size: 12.5px; font-weight: 900; line-height: 1.45; }
 .gd .m { margin-top: 4px; font-size: 12px; line-height: 1.55; color: var(--ink-soft); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .gbox { position: fixed; inset: 0; z-index: 100; display: none; align-items: center; justify-content: center; padding: 16px; background: rgba(26, 10, 48, .85); }
@@ -520,7 +523,7 @@ body.typing .lib-dock, body.kb .lib-dock { bottom: var(--kb, 0px); padding-botto
         <div class="thanks"></div>
         <div class="acts one" id="w-gift-acts"><button type="button" id="w-gift" data-go="gift">続きをプレゼントする</button></div>
         <section class="goods" id="w-goods-sec" hidden>
-          <h2 class="round">お嬢から届いたグッズ</h2>
+          <h2 class="round" id="w-goods-h">お嬢から届いたグッズ</h2>
           <div class="goods-grid" id="w-goods"></div>
         </section>
         <section class="same">
@@ -624,8 +627,8 @@ body.typing .lib-dock, body.kb .lib-dock { bottom: var(--kb, 0px); padding-botto
       </section>
     </div>
     <section class="goods" id="g-goods-sec" hidden>
-      <h2 class="round">これまでに届いたグッズ</h2>
-      <p class="goods-lead">お嬢からいただいたグッズたち。タップすると大きく見られます。</p>
+      <h2 class="round" id="g-goods-h">これまでに届いたグッズ</h2>
+      <p class="goods-lead">お嬢からいただいたものたち。タップすると大きく見られます。</p>
       <div class="goods-grid" id="g-goods"></div>
     </section>
     <p class="g-foot">いただいたプレゼントは、動画やSNSでご報告します</p>
@@ -838,14 +841,19 @@ async function loadGoods() {
       img:   (r[5] || '').trim(),
       r18:   !!(r[7] || '').trim(),
       date:  (r[8] || '').trim(),
+      heard: (r[9] || '').trim(),
     })).filter(g => g.img && (g.title || g.what));
   } catch (e) { goods = []; }
   renderGoods();
 }
-const goodsHTML = (g, inWork) => `<button type="button" class="gd${g.r18 ? ' r18' : ''}" data-g="${goods.indexOf(g)}"><div class="ph"><img data-src="${esc(imgAt(g.img, 500))}" data-backup="${esc(imgBackup(g.img, 500))}" alt="">${g.r18 ? '<span class="r18m">R18<br>タップで表示</span>' : ''}</div><div class="tx"><span class="gk">${esc(g.kind || 'グッズ')}</span><div class="w">${esc(inWork ? g.what || g.title : g.title)}</div>${g.memo ? `<div class="m">${esc(g.memo)}</div>` : ''}</div></button>`;
+// ドラマCDは「聴いた／まだ聴いてない」も出す
+const heardHTML = g => g.heard ? (g.heard === '聴いた' ? '<span class="gk heard">聴いた</span>' : '<span class="gk yet">まだ聴いてない</span>') : '';
+const goodsHead = list => list.some(g => g.kind === 'ドラマCD') ? (list.every(g => g.kind === 'ドラマCD') ? 'ドラマCD' : 'グッズ・ドラマCD') : 'グッズ';
+const goodsHTML = (g, inWork) => `<button type="button" class="gd${g.r18 ? ' r18' : ''}" data-g="${goods.indexOf(g)}"><div class="ph"><img data-src="${esc(imgAt(g.img, 500))}" data-backup="${esc(imgBackup(g.img, 500))}" alt="">${g.r18 ? '<span class="r18m">R18<br>タップで表示</span>' : ''}</div><div class="tx"><span class="gk">${esc(g.kind || 'グッズ')}</span>${heardHTML(g)}<div class="w">${esc(inWork ? g.what || g.title : g.title)}</div>${g.memo ? `<div class="m">${esc(g.memo)}</div>` : ''}</div></button>`;
 function renderGoods() {
   $('g-goods').innerHTML = goods.slice().reverse().map(g => goodsHTML(g, false)).join('');
   $('g-goods-sec').hidden = !goods.length;
+  $('g-goods-h').textContent = 'これまでに届いた' + goodsHead(goods);
   watchImgs($('g-goods'));
   if (current) renderWorkGoods(current);
 }
@@ -853,6 +861,7 @@ function renderWorkGoods(b) {
   const mine = goods.filter(g => g.title === b.title);
   $('w-goods').innerHTML = mine.map(g => goodsHTML(g, true)).join('');
   $('w-goods-sec').hidden = !mine.length;
+  $('w-goods-h').textContent = 'お嬢から届いた' + goodsHead(mine);
   watchImgs($('w-goods'));
 }
 function openGoods(i) {
@@ -860,7 +869,7 @@ function openGoods(i) {
   if (!g) return;
   const b = books.find(x => x.vol && x.title === g.title);
   const link = b && !(current === b && $('p-work').classList.contains('on'));
-  $('gbox').innerHTML = `<div class="in"><div class="ph${g.r18 ? ' r18' : ''}"><img src="${esc(imgAt(g.img, 1200))}" alt="">${g.r18 ? '<button type="button" class="r18b" data-r18>R18｜18歳以上の方はタップして表示</button>' : ''}</div><div class="tx"><span class="gk">${esc(g.kind || 'グッズ')}</span><div class="w">${esc(g.what || g.title)}</div><div class="c">${esc(g.title)}</div>${g.memo ? `<p class="m">${esc(g.memo)}</p>` : ''}${link ? `<button type="button" class="go" data-i="${books.indexOf(b)}">この作品を本棚で見る ›</button>` : ''}</div></div><button type="button" class="x" data-gclose aria-label="閉じる">×</button>`;
+  $('gbox').innerHTML = `<div class="in"><div class="ph${g.r18 ? ' r18' : ''}"><img src="${esc(imgAt(g.img, 1200))}" alt="">${g.r18 ? '<button type="button" class="r18b" data-r18>R18｜18歳以上の方はタップして表示</button>' : ''}</div><div class="tx"><span class="gk">${esc(g.kind || 'グッズ')}</span>${heardHTML(g)}<div class="w">${esc(g.what || g.title)}</div><div class="c">${esc(g.title)}</div>${g.memo ? `<p class="m">${esc(g.memo)}</p>` : ''}${link ? `<button type="button" class="go" data-i="${books.indexOf(b)}">この作品を本棚で見る ›</button>` : ''}</div></div><button type="button" class="x" data-gclose aria-label="閉じる">×</button>`;
   $('gbox').classList.add('on');
   document.body.style.overflow = 'hidden';
 }
