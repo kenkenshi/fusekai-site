@@ -842,7 +842,8 @@ async function loadGoods() {
       r18:   !!(r[7] || '').trim(),
       date:  (r[8] || '').trim(),
       heard: (r[9] || '').trim(),
-    })).filter(g => g.img && (g.title || g.what));
+    // R18列に印があるもの（同人誌など）は載せない。サイトのURLをYouTubeの概要欄に貼っているため（2026-11-05 けんしと決定）
+    })).filter(g => g.img && (g.title || g.what) && !g.r18);
   } catch (e) { goods = []; }
   renderGoods();
 }
