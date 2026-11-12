@@ -150,6 +150,25 @@ input[type=search]::-webkit-search-cancel-button { -webkit-appearance: none; dis
 .ltag { position: absolute; left: 0; right: 0; top: 0; padding: 3px 0; text-align: center; font-size: 10px; font-weight: 900; color: #fff; background: rgba(240,122,28,.92); }
 .ltag ~ .badge { top: 24px; }
 .vol { position: absolute; right: 6px; bottom: 6px; padding: 2px 7px; border-radius: 6px; font-size: 10.5px; font-weight: 700; color: #fff; background: rgba(26,10,48,.72); }
+/* シリーズ：表紙を横にスワイプ。本棚では後ろに本が重なって見えるようにする */
+.cover.multi .strip { position: absolute; inset: 0; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.cover.multi .strip::-webkit-scrollbar { display: none; }
+.cover.multi .strip img { flex: 0 0 100%; width: 100%; height: 100%; scroll-snap-align: start; }
+.dots { position: absolute; left: 0; right: 0; bottom: 30px; display: flex; justify-content: center; gap: 5px; pointer-events: none; }
+.dots > * { width: 6px; height: 6px; padding: 0; border-radius: 50%; background: rgba(255,255,255,.6); box-shadow: 0 0 0 1px rgba(26,10,48,.35); }
+.dots > .on { background: #fff; transform: scale(1.3); }
+.dots button { pointer-events: auto; width: 9px; height: 9px; }
+.work-cover .dots { bottom: 36px; gap: 8px; }
+.book.ser .cover { box-shadow: 5px -5px 0 -1px #fff, 5px -5px 0 0 rgba(80,30,130,.3), 10px -10px 0 -1px #fff, 10px -10px 0 0 rgba(80,30,130,.2), 0 2px 0 rgba(26,10,48,.08), 0 8px 18px rgba(80,30,130,.16); }
+div.book[data-i] { cursor: pointer; }
+.series-list { margin-top: 12px; list-style: none; padding: 0; background: #fff; border: 2px solid var(--ink); border-radius: var(--radius); overflow: hidden; }
+.series-list li + li { border-top: 1px solid var(--line); }
+.series-list button { display: grid; grid-template-columns: 26px 1fr; column-gap: 10px; align-items: center; width: 100%; padding: 10px 14px; text-align: left; }
+.series-list button:disabled { opacity: 1; cursor: default; }
+.series-list .n { grid-row: span 2; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 900; color: #fff; background: var(--purple); }
+.series-list b { font-size: 14.5px; line-height: 1.4; }
+.series-list small { font-size: 11.5px; font-weight: 700; color: var(--cyan); }
+.series-list small.later { color: var(--orange); }
 .book .t { margin-top: 7px; font-size: 12.5px; font-weight: 700; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .book .a { margin-top: 2px; font-size: 11px; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
@@ -521,6 +540,7 @@ body.typing .lib-dock, body.kb .lib-dock { bottom: var(--kb, 0px); padding-botto
         <span class="label" id="w-label"></span>
         <h1 id="w-title"></h1>
         <div class="au" id="w-author"></div>
+        <ol class="series-list" id="w-series" hidden></ol>
         <div class="memo" id="w-memo"></div>
         <div class="acts one"><button type="button" class="main" data-talk="語る" id="w-talk">この作品について語る</button></div>
         <p class="radio-note">届いた声は、<em>YouTubeの実写ラジオ</em>で読むかも！</p>
@@ -702,10 +722,12 @@ async function loadBooks() {
       img:    (r[5] || '').trim(),
       gift:   !!(r[6] || '').trim(),
       yomi:   (r[7] || '').trim(),
+      series: (r[15] || '').trim(),
     })).filter(b => b.title);
     books.forEach(b => { b.later = b.vol.startsWith('積読'); });
+    makeSeries();
     if (goods.length) renderGoods();
-    const shelved = books.filter(b => b.vol);
+    const shelved = books.filter(b => b.vol && !b.parent);
     read = shelved.filter(b => !b.later);
     later = shelved.filter(b => b.later);
     $('total').textContent = $('n-all').textContent = $('s-all').textContent = shelved.length;
@@ -718,6 +740,29 @@ async function loadBooks() {
     $('groups').innerHTML = '<p class="loading">読み込みに失敗しました。時間をおいて開き直してください</p>';
   }
 }
+
+/* ── シリーズ（既読リストP列が同じ作品は、本棚では1冊にまとめる。2026-11-12 けんしの依頼） ── */
+// 各巻はbooksに残す（検索・予約の被り判定に使う）。本棚にはまとめた1冊（isSeries）だけ並べる
+function makeSeries() {
+  const map = new Map();
+  books.forEach(b => { if (b.series && b.vol) (map.get(b.series) || map.set(b.series, []).get(b.series)).push(b); });
+  map.forEach((members, name) => {
+    if (members.length < 2) return;
+    const allLater = members.every(m => m.later);
+    const s = {
+      title: name, isSeries: true, members,
+      author: [...new Set(members.map(m => m.author))].join('・'),
+      vol: (allLater ? '積読' : '') + members.length + '冊',
+      memo: members[0].memo, img: members[0].img, yomi: members[0].yomi,
+      gift: members.some(m => m.gift), later: allLater,
+      imgs: [...new Set(members.map(m => m.img).filter(Boolean))],
+    };
+    members.forEach(m => { m.parent = s; });
+    books.push(s);
+  });
+}
+// シリーズはまとめた名前・作者に加えて、各巻の題名・読みでも見つかるようにする
+const titleKeys = b => [b.title, b.yomi].concat(b.members ? b.members.flatMap(m => [m.title, m.yomi]) : []);
 
 /* ── 表紙 ── */
 const imgAt = (url, w) => {
@@ -743,19 +788,36 @@ function watchImgs(root) {
   root.querySelectorAll('img[data-src]').forEach(img => lazyIO ? lazyIO.observe(img) : loadImg(img));
 }
 const volText = b => b.vol.replace(/^積読[\s　:：・,，]*/, '').replace(/〜/g, '-');
-function coverHTML(b, w, showLater) {
-  const img = b.img ? `<img data-src="${esc(imgAt(b.img, w))}" data-backup="${esc(imgBackup(b.img, w))}" alt="">` : `<div class="noimg">${esc(b.title)}</div>`;
-  return `<div class="cover">${img}${showLater && b.later ? '<span class="ltag">これから読む</span>' : ''}${b.gift ? `<span class="badge" title="お嬢からのプレゼント">${GIFT_SVG}</span>` : ''}${volText(b) ? `<span class="vol">${esc(volText(b))}</span>` : ''}</div>`;
+const imgTag = (url, w) => `<img data-src="${esc(imgAt(url, w))}" data-backup="${esc(imgBackup(url, w))}" alt="">`;
+// シリーズで表紙が2枚以上あるときは、横にスワイプして見られるようにする（作品ページでは点を押しても切り替わる）
+function coverHTML(b, w, showLater, dotBtns) {
+  const multi = b.imgs && b.imgs.length > 1;
+  const img = multi
+    ? `<div class="strip">${b.imgs.map(u => imgTag(u, w)).join('')}</div><span class="dots">${b.imgs.map((u, k) => dotBtns ? `<button type="button" class="${k ? '' : 'on'}" data-dot="${k}" aria-label="${k + 1}枚目"></button>` : `<i class="${k ? '' : 'on'}"></i>`).join('')}</span>`
+    : b.img ? imgTag(b.img, w) : `<div class="noimg">${esc(b.title)}</div>`;
+  return `<div class="cover${multi ? ' multi' : ''}">${img}${showLater && b.later ? '<span class="ltag">これから読む</span>' : ''}${b.gift ? `<span class="badge" title="お嬢からのプレゼント">${GIFT_SVG}</span>` : ''}${volText(b) ? `<span class="vol">${esc(volText(b))}</span>` : ''}</div>`;
 }
 function bookHTML(b, showLater) {
-  return `<button class="book" data-i="${books.indexOf(b)}">${coverHTML(b, 400, showLater)}<div class="t">${esc(b.title)}</div><div class="a">${esc(b.author)}</div></button>`;
+  // スワイプできる表紙はbuttonの中だとiPhoneで横に動かないので、divをボタン代わりにする
+  const multi = b.imgs && b.imgs.length > 1;
+  const open = multi ? 'div role="button" tabindex="0"' : 'button', close = multi ? 'div' : 'button';
+  return `<${open} class="book${b.isSeries ? ' ser' : ''}" data-i="${books.indexOf(b)}">${coverHTML(b, 400, showLater)}<div class="t">${esc(b.title)}</div><div class="a">${esc(b.author)}</div></${close}>`;
 }
+document.addEventListener('scroll', e => {
+  const s = e.target;
+  if (!s.classList || !s.classList.contains('strip')) return;
+  const k = Math.round(s.scrollLeft / s.clientWidth);
+  s.parentNode.querySelectorAll('.dots > *').forEach((d, i) => d.classList.toggle('on', i === k));
+}, true);
+document.addEventListener('keydown', e => {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('div.book[data-i]')) { e.preventDefault(); e.target.click(); }
+});
 
 /* ── 検索 ── */
 const norm = s => (s || '').normalize('NFKC').toLowerCase()
   .replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60))
   .replace(/[\s・、。,.!?！？「」『』()（）〜~\-ー:：♡☆★]/g, '');
-const hitHTML = b => `<button class="hit" data-i="${books.indexOf(b)}">${b.img ? `<img src="${esc(imgAt(b.img, 120))}" alt="">` : '<span class="ph"></span>'}<span><b>${esc(b.title)}</b><small>${esc(b.author)}</small></span><span class="pill${b.later ? ' later' : ''}">${b.later ? 'これから読む' : '既読'}</span></button>`;
+const hitHTML = b => `<button class="hit" data-i="${books.indexOf(b)}">${b.img ? `<img src="${esc(imgAt(b.img, 120))}" alt="">` : '<span class="ph"></span>'}<span><b>${esc(b.title)}</b><small>${esc(b.author + (b.isSeries ? '・全' + b.members.length + '冊' : ''))}</small></span><span class="pill${b.later ? ' later' : ''}">${b.later ? 'これから読む' : '既読'}</span></button>`;
 // グッズの「作品名」のうち、漫画の作品ではないもの
 const NOT_WORK = ['チンアナゴ', 'J.GARDEN'];
 // 一覧で見せる名前：ここに入れた作品名は、中身の名前（デカチンアナゴ等）で出す（2026-11-05 けんしの依頼）
@@ -768,8 +830,10 @@ function search(q) {
   searchMemo.set('q', q);
   rsvShowStatus(null);
   if (!n || !books.length) { $('sugg').classList.remove('on'); $('none').classList.remove('on'); return; }
-  const byTitle = books.filter(b => norm(b.title).includes(n) || norm(b.yomi).includes(n));
-  const byAuthor = books.filter(b => !byTitle.includes(b) && norm(b.author).includes(n));
+  // シリーズの巻に当たったときは、シリーズ1つにまとめて出す
+  const onShelf = books.filter(b => !b.parent);
+  const byTitle = onShelf.filter(b => titleKeys(b).some(x => norm(x).includes(n)));
+  const byAuthor = onShelf.filter(b => !byTitle.includes(b) && norm(b.author).includes(n));
   // グッズ・ドラマCDも予測に出す（作品名・読み・中身で）
   const byGoods = goods.filter(g => [g.title, g.what, (books.find(b => b.title === g.title) || {}).yomi].some(x => norm(x).includes(n))).reverse();
   const goodsPart = byGoods.length ? '<div class="head">グッズ・ドラマCD</div>' + byGoods.slice(0, 6).map(goodsHitHTML).join('') : '';
@@ -808,7 +872,7 @@ function renderLib() {
   $('p-lib').classList.toggle('cat-goods', cat === 'goods');
   if (cat === 'goods') { renderLibGoods(lq); return; }
   const list = (cat === 'all' ? read.concat(later) : cat === 'read' ? read : later)
-    .filter(b => !lq || norm(b.title).includes(lq) || norm(b.yomi).includes(lq) || norm(b.author).includes(lq))
+    .filter(b => !lq || titleKeys(b).concat(b.author).some(x => norm(x).includes(lq)))
     .sort((a, b) => norm(a.yomi || a.title).localeCompare(norm(b.yomi || b.title), 'ja'));
   if (lq) {
     $('groups').innerHTML = list.length
@@ -888,7 +952,8 @@ function renderLibGoods(lq) {
   document.querySelectorAll('.seg button').forEach(b => b.classList.toggle('on', b.dataset.cat === cat));
 }
 function renderWorkGoods(b) {
-  const mine = goods.filter(g => g.title === b.title);
+  const titles = [b.title].concat(b.members ? b.members.map(m => m.title) : []);
+  const mine = goods.filter(g => titles.includes(g.title));
   $('w-goods').innerHTML = mine.map(g => goodsHTML(g, true)).join('');
   $('w-goods-sec').hidden = !mine.length;
   $('w-goods-h').textContent = 'お嬢から届いた' + goodsHead(mine);
@@ -922,12 +987,19 @@ window.addEventListener('popstate', closeGoods);
 let current = null;
 function renderWork(b) {
   current = b;
-  $('w-cover').innerHTML = coverHTML(b, 600, false);
+  $('w-cover').innerHTML = coverHTML(b, 600, false, true);
   $('w-cover').querySelectorAll('img[data-src]').forEach(loadImg);
   $('w-label').textContent = b.later ? 'これから読む' : '既読';
   $('w-label').className = 'label' + (b.later ? ' later' : '');
   $('w-title').textContent = b.title;
-  $('w-author').textContent = b.author + (volText(b) ? '　' + b.vol.replace(/^積読[\s　:：・,，]*/, '') : '');
+  $('w-author').textContent = b.author + (b.isSeries ? '　全' + b.members.length + '冊' : volText(b) ? '　' + b.vol.replace(/^積読[\s　:：・,，]*/, '') : '');
+  // シリーズは収録タイトルを順番に全部出す（押すとその巻の表紙に切り替わる）
+  $('w-series').hidden = !b.isSeries;
+  $('w-series').innerHTML = b.isSeries ? b.members.map((m, k) => {
+    const slide = b.imgs.length > 1 ? b.imgs.indexOf(m.img) : -1;
+    const v = m.vol.replace(/^積読[\s　:：・,，]*/, '');
+    return `<li><button type="button"${slide >= 0 ? ` data-dot="${slide}"` : ' disabled'}><span class="n">${k + 1}</span><b>${esc(m.title)}</b><small class="${m.later ? 'later' : ''}">${m.later ? 'これから読む' : '既読'}${v ? '・' + esc(v) : ''}</small></button></li>`;
+  }).join('') : '';
   $('w-memo').textContent = b.memo;
   $('w-memo').style.display = b.memo ? '' : 'none';
   $('w-gift-acts').style.display = RSV_READY && b.vol ? '' : 'none';
@@ -935,7 +1007,7 @@ function renderWork(b) {
   const box = document.querySelector('#p-work .work-info');
   resetTalk(box);
   talkRestore(box);
-  const same = b.author ? books.filter(x => x !== b && x.vol && x.author === b.author) : [];
+  const same = b.author ? books.filter(x => x !== b && x.vol && !x.parent && x.author === b.author) : [];
   $('w-same').innerHTML = same.length ? same.map(x => bookHTML(x, false)).join('') : '<p class="only">本棚にはこの1作品だけ</p>';
   watchImgs($('w-same'));
 }
@@ -1415,7 +1487,8 @@ function rsvOpenGift() {
 }
 if (RSV_READY && rsvToken) rsvRefresh();
 $('none-gift').addEventListener('click', () => { rsvPrefill = RSV_READY ? $('q').value.trim() : ''; });
-$('w-gift').addEventListener('click', () => { rsvPrefill = current.title; });
+// シリーズのときは、シリーズ名ではなく最新の巻の題名を入れる
+$('w-gift').addEventListener('click', () => { rsvPrefill = current.isSeries ? current.members[current.members.length - 1].title : current.title; });
 $('rsv-add').addEventListener('click', () => rsvAddRow('').querySelector('.rsv-input').focus());
 $('rsv-send').addEventListener('click', rsvSend);
 $('rsv-skip').addEventListener('click', () => {
@@ -1517,8 +1590,10 @@ function route(keepScroll) {
     show('lib');
   } else if (p === 'work' && arg) {
     if (!books.length) return;
-    const b = books.find(x => x.title === arg);
-    if (!b) { show('top'); return; }
+    const hit = books.find(x => x.title === arg);
+    if (!hit) { show('top'); return; }
+    // シリーズの巻の題名で開かれたときは、シリーズのページを出す
+    const b = hit.parent || hit;
     if (current !== b) renderWork(b);
     show('work');
   } else if (p === 'letter') { resetLetter(); show('letter'); }
@@ -1538,8 +1613,17 @@ function go(hash) {
 window.addEventListener('popstate', () => { navCount = Math.max(0, navCount - 1); route(true); });
 
 document.addEventListener('click', e => {
+  // 作品ページの表紙の点・シリーズの題名を押したら、その表紙に切り替える
+  const dot = e.target.closest('[data-dot]');
+  if (dot) {
+    const strip = $('w-cover').querySelector('.strip');
+    if (strip) strip.scrollTo({ left: strip.clientWidth * +dot.dataset.dot });
+    // 題名リストから押したときは、表紙が画面の外なら見えるところまで戻す
+    if (dot.closest('#w-series')) { const r = $('w-cover').getBoundingClientRect(); if (r.top < 60) $('w-cover').scrollIntoView({ block: 'center' }); }
+    return;
+  }
   const book = e.target.closest('[data-i]');
-  if (book) { go('#work/' + encodeURIComponent(books[+book.dataset.i].title)); return; }
+  if (book) { const bk = books[+book.dataset.i]; go('#work/' + encodeURIComponent((bk.parent || bk).title)); return; }
   const g = e.target.closest('[data-go]');
   if (g) {
     e.preventDefault();
