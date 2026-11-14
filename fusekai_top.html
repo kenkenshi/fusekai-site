@@ -174,10 +174,13 @@ div.book[data-i] { cursor: pointer; }
 
 /* ===== 本棚 ===== */
 .lib-head { padding: 18px 0 0; }
-.seg { display: inline-flex; padding: 4px; border-radius: 999px; background: #fff; border: 1.5px solid var(--ink); max-width: 100%; }
-.seg button { padding: 8px 14px; border-radius: 999px; font-weight: 900; font-size: 14px; white-space: nowrap; }
-.seg button small { font-size: 11px; font-weight: 700; opacity: .7; }
-.seg button.on { background: var(--ink); color: #fff; }
+/* 本棚の「見る」「並び順」はプルダウン2つ（2026-11-14 けんしがC案を選択） */
+.picks { display: flex; gap: 8px; }
+.dd { position: relative; flex: 1; min-width: 0; max-width: 240px; }
+.dd[hidden] { display: none; }
+.dd small { position: absolute; left: 13px; top: 7px; font-size: 11px; font-weight: 900; color: var(--purple); pointer-events: none; }
+.dd select { width: 100%; appearance: none; -webkit-appearance: none; margin: 0; padding: 23px 32px 7px 12px; border: 1.5px solid var(--ink); border-radius: 12px; background: #fff; font: inherit; font-size: 16px; font-weight: 900; color: var(--ink); cursor: pointer; text-overflow: ellipsis; }
+.dd::after { content: ''; position: absolute; right: 13px; top: 50%; margin-top: -2px; border: 6px solid transparent; border-top-color: var(--ink); border-bottom-width: 0; pointer-events: none; }
 .lib-sticky {
   position: sticky; top: 55px; z-index: 10;
   margin: 12px -16px 0; padding: 10px 12px;
@@ -188,13 +191,10 @@ div.book[data-i] { cursor: pointer; }
 .lib-search .clear { width: 24px; height: 24px; }
 .kana { display: flex; gap: 4px; }
 .searching .kana, .searching .lib-sticky, .cat-goods .lib-sticky { display: none; }
-@media (max-width: 420px) { .seg button { padding: 8px 9px; font-size: 13px; } .seg button small { font-size: 10px; } }
-/* ドラマCD・グッズまで出て5つになったら、スマホでは2段にする（上：すべて・既読・これから読む／下：ドラマCD・グッズ） */
-@media (max-width: 600px) {
-  .seg.five { display: grid; grid-template-columns: repeat(6, 1fr); gap: 2px; width: 100%; border-radius: 22px; }
-  .seg.five button { grid-column: span 2; padding: 8px 4px; }
-  .seg.five button:nth-child(n+4) { grid-column: span 3; }
-}
+/* 出版社順・作家さん順は見出しが多いので、飛ぶボタンを横にすべらせる */
+.kana.scroll { overflow-x: auto; scrollbar-width: none; }
+.kana.scroll::-webkit-scrollbar { display: none; }
+.kana.scroll button { flex: 0 0 auto; max-width: none; padding: 0 13px; font-size: 13px; white-space: nowrap; }
 .lib-none { padding: 30px 0; text-align: center; font-size: 14px; line-height: 1.8; color: var(--ink-soft); }
 .lib-none b { color: var(--ink); }
 .lib-none button { margin-top: 12px; padding: 11px 20px; border-radius: 999px; border: 2px solid var(--ink); background: #fff; font-weight: 900; box-shadow: 0 3px 0 var(--ink); }
@@ -523,12 +523,9 @@ body.typing .lib-dock, body.kb .lib-dock { bottom: var(--kb, 0px); padding-botto
 <main class="page" id="p-lib">
   <div class="wrap">
     <div class="lib-head">
-      <div class="seg">
-        <button data-cat="all">すべて <small id="s-all"></small></button>
-        <button data-cat="read">既読 <small id="s-read"></small></button>
-        <button data-cat="later">これから読む <small id="s-later"></small></button>
-        <button data-cat="cd" id="seg-cd" hidden>ドラマCD <small id="s-cd"></small></button>
-        <button data-cat="goods" id="seg-goods" hidden>グッズ <small id="s-goods"></small></button>
+      <div class="picks">
+        <label class="dd"><small>見る</small><select id="cat-sel" aria-label="見る"><option value="all">すべて</option></select></label>
+        <label class="dd" id="sort-dd"><small>並び順</small><select id="sort-sel" aria-label="並び順"><option value="title">作品名順</option><option value="pub">出版社順</option><option value="author">作家さん順</option></select></label>
       </div>
     </div>
     <div class="lib-sticky">
@@ -730,6 +727,7 @@ async function loadBooks() {
       img:    (r[5] || '').trim(),
       gift:   !!(r[6] || '').trim(),
       yomi:   (r[7] || '').trim(),
+      pub:    (r[12] || '').trim(),
       series: (r[15] || '').trim(),
     })).filter(b => b.title);
     books.forEach(b => { b.later = b.vol.startsWith('積読'); });
@@ -738,9 +736,10 @@ async function loadBooks() {
     const shelved = books.filter(b => b.vol && !b.parent);
     read = shelved.filter(b => !b.later);
     later = shelved.filter(b => b.later);
-    $('total').textContent = $('n-all').textContent = $('s-all').textContent = shelved.length;
-    $('n-read').textContent = $('s-read').textContent = read.length;
-    $('n-later').textContent = $('s-later').textContent = later.length;
+    $('total').textContent = $('n-all').textContent = shelved.length;
+    $('n-read').textContent = read.length;
+    $('n-later').textContent = later.length;
+    fillCatSel();
     if ($('q').value) search($('q').value);
     renderLib();
     route(true);
@@ -761,7 +760,7 @@ function makeSeries() {
       title: name, isSeries: true, members,
       author: [...new Set(members.map(m => m.author))].join('・'),
       vol: (allLater ? '積読' : '') + members.length + '冊',
-      memo: members[0].memo, img: members[0].img, yomi: members[0].yomi,
+      memo: members[0].memo, img: members[0].img, yomi: members[0].yomi, pub: members[0].pub,
       gift: members.some(m => m.gift), later: allLater,
       imgs: [...new Set(members.map(m => m.img).filter(Boolean))],
     };
@@ -871,6 +870,34 @@ $('q-clear').addEventListener('click', e => { e.preventDefault(); $('q').value =
 const ROWS = [['あ','あいうえおぁぃぅぇぉゔ'],['か','かきくけこがぎぐげご'],['さ','さしすせそざじずぜぞ'],['た','たちつてとだぢづでどっ'],['な','なにぬねの'],['は','はひふへほばびぶべぼぱぴぷぺぽ'],['ま','まみむめも'],['や','やゆよゃゅょ'],['ら','らりるれろ'],['わ','わをん']];
 const rowOf = b => { const c = norm(b.yomi || b.title)[0] || ''; const r = ROWS.find(([, s]) => s.includes(c)); return r ? r[0] : '英'; };
 let cat = 'all';
+// 並び順：作品名順（あかさたな）／出版社順（多い順）／作家さん順（作品の多い作家さんから。1作品の作家さんは最後にまとめる）
+let sortBy = 'title';
+try { if (['title', 'pub', 'author'].includes(localStorage.getItem('fusekai-sort'))) sortBy = localStorage.getItem('fusekai-sort'); } catch (e) {}
+function groupList(list) {
+  const by = key => { const m = new Map(); list.forEach(b => { const k = key(b) || 'その他'; (m.get(k) || m.set(k, []).get(k)).push(b); }); return [...m].sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0], 'ja')); };
+  if (sortBy === 'pub') return by(b => b.pub).map(([k, l]) => [k, l, k]);
+  if (sortBy === 'author') {
+    const all = by(b => b.author), many = all.filter(([, l]) => l.length > 1), one = all.filter(([, l]) => l.length < 2).flatMap(([, l]) => l);
+    one.sort((a, b) => norm(a.yomi || a.title).localeCompare(norm(b.yomi || b.title), 'ja'));
+    return many.map(([k, l]) => [k, l, k]).concat(one.length ? [['ほか', one, 'ほかの作家さん']] : []);
+  }
+  return [...ROWS.map(r => r[0]), '英'].map(k => [k, list.filter(b => rowOf(b) === k), k === '英' ? '英数字' : k + '行']).filter(([, l]) => l.length);
+}
+// 「見る」の中身（件数つき）。ドラマCD・グッズは1つもなければ出さない
+function fillCatSel() {
+  const opts = [['all', 'すべて', read.length + later.length], ['read', '既読', read.length], ['later', 'これから読む', later.length], ['cd', 'ドラマCD', goodsIn('cd').length], ['goods', 'グッズ', goodsIn('goods').length]]
+    .filter(([c, , n]) => n || !isGoodsCat(c));
+  $('cat-sel').innerHTML = opts.map(([c, l, n]) => `<option value="${c}">${l}${books.length || isGoodsCat(c) ? '　' + n : ''}</option>`).join('');
+  syncPicks();
+}
+// ドラマCD・グッズは届いた順だけなので、並び順は隠す
+function syncPicks() {
+  if ([...$('cat-sel').options].some(o => o.value === cat)) $('cat-sel').value = cat;
+  $('sort-sel').value = sortBy;
+  $('sort-dd').hidden = isGoodsCat(cat);
+}
+$('cat-sel').addEventListener('change', e => { cat = e.target.value; history.replaceState(null, '', '#lib/' + cat); renderLib(); window.scrollTo(0, 0); });
+$('sort-sel').addEventListener('change', e => { sortBy = e.target.value; try { localStorage.setItem('fusekai-sort', sortBy); } catch (err) {} renderLib(); window.scrollTo(0, 0); });
 function renderLib() {
   if (!books.length) return;
   searchMemo.set('lq', $('lq').value);
@@ -887,14 +914,16 @@ function renderLib() {
       ? `<section class="group"><h3>見つかった作品 <small>${list.length}作品</small></h3><div class="grid">${list.map(b => bookHTML(b, cat === 'all')).join('')}</div></section>`
       : `<div class="lib-none"><b>「${esc($('lq').value)}」</b>は${cat === 'all' ? '本棚に' : cat === 'read' ? '既読に' : 'これから読むに'}ありませんでした<br>${cat === 'all' ? '' : '<button type="button" data-cat-all>すべての中で探す</button><br>'}<button type="button" data-fukyou>けんしに布教する</button></div>`;
     watchImgs($('groups'));
-    document.querySelectorAll('.seg button').forEach(b => b.classList.toggle('on', b.dataset.cat === cat));
+    syncPicks();
     return;
   }
-  const groups = [...ROWS.map(r => r[0]), '英'].map(k => [k, list.filter(b => rowOf(b) === k)]).filter(([, l]) => l.length);
-  $('kana').innerHTML = groups.map(([k], i) => `<button class="${i ? '' : 'on'}" data-k="${k}">${k}</button>`).join('');
-  $('groups').innerHTML = groups.map(([k, l]) => `<section class="group" id="g-${k}"><h3>${k === '英' ? '英数字' : k + '行'} <small>${l.length}作品</small></h3><div class="grid">${l.map(b => bookHTML(b, cat === 'all')).join('')}</div></section>`).join('');
+  const groups = groupList(list);
+  $('kana').classList.toggle('scroll', sortBy !== 'title');
+  $('kana').scrollLeft = 0;
+  $('kana').innerHTML = groups.map(([k], i) => `<button class="${i ? '' : 'on'}" data-k="${i}">${esc(k)}</button>`).join('');
+  $('groups').innerHTML = groups.map(([, l, h], i) => `<section class="group" id="g-${i}"><h3>${esc(h)} <small>${l.length}作品</small></h3><div class="grid">${l.map(b => bookHTML(b, cat === 'all')).join('')}</div></section>`).join('');
   watchImgs($('groups'));
-  document.querySelectorAll('.seg button').forEach(b => b.classList.toggle('on', b.dataset.cat === cat));
+  syncPicks();
 }
 $('lq').addEventListener('input', () => { renderLib(); window.scrollTo(0, 0); });
 $('lq').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing && e.keyCode !== 229) e.target.blur(); });
@@ -913,6 +942,8 @@ window.addEventListener('scroll', () => {
   if (groupEls.length && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) cur = groupEls[groupEls.length - 1].id.slice(2);
   const btns = document.querySelectorAll('.kana button');
   btns.forEach((x, i) => x.classList.toggle('on', cur ? x.dataset.k === cur : i === 0));
+  const bar = $('kana'), on = bar.querySelector('.on');
+  if (on && bar.classList.contains('scroll') && on !== bar.__last) { bar.__last = on; bar.scrollLeft = on.offsetLeft - bar.offsetLeft - (bar.clientWidth - on.offsetWidth) / 2; }
 }, { passive: true });
 
 /* ── お嬢から届いたグッズ（既読リストの「グッズ」タブ） ── */
@@ -946,8 +977,7 @@ const goodsHTML = (g, inWork) => `<button type="button" class="gd${g.r18 ? ' r18
 const isGoodsCat = c => c === 'goods' || c === 'cd';
 const goodsIn = c => goods.filter(g => (g.kind === 'ドラマCD') === (c === 'cd'));
 function renderGoods() {
-  ['goods', 'cd'].forEach(c => { const n = goodsIn(c).length; $('s-' + c).textContent = n; $('seg-' + c).hidden = !n; });
-  $('seg-cd').parentNode.classList.toggle('five', !$('seg-goods').hidden && !$('seg-cd').hidden);
+  fillCatSel();
   if (isGoodsCat(cat)) renderLib();
   if ($('q').value) search($('q').value);
   if (current) renderWorkGoods(current);
@@ -963,7 +993,7 @@ function renderLibGoods(lq) {
     ? `<section class="group"><h3>${lq ? '見つかった' : 'お嬢から届いた'}${name} <small>${list.length}${cd ? '枚' : '点'}</small></h3><p class="goods-lead">お嬢からいただいた${cd ? 'ドラマCD' : 'ものたち'}。タップすると大きく見られます。</p><div class="goods-grid">${list.map(g => goodsHTML(g, false)).join('')}</div></section>`
     : `<div class="lib-none"><b>「${esc($('lq').value)}」</b>は${name}にありませんでした<br><button type="button" data-cat-all>本棚のすべての中で探す</button></div>`;
   watchImgs($('groups'));
-  document.querySelectorAll('.seg button').forEach(b => b.classList.toggle('on', b.dataset.cat === cat));
+  syncPicks();
 }
 function renderWorkGoods(b) {
   const titles = [b.title].concat(b.members ? b.members.map(m => m.title) : []);
@@ -1646,8 +1676,6 @@ document.addEventListener('click', e => {
     go(p === 'top' ? '#' : p === 'lib' ? '#lib/' + (g.dataset.cat || 'all') : '#' + p);
     return;
   }
-  const seg = e.target.closest('.seg button');
-  if (seg) { history.replaceState(null, '', '#lib/' + seg.dataset.cat); cat = seg.dataset.cat; renderLib(); window.scrollTo(0, 0); return; }
   const k = e.target.closest('.kana button');
   if (k) {
     document.querySelectorAll('.kana button').forEach(x => x.classList.toggle('on', x === k));
