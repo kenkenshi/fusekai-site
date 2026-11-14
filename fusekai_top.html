@@ -189,6 +189,8 @@ div.book[data-i] { cursor: pointer; }
 .kana { display: flex; gap: 4px; }
 .searching .kana, .searching .lib-sticky, .cat-goods .lib-sticky { display: none; }
 @media (max-width: 420px) { .seg button { padding: 8px 9px; font-size: 13px; } .seg button small { font-size: 10px; } }
+/* グッズ・ドラマCDまで出て5つになったときは詰める */
+@media (max-width: 420px) { .seg.five button { padding: 8px 4px; font-size: 11.5px; } .seg.five button small { font-size: 9px; } }
 .lib-none { padding: 30px 0; text-align: center; font-size: 14px; line-height: 1.8; color: var(--ink-soft); }
 .lib-none b { color: var(--ink); }
 .lib-none button { margin-top: 12px; padding: 11px 20px; border-radius: 999px; border: 2px solid var(--ink); background: #fff; font-weight: 900; box-shadow: 0 3px 0 var(--ink); }
@@ -245,6 +247,7 @@ div.book[data-i] { cursor: pointer; }
 .gk.heard { background: var(--cyan); }
 .gk.yet { background: var(--orange); }
 .gd .w { margin-top: 5px; font-size: 12.5px; font-weight: 900; line-height: 1.45; }
+.gd .s { margin-top: 2px; font-size: 11.5px; font-weight: 700; line-height: 1.45; color: var(--purple); }
 .gd .m { margin-top: 4px; font-size: 12px; line-height: 1.55; color: var(--ink-soft); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .gbox { position: fixed; inset: 0; z-index: 100; display: none; align-items: center; justify-content: center; padding: 16px; background: rgba(26, 10, 48, .85); }
 .gbox.on { display: flex; }
@@ -521,6 +524,7 @@ body.typing .lib-dock, body.kb .lib-dock { bottom: var(--kb, 0px); padding-botto
         <button data-cat="read">既読 <small id="s-read"></small></button>
         <button data-cat="later">これから読む <small id="s-later"></small></button>
         <button data-cat="goods" id="seg-goods" hidden>グッズ <small id="s-goods"></small></button>
+        <button data-cat="cd" id="seg-cd" hidden>ドラマCD <small id="s-cd"></small></button>
       </div>
     </div>
     <div class="lib-sticky">
@@ -819,7 +823,7 @@ const norm = s => (s || '').normalize('NFKC').toLowerCase()
   .replace(/[\s・、。,.!?！？「」『』()（）〜~\-ー:：♡☆★]/g, '');
 const hitHTML = b => `<button class="hit" data-i="${books.indexOf(b)}">${b.img ? `<img src="${esc(imgAt(b.img, 120))}" alt="">` : '<span class="ph"></span>'}<span><b>${esc(b.title)}</b><small>${esc(b.author + (b.isSeries ? '・全' + b.members.length + '冊' : ''))}</small></span><span class="pill${b.later ? ' later' : ''}">${b.later ? 'これから読む' : '既読'}</span></button>`;
 // グッズの「作品名」のうち、漫画の作品ではないもの
-const NOT_WORK = ['チンアナゴ', 'J.GARDEN'];
+const NOT_WORK = ['チンアナゴ', 'J.GARDEN', '男子高校生、はじめての'];
 // 一覧で見せる名前：ここに入れた作品名は、中身の名前（デカチンアナゴ等）で出す（2026-11-05 けんしの依頼）
 const NAME_BY_WHAT = ['チンアナゴ'];
 const goodsName = g => NAME_BY_WHAT.includes(g.title) && g.what ? g.what : g.title;
@@ -869,8 +873,8 @@ function renderLib() {
   const lq = norm($('lq').value);
   $('lq').closest('.search').classList.toggle('has', !!$('lq').value);
   $('p-lib').classList.toggle('searching', !!lq);
-  $('p-lib').classList.toggle('cat-goods', cat === 'goods');
-  if (cat === 'goods') { renderLibGoods(lq); return; }
+  $('p-lib').classList.toggle('cat-goods', isGoodsCat(cat));
+  if (isGoodsCat(cat)) { renderLibGoods(lq); return; }
   const list = (cat === 'all' ? read.concat(later) : cat === 'read' ? read : later)
     .filter(b => !lq || titleKeys(b).concat(b.author).some(x => norm(x).includes(lq)))
     .sort((a, b) => norm(a.yomi || a.title).localeCompare(norm(b.yomi || b.title), 'ja'));
@@ -931,11 +935,16 @@ async function loadGoods() {
 // ドラマCDは「聴いた／まだ聴いてない」も出す
 const heardHTML = g => g.heard ? (g.heard === '聴いた' ? '<span class="gk heard">聴いた</span>' : '<span class="gk yet">まだ聴いてない</span>') : '';
 const goodsHead = list => list.some(g => g.kind === 'ドラマCD') ? (list.every(g => g.kind === 'ドラマCD') ? 'ドラマCD' : 'グッズ・ドラマCD') : 'グッズ';
-const goodsHTML = (g, inWork) => `<button type="button" class="gd${g.r18 ? ' r18' : ''}" data-g="${goods.indexOf(g)}"><div class="ph"><img data-src="${esc(imgAt(g.img, 500))}" data-backup="${esc(imgBackup(g.img, 500))}" alt="">${g.r18 ? '<span class="r18m">R18<br>タップで表示</span>' : ''}</div><div class="tx"><span class="gk">${esc(g.kind || 'グッズ')}</span>${heardHTML(g)}<div class="w">${esc(inWork ? g.what || g.title : goodsName(g))}</div>${g.memo ? `<div class="m">${esc(g.memo)}</div>` : ''}</div></button>`;
+// ドラマCDは同じ作品の盤違いもあるので、一覧では題名の下に中身（第2弾・限定盤など）も出す
+const cdSub = (g, inWork) => g.kind === 'ドラマCD' && !inWork ? g.what.replace(/^ドラマCD\s*/, '') : '';
+const goodsHTML = (g, inWork) => `<button type="button" class="gd${g.r18 ? ' r18' : ''}" data-g="${goods.indexOf(g)}"><div class="ph"><img data-src="${esc(imgAt(g.img, 500))}" data-backup="${esc(imgBackup(g.img, 500))}" alt="">${g.r18 ? '<span class="r18m">R18<br>タップで表示</span>' : ''}</div><div class="tx"><span class="gk">${esc(g.kind || 'グッズ')}</span>${heardHTML(g)}<div class="w">${esc(inWork ? g.what || g.title : goodsName(g))}</div>${cdSub(g, inWork) ? `<div class="s">${esc(cdSub(g, inWork))}</div>` : ''}${g.memo ? `<div class="m">${esc(g.memo)}</div>` : ''}</div></button>`;
+// 本棚の「グッズ」と「ドラマCD」は分けて出す（2026-11-14 けんしの提案）
+const isGoodsCat = c => c === 'goods' || c === 'cd';
+const goodsIn = c => goods.filter(g => (g.kind === 'ドラマCD') === (c === 'cd'));
 function renderGoods() {
-  $('s-goods').textContent = goods.length;
-  $('seg-goods').hidden = !goods.length;
-  if (cat === 'goods') renderLib();
+  ['goods', 'cd'].forEach(c => { const n = goodsIn(c).length; $('s-' + c).textContent = n; $('seg-' + c).hidden = !n; });
+  $('seg-cd').parentNode.classList.toggle('five', !$('seg-goods').hidden && !$('seg-cd').hidden);
+  if (isGoodsCat(cat)) renderLib();
   if ($('q').value) search($('q').value);
   if (current) renderWorkGoods(current);
 }
@@ -943,11 +952,12 @@ function renderGoods() {
 function renderLibGoods(lq) {
   // グッズのURLを直接開いたとき、読み込み前に「ありませんでした」と出さない
   if (!goodsLoaded) { $('kana').innerHTML = ''; $('groups').innerHTML = '<p class="loading">グッズを読み込み中…</p>'; return; }
-  const list = goods.slice().reverse().filter(g => !lq || [g.title, g.what, g.kind].some(x => norm(x).includes(lq)));
+  const cd = cat === 'cd', name = cd ? 'ドラマCD' : 'グッズ';
+  const list = goodsIn(cat).reverse().filter(g => !lq || [g.title, g.what, g.kind].some(x => norm(x).includes(lq)));
   $('kana').innerHTML = '';
   $('groups').innerHTML = list.length
-    ? `<section class="group"><h3>${lq ? '見つかったグッズ' : 'お嬢から届いた' + goodsHead(goods)} <small>${list.length}点</small></h3><p class="goods-lead">お嬢からいただいたものたち。タップすると大きく見られます。</p><div class="goods-grid">${list.map(g => goodsHTML(g, false)).join('')}</div></section>`
-    : `<div class="lib-none"><b>「${esc($('lq').value)}」</b>はグッズにありませんでした<br><button type="button" data-cat-all>本棚のすべての中で探す</button></div>`;
+    ? `<section class="group"><h3>${lq ? '見つかった' : 'お嬢から届いた'}${name} <small>${list.length}${cd ? '枚' : '点'}</small></h3><p class="goods-lead">お嬢からいただいた${cd ? 'ドラマCD' : 'ものたち'}。タップすると大きく見られます。</p><div class="goods-grid">${list.map(g => goodsHTML(g, false)).join('')}</div></section>`
+    : `<div class="lib-none"><b>「${esc($('lq').value)}」</b>は${name}にありませんでした<br><button type="button" data-cat-all>本棚のすべての中で探す</button></div>`;
   watchImgs($('groups'));
   document.querySelectorAll('.seg button').forEach(b => b.classList.toggle('on', b.dataset.cat === cat));
 }
@@ -1585,7 +1595,7 @@ function route(keepScroll) {
   const h = decodeURIComponent(location.hash.slice(1));
   const [p, arg] = h.split('/');
   if (p === 'lib') {
-    const c = ['all', 'read', 'later', 'goods'].includes(arg) ? arg : 'all';
+    const c = ['all', 'read', 'later', 'goods', 'cd'].includes(arg) ? arg : 'all';
     if (c !== cat || !$('groups').querySelector('.group')) { cat = c; renderLib(); }
     show('lib');
   } else if (p === 'work' && arg) {
