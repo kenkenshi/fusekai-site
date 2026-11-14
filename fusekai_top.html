@@ -189,8 +189,12 @@ div.book[data-i] { cursor: pointer; }
 .kana { display: flex; gap: 4px; }
 .searching .kana, .searching .lib-sticky, .cat-goods .lib-sticky { display: none; }
 @media (max-width: 420px) { .seg button { padding: 8px 9px; font-size: 13px; } .seg button small { font-size: 10px; } }
-/* グッズ・ドラマCDまで出て5つになったときは詰める */
-@media (max-width: 420px) { .seg.five button { padding: 8px 4px; font-size: 11.5px; } .seg.five button small { font-size: 9px; } }
+/* ドラマCD・グッズまで出て5つになったら、スマホでは2段にする（上：すべて・既読・これから読む／下：ドラマCD・グッズ） */
+@media (max-width: 600px) {
+  .seg.five { display: grid; grid-template-columns: repeat(6, 1fr); gap: 2px; width: 100%; border-radius: 22px; }
+  .seg.five button { grid-column: span 2; padding: 8px 4px; }
+  .seg.five button:nth-child(n+4) { grid-column: span 3; }
+}
 .lib-none { padding: 30px 0; text-align: center; font-size: 14px; line-height: 1.8; color: var(--ink-soft); }
 .lib-none b { color: var(--ink); }
 .lib-none button { margin-top: 12px; padding: 11px 20px; border-radius: 999px; border: 2px solid var(--ink); background: #fff; font-weight: 900; box-shadow: 0 3px 0 var(--ink); }
@@ -523,8 +527,8 @@ body.typing .lib-dock, body.kb .lib-dock { bottom: var(--kb, 0px); padding-botto
         <button data-cat="all">すべて <small id="s-all"></small></button>
         <button data-cat="read">既読 <small id="s-read"></small></button>
         <button data-cat="later">これから読む <small id="s-later"></small></button>
-        <button data-cat="goods" id="seg-goods" hidden>グッズ <small id="s-goods"></small></button>
         <button data-cat="cd" id="seg-cd" hidden>ドラマCD <small id="s-cd"></small></button>
+        <button data-cat="goods" id="seg-goods" hidden>グッズ <small id="s-goods"></small></button>
       </div>
     </div>
     <div class="lib-sticky">
