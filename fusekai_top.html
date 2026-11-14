@@ -191,10 +191,30 @@ div.book[data-i] { cursor: pointer; }
 .lib-search .clear { width: 24px; height: 24px; }
 .kana { display: flex; gap: 4px; }
 .searching .kana, .searching .lib-sticky, .cat-goods .lib-sticky { display: none; }
-/* 出版社順・作家さん順は見出しが多いので、飛ぶボタンを横にすべらせる */
-.kana.scroll { overflow-x: auto; scrollbar-width: none; }
-.kana.scroll::-webkit-scrollbar { display: none; }
-.kana.scroll button { flex: 0 0 auto; max-width: none; padding: 0 13px; font-size: 13px; white-space: nowrap; }
+/* 出版社順・作家さん順は、ボタンを押すとあいうえお順の一覧がバッと出る（2026-11-14 けんしの希望。横スワイプは量が多すぎた） */
+.kana[hidden] { display: none; }
+.jump { display: flex; align-items: center; gap: 8px; width: 100%; height: 38px; padding: 0 14px; border-radius: 999px; background: #fff; border: 1.5px solid var(--ink); font-weight: 900; font-size: 14px; text-align: left; }
+.jump[hidden] { display: none; }
+.jump small { color: var(--purple); font-size: 11.5px; flex: none; }
+.jump span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.jump::after { content: ''; flex: none; border: 6px solid transparent; border-top-color: var(--ink); border-bottom-width: 0; transition: transform .15s; }
+.jump.open::after { transform: rotate(180deg); }
+.jump-panel { position: absolute; left: 12px; right: 12px; top: calc(100% - 4px); max-height: min(62vh, 520px); overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 6px 14px 14px; background: #fff; border: 1.5px solid var(--ink); border-radius: 18px; box-shadow: 0 10px 30px rgba(26,10,48,.18); }
+.jump-panel[hidden] { display: none; }
+.jp-row { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.jp-row:last-child { border-bottom: 0; }
+.jp-row > b { flex: none; width: 22px; padding-top: 5px; font-size: 14px; font-weight: 900; color: var(--pink); }
+.jp-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.jp-chips button { padding: 6px 11px; border-radius: 999px; border: 1px solid var(--line); background: #fff; font-size: 13px; font-weight: 900; line-height: 1.3; }
+.jp-chips button small { margin-left: 3px; font-size: 10.5px; font-weight: 700; color: var(--ink-soft); }
+.jp-chips button.on { background: var(--pink); border-color: var(--pink); color: #fff; }
+.jp-chips button.on small { color: #fff; }
+.book[id] { scroll-margin-top: 170px; }
+/* 本棚で下まで来たら、右下に「いちばん上へ」ボタン（2026-11-14 けんしの希望） */
+.totop { display: none; position: fixed; right: 14px; bottom: calc(136px + env(safe-area-inset-bottom)); z-index: 30; width: 46px; height: 46px; border-radius: 50%; background: #fff; border: 2px solid var(--ink); box-shadow: 0 3px 0 var(--ink); align-items: center; justify-content: center; }
+.totop svg { width: 22px; height: 22px; }
+body[data-page="lib"].scrolled .totop { display: flex; }
+body.typing .totop, body.kb .totop { display: none !important; }
 .lib-none { padding: 30px 0; text-align: center; font-size: 14px; line-height: 1.8; color: var(--ink-soft); }
 .lib-none b { color: var(--ink); }
 .lib-none button { margin-top: 12px; padding: 11px 20px; border-radius: 999px; border: 2px solid var(--ink); background: #fff; font-weight: 900; box-shadow: 0 3px 0 var(--ink); }
@@ -372,6 +392,7 @@ body.typing .lib-dock, body.kb .lib-dock { bottom: var(--kb, 0px); padding-botto
   .lib-sticky { top: 65px; margin: 14px 0 0; padding: 10px 0; }
   body[data-page="lib"] .lib-dock { bottom: 20px; left: 50%; right: auto; width: 480px; transform: translateX(-50%); padding: 0; background: none; border: 0; backdrop-filter: none; -webkit-backdrop-filter: none; }
   body[data-page="lib"] { padding-bottom: 90px; }
+  .totop { right: 28px; bottom: 26px; }
   .grid { grid-template-columns: repeat(6, 1fr); gap: 22px 18px; }
   .work-main { display: grid; grid-template-columns: 320px 1fr; gap: 40px; align-items: start; }
   .work-cover { width: 100%; max-width: none; margin: 0; position: sticky; top: 90px; }
@@ -530,6 +551,8 @@ body.typing .lib-dock, body.kb .lib-dock { bottom: var(--kb, 0px); padding-botto
     </div>
     <div class="lib-sticky">
       <div class="kana" id="kana"></div>
+      <button type="button" class="jump" id="jump" hidden aria-expanded="false"></button>
+      <div class="jump-panel" id="jump-panel" hidden></div>
     </div>
     <div id="groups"><p class="loading">本棚を読み込み中…</p></div>
   </div>
@@ -660,6 +683,7 @@ body.typing .lib-dock, body.kb .lib-dock { bottom: var(--kb, 0px); padding-botto
   </div>
 </main>
 
+<button type="button" class="totop" id="totop" aria-label="いちばん上へ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5"/></svg></button>
 <div class="lib-dock" id="lib-dock"><label class="search lib-search"><svg class="sicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/></svg><input id="lq" type="search" enterkeyhint="search" placeholder="本棚の中を探す" autocomplete="off" autocorrect="off" autocapitalize="off"><button type="button" class="clear" id="lq-clear" aria-label="消す">×</button></label></div>
 <nav class="tabbar">
   <button data-go="top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>トップ</button>
@@ -729,6 +753,7 @@ async function loadBooks() {
       yomi:   (r[7] || '').trim(),
       pub:    (r[12] || '').trim(),
       series: (r[15] || '').trim(),
+      ay:     (r[16] || '').trim(),
     })).filter(b => b.title);
     books.forEach(b => { b.later = b.vol.startsWith('積読'); });
     makeSeries();
@@ -760,7 +785,7 @@ function makeSeries() {
       title: name, isSeries: true, members,
       author: [...new Set(members.map(m => m.author))].join('・'),
       vol: (allLater ? '積読' : '') + members.length + '冊',
-      memo: members[0].memo, img: members[0].img, yomi: members[0].yomi, pub: members[0].pub,
+      memo: members[0].memo, img: members[0].img, yomi: members[0].yomi, pub: members[0].pub, ay: members[0].ay,
       gift: members.some(m => m.gift), later: allLater,
       imgs: [...new Set(members.map(m => m.img).filter(Boolean))],
     };
@@ -868,20 +893,41 @@ $('q-clear').addEventListener('click', e => { e.preventDefault(); $('q').value =
 
 /* ── 本棚 ── */
 const ROWS = [['あ','あいうえおぁぃぅぇぉゔ'],['か','かきくけこがぎぐげご'],['さ','さしすせそざじずぜぞ'],['た','たちつてとだぢづでどっ'],['な','なにぬねの'],['は','はひふへほばびぶべぼぱぴぷぺぽ'],['ま','まみむめも'],['や','やゆよゃゅょ'],['ら','らりるれろ'],['わ','わをん']];
-const rowOf = b => { const c = norm(b.yomi || b.title)[0] || ''; const r = ROWS.find(([, s]) => s.includes(c)); return r ? r[0] : '英'; };
+const rowKey = str => { const c = norm(str)[0]; if (!c) return '英'; const r = ROWS.find(([, s]) => s.includes(c)); return r ? r[0] : '英'; };
+const rowOf = b => rowKey(b.yomi || b.title);
 let cat = 'all';
 // 並び順：作品名順（あかさたな）／出版社順（多い順）／作家さん順（作品の多い作家さんから。1作品の作家さんは最後にまとめる）
 let sortBy = 'title';
 try { if (['title', 'pub', 'author'].includes(localStorage.getItem('fusekai-sort'))) sortBy = localStorage.getItem('fusekai-sort'); } catch (e) {}
+// 出版社の読み（あいうえお順に並べるため。かなの出版社はそのまま読む。新しい出版社が来たらここに足す）
+const PUB_YOMI = { BookLive: 'ぶっくらいぶ', CLAPコミックス: 'くらっぷこみっくす', Jパブリッシング: 'じぇいぱぶりっしんぐ', KADOKAWA: 'かどかわ', MUGENUP: 'むげんあっぷ', ぶんか社: 'ぶんかしゃ', ブライト出版: 'ぶらいとしゅっぱん', プランタン出版: 'ぷらんたんしゅっぱん', ホーム社: 'ほーむしゃ', 一迅社: 'いちじんしゃ', 二見書房: 'ふたみしょぼう', 光文社: 'こうぶんしゃ', 双葉社: 'ふたばしゃ', 大洋図書: 'たいようとしょ', 実業之日本社: 'じつぎょうのにほんしゃ', 小学館: 'しょうがくかん', 幻冬舎コミックス: 'げんとうしゃこみっくす', 彗星社: 'すいせいしゃ', 徳間書店: 'とくましょてん', 心交社: 'しんこうしゃ', 新書館: 'しんしょかん', 新潮社: 'しんちょうしゃ', 東京漫画社: 'とうきょうまんがしゃ', 海王社: 'かいおうしゃ', 白泉社: 'はくせんしゃ', 祥伝社: 'しょうでんしゃ', 秋水社: 'しゅうすいしゃ', 秋田書店: 'あきたしょてん', 竹書房: 'たけしょぼう', 芳文社: 'ほうぶんしゃ', 茜新社: 'せんしんしゃ', 講談社: 'こうだんしゃ', 道玄坂書房: 'どうげんざかしょぼう', 集英社: 'しゅうえいしゃ' };
+const pubYomi = p => norm(PUB_YOMI[p] || p);
+// 作家さんの読みは既読リストQ列「作者よみ」。空なら作者名をそのまま使う
+const auYomi = b => norm(b.ay || b.author);
+const byKana = (a, b) => a.localeCompare(b, 'ja');
+// 返すもの：groups＝[飛ぶボタンの字, 作品, 見出し]、jumps＝一覧に出す項目（出版社順・作家さん順のとき）
 function groupList(list) {
-  const by = key => { const m = new Map(); list.forEach(b => { const k = key(b) || 'その他'; (m.get(k) || m.set(k, []).get(k)).push(b); }); return [...m].sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0], 'ja')); };
-  if (sortBy === 'pub') return by(b => b.pub).map(([k, l]) => [k, l, k]);
-  if (sortBy === 'author') {
-    const all = by(b => b.author), many = all.filter(([, l]) => l.length > 1), one = all.filter(([, l]) => l.length < 2).flatMap(([, l]) => l);
-    one.sort((a, b) => norm(a.yomi || a.title).localeCompare(norm(b.yomi || b.title), 'ja'));
-    return many.map(([k, l]) => [k, l, k]).concat(one.length ? [['ほか', one, 'ほかの作家さん']] : []);
+  if (sortBy === 'pub') {
+    const m = new Map(); list.forEach(b => { const k = b.pub || 'その他'; (m.get(k) || m.set(k, []).get(k)).push(b); });
+    const groups = [...m].sort((a, b) => byKana(pubYomi(a[0]), pubYomi(b[0]))).map(([k, l]) => [k, l, k]);
+    return { groups, jumps: groups.map(([k, l], i) => ({ label: k, n: l.length, to: 'g-' + i, row: rowKey(pubYomi(k)) })) };
   }
-  return [...ROWS.map(r => r[0]), '英'].map(k => [k, list.filter(b => rowOf(b) === k), k === '英' ? '英数字' : k + '行']).filter(([, l]) => l.length);
+  if (sortBy === 'author') {
+    const sorted = list.slice().sort((a, b) => byKana(auYomi(a), auYomi(b)) || byKana(norm(a.yomi || a.title), norm(b.yomi || b.title)));
+    const groups = [...ROWS.map(r => r[0]), '英'].map(k => [k, sorted.filter(b => rowKey(auYomi(b)) === k), k === '英' ? '英数字' : k + '行']).filter(([, l]) => l.length);
+    const jumps = [];
+    sorted.forEach(b => { const j = jumps[jumps.length - 1]; if (j && j.label === b.author) j.n++; else jumps.push({ label: b.author, n: 1, to: 'j-' + jumps.length, row: rowKey(auYomi(b)), first: b }); });
+    return { groups, jumps };
+  }
+  return { groups: [...ROWS.map(r => r[0]), '英'].map(k => [k, list.filter(b => rowOf(b) === k), k === '英' ? '英数字' : k + '行']).filter(([, l]) => l.length), jumps: [] };
+}
+const jumpPanelHTML = jumps => [...ROWS.map(r => r[0]), '英'].map(k => [k, jumps.filter(j => j.row === k)]).filter(([, l]) => l.length)
+  .map(([k, l]) => `<div class="jp-row"><b>${k === '英' ? 'A' : k}</b><div class="jp-chips">${l.map(j => `<button type="button" data-j="${j.to}">${esc(j.label)}<small>${j.n}</small></button>`).join('')}</div></div>`).join('');
+let libHeads = [];
+function setJump(text) { $('jump').innerHTML = `<small>${sortBy === 'pub' ? '出版社' : '作家さん'}</small><span>${esc(text || '一覧から選ぶ')}</span>`; }
+function openJump(on) {
+  $('jump-panel').hidden = !on; $('jump').classList.toggle('open', on); $('jump').setAttribute('aria-expanded', on);
+  if (on) { const c = $('jump-panel').querySelector('.on'); $('jump-panel').scrollTop = c ? c.offsetTop - 60 : 0; }
 }
 // 「見る」の中身（件数つき）。ドラマCD・グッズは1つもなければ出さない
 function fillCatSel() {
@@ -917,11 +963,16 @@ function renderLib() {
     syncPicks();
     return;
   }
-  const groups = groupList(list);
-  $('kana').classList.toggle('scroll', sortBy !== 'title');
-  $('kana').scrollLeft = 0;
-  $('kana').innerHTML = groups.map(([k], i) => `<button class="${i ? '' : 'on'}" data-k="${i}">${esc(k)}</button>`).join('');
-  $('groups').innerHTML = groups.map(([, l, h], i) => `<section class="group" id="g-${i}"><h3>${esc(h)} <small>${l.length}作品</small></h3><div class="grid">${l.map(b => bookHTML(b, cat === 'all')).join('')}</div></section>`).join('');
+  const { groups, jumps } = groupList(list);
+  const kanaMode = sortBy === 'title';
+  libHeads = groups.map(([, , h]) => h);
+  $('kana').hidden = kanaMode ? false : true; $('jump').hidden = kanaMode; openJump(false);
+  $('kana').innerHTML = kanaMode ? groups.map(([k], i) => `<button class="${i ? '' : 'on'}" data-k="${i}">${esc(k)}</button>`).join('') : '';
+  if (!kanaMode) { setJump(sortBy === 'pub' ? libHeads[0] : ''); $('jump-panel').innerHTML = jumpPanelHTML(jumps); }
+  // 作家さん順は、その作家さんの1冊目に飛べる印をつける
+  const firstOf = new Map(jumps.filter(j => j.first).map(j => [j.first, j.to]));
+  const card = b => { const h = bookHTML(b, cat === 'all'); return firstOf.has(b) ? h.replace(' class="book', ` id="${firstOf.get(b)}" class="book`) : h; };
+  $('groups').innerHTML = groups.map(([, l, h], i) => `<section class="group" id="g-${i}"><h3>${esc(h)} <small>${l.length}作品</small></h3><div class="grid">${l.map(card).join('')}</div></section>`).join('');
   watchImgs($('groups'));
   syncPicks();
 }
@@ -934,6 +985,7 @@ document.addEventListener('click', e => {
 });
 let spyLock = 0;
 window.addEventListener('scroll', () => {
+  document.body.classList.toggle('scrolled', window.scrollY > 500);
   if (!$('p-lib').classList.contains('on') || Date.now() < spyLock) return;
   let cur = null;
   const groupEls = document.querySelectorAll('.group');
@@ -942,8 +994,7 @@ window.addEventListener('scroll', () => {
   if (groupEls.length && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) cur = groupEls[groupEls.length - 1].id.slice(2);
   const btns = document.querySelectorAll('.kana button');
   btns.forEach((x, i) => x.classList.toggle('on', cur ? x.dataset.k === cur : i === 0));
-  const bar = $('kana'), on = bar.querySelector('.on');
-  if (on && bar.classList.contains('scroll') && on !== bar.__last) { bar.__last = on; bar.scrollLeft = on.offsetLeft - bar.offsetLeft - (bar.clientWidth - on.offsetWidth) / 2; }
+  if (sortBy === 'pub' && !$('jump').hidden) setJump(libHeads[cur ? +cur : 0]);
 }, { passive: true });
 
 /* ── お嬢から届いたグッズ（既読リストの「グッズ」タブ） ── */
@@ -1676,6 +1727,17 @@ document.addEventListener('click', e => {
     go(p === 'top' ? '#' : p === 'lib' ? '#lib/' + (g.dataset.cat || 'all') : '#' + p);
     return;
   }
+  if (e.target.closest('#totop')) { openJump(false); window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+  if (e.target.closest('#jump')) { openJump($('jump-panel').hidden); return; }
+  const jb = e.target.closest('[data-j]');
+  if (jb) {
+    $('jump-panel').querySelectorAll('.on').forEach(x => x.classList.remove('on')); jb.classList.add('on');
+    openJump(false); spyLock = Date.now() + 800;
+    setJump(jb.firstChild.textContent);
+    const t = document.getElementById(jb.dataset.j); if (t) t.scrollIntoView({ block: 'start' });
+    return;
+  }
+  if (!$('jump-panel').hidden && !e.target.closest('#jump-panel')) openJump(false);
   const k = e.target.closest('.kana button');
   if (k) {
     document.querySelectorAll('.kana button').forEach(x => x.classList.toggle('on', x === k));
